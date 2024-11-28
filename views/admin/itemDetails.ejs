@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background: #f4f7fc;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container {
+            margin-top: 50px;
+            max-width: 1000px;
+        }
+
+        .order-header {
+            background: linear-gradient(135deg, #c2bcba 0%, #937f6f 100%);
+            color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .order-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .order-header p {
+            margin: 5px 0;
+            font-size: 18px;
+        }
+
+        .order-info, .product-details, .update-status {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .order-info h4, .product-details h4 {
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .order-info p {
+            margin: 0 0 10px;
+            font-size: 16px;
+        }
+
+        .product-details table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 15px;
+        }
+
+        .product-details table th {
+            background-color:  #beb5ad;
+            /* background: linear-gradient(135deg, #c2bcba 0%, #937f6f 100%); */
+            color: white;
+            font-size: 16px;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .product-details table td {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 10px;
+            vertical-align: middle;
+        }
+
+        .product-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .total-amount {
+            font-weight: bold;
+            font-size: 22px;
+            color: #ff7e5f;
+        }
+
+        .update-status {
+            margin-top: 30px;
+        }
+
+        .btn-custom {
+            background-color:#c96;
+            border-color: #c96;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #a6c76c;
+            border-color: #a6c76c;
+        }
+
+        .form-select {
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Order Header -->
+        <div class="order-header">
+            <h1> order ID:<%= order._id%></h1>
+            <input type="hidden" id="orderrr" value="<%= order._id%>">
+            <input type="hidden"  id="userid" value="<%= order.user%>">
+            <input type="hidden" id="paymentStatus" value="<%= order.paymentStatus %>">
+            <p>Order placed on: <%= new Date(order.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) %></p>
+
+        </div>
+
+        <!-- Order Information -->
+        <div class="order-info">
+            <h4>Customer Information</h4>
+            <p><strong>Name:</strong> <%= order.address.name %></p>
+            
+            <p><strong>Mobile:</strong> <%= order.address.mobile %></p>
+            <p><strong>Shipping Address:</strong> <%= order.address.address %>, <%= order.address.city %>, <%= order.address.state %>, <%= order.address.pincode %></p>
+        </div>
+        
+
+        <% if (order.returnRequest) { %>
+            <div class="return-request alert alert-warning">
+                <h4>Return Request</h4>
+                <p><strong>Reason:</strong> <%= order.returnReason %></p>
+            </div>
+        <% } %>
+
+
+        <!-- Product Details -->
+        <div class="product-details">
+            <h4>Product Details</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price (Each)</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% order.products.forEach(items => { %> 
+                    <tr>
+                        <td><img src="https://via.placeholder.com/80" alt="Product 1" class="product-img"></td>
+                        <td><%= items.name%></td>
+                        <td><%= items.quantity%></td>
+                        <td><%= items.price%></td>
+                        <td><%= items.total%></td>
+                    </tr>
+                    
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Order Total -->
+        <div class="text-end mt-4">
+            <p class="total-amount">Total Amount:<%= order.total%></p>
+            <% if (order.paymentStatus === "failed") { %> 
+                <span class="text-danger">Payment Failed</span>
+                 <!-- <p><strong>Status:</strong> Pending</p> -->
+            <% } else { %>
+                <% order.products.forEach(item => { %>
+                <span class="text-success"><%= item.orderStatus %></span>
+                <% }) %>  
+            <% } %>
+        </div>
+
+        <!-- Update Order Status -->
+        <div class="update-status">
+            <h4>Update Order Status</h4>
+            <form id="statusForm">
+                <div class="input-group mb-3">
+                    <label for="status" class="input-group-text">Status</label>
+                    <select id="status" name="status" class="form-select">
+                        <option value="Pending" selected>Pending</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-custom">Update Status</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        document.getElementById("statusForm").addEventListener("submit", function(event) {
+            event.preventDefault(); 
+            const userId = document.getElementById("userid").value;
+            const orderId = document.getElementById("orderrr").value;
+            const paymentStatus = document.getElementById("paymentStatus").value;
+            const statusSelect = document.getElementById("status");
+            const selectedStatus = statusSelect.value;
+            console.log("Payment Status:", paymentStatus);
+    
+            // console.log("bbbbbb",orderId);
+            // console.log("Selected Status:", selectedStatus);
+
+            if (paymentStatus === "failed") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Action Not Allowed',
+                    text: 'Cannot change order status because payment has failed.',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            fetch('/admin/updateStatus',{
+                method:"post",
+                headers:{"Content-type":'application/json'},
+                body:JSON.stringify({orderId,selectedStatus,userId})
+            })
+            .then(response=>response.json())
+            .then(response =>{
+                if(response.success){
+                    console.log("GGGGGGGGGGGGGGGGGGgggggggg")
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Status updated successfully',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // $(`#editCouponModal${couponId}`).modal('hide');
+                    location.reload();
+                });
+                }
+            })
+    
+  
+        });
+    
+        
+        
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,311 @@
+<%- include('../layout/admin/adminHeader') %>
+
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Orders</h2>
+            <!-- <p>Lorem ipsum dolor sit amet.</p> -->
+        </div>
+        <div>
+            <input type="text" placeholder="Search order ID" class="form-control bg-white" />
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3">
+                <!-- <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="text" placeholder="Search..." class="form-control" />
+                </div> -->
+                <!-- <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Status</option>
+                        <option>Active</option>
+                        <option>Disabled</option>
+                        <option>Show all</option>
+                    </select>
+                </div> -->
+                <!-- <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Show 20</option>
+                        <option>Show 30</option>
+                        <option>Show 40</option>
+                    </select>
+                </div> -->
+            </div>
+        </header>
+        <!-- card-header end// -->
+        <div class="card-body">
+            <div class="table-responsive">
+               
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">return info</th>
+                            <th scope="col">Date</th>
+                            <th scope="col" class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                   
+                    <tbody>
+                        <% allOrders.forEach(order => { %> 
+                            <% order.products.forEach((product, index) => { %>
+                                <tr>
+                                    <% if (index === 0) { %>
+                                        <td rowspan="<%= order.products.length %>">
+                                            <p id="orderId"><%= order.id %></p>
+                                            <input type="hidden" id="orderidd" value="<%= order._id %>">
+                                        </td>
+                                        <td rowspan="<%= order.products.length %>">
+                                            <% if (order.user) { %>
+                                                <p><%= order.user.name %></p>
+                                            <% } else { %>
+                                                <p>User not Available</p>
+                                            <% } %>
+                                        </td>
+                                        <td rowspan="<%= order.products.length %>"><p><%= order.total %></p></td>
+                    
+                                        <td rowspan="<%= order.products.length %>">
+                                            <% if (order.returnStatus === "rejected") { %>
+                                                <p>return rejected</p>
+                                            <% } else if (order.returnStatus === "accepted") { %>
+                                                <p>return approved</p>
+                                            <% } else { %>
+                                                <div class="btn-group">
+                                                    <% if (product.orderStatus !== 'cancelled' && product.orderStatus !== 'returned' && product.orderStatus !== 'delivered') { %>
+                                                        <div class="btn-group dropstart">
+                                                            <% if (order.returnStatus === "requested") { %>
+                                                                <input type="hidden" id="productId" value="<%=product.productId._id%>">
+
+                                                                <button type="button" id="statusButton-<%= order.id %>" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Status
+                                                                </button> 
+                                                                <ul class="dropdown-menu" id="orderStatusDropdown-<%= order.id %>">
+                                                                    <li><a class="dropdown-item text-primary" href="#" data-value="rejected">Rejected</a></li>
+                                                                    <li><a class="dropdown-item text-success" href="#" data-value="accepted">Accepted</a></li>
+                                                                </ul>
+                                                            <% } else { %>
+                                                                <p>Not requested yet</p>
+                                                            <% } %>
+                                                        </div>
+                                                    <% } %>
+                                                </div>
+                                            <% } %>
+                                        </td>
+                    
+                                        <td rowspan="<%= order.products.length %>"><%= new Date(order.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) %></td>
+                                        <td class="text-end" rowspan="<%= order.products.length %>">
+                                            <% if (product.orderStatus === "cancelled") { %>
+                                                order cancelled
+                                            <% } else { %>
+                                                <a href="/admin/orders/<%= order._id %>/items/<%= product.productId._id %>" class="btn btn-md rounded font-sm">Detail</a>
+                                            <% } %>
+                                        </td>
+                                    <% } %>
+                                </tr>
+                            <% }) %>  
+                        <% }) %>
+                    </tbody>
+
+                </table>
+
+
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+                
+<script>
+  const dropdownItems = document.querySelectorAll('#orderStatusDropdown .dropdown-item');
+
+// Add click event listener to each item
+dropdownItems.forEach(item => {
+    item.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default link behavior
+        const selectedValue = this.textContent.trim(); // Get the text content of the clicked item
+        console.log(selectedValue); // You can use this value in your logic
+        // Do something with the selectedValue
+        const inputElement = document.getElementById("orderId").textContent;
+console.log("..........", inputElement);
+
+// console.log("..........",inputElement);
+
+
+
+
+////////////////
+fetch('/updateStatus', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status, orderId }),
+    })
+
+
+    });
+});  
+</script>
+
+
+     <script>
+         function updateStatus(status, orderId) {
+             console.log('Selected status:', status);
+             console.log("Order ID:", orderId);
+
+    fetch('/admin/updateStatus', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status, orderId }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Status updated successfully:', data);
+        // You might want to show a success message to the user here
+    })
+    .catch(error => {
+        console.error('Error updating status:', error);
+        // You might want to show an error message to the user here
+    });
+
+
+    // Update the button text with the selected status
+    // const statusButton = document.getElementById(`statusButton-${orderId}`);
+    // statusButton.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+    
+    // Remove existing button classes
+    // statusButton.classList.remove('btn-success', 'btn-primary', 'btn-danger', 'btn-warning', 'btn-info');
+    
+    // Apply different button styles based on status
+    // switch(status) {
+    //     case 'delivered':
+    //         statusButton.classList.add('btn-success');
+    //         break;
+    //     case 'cancelled':
+    //         statusButton.classList.add('btn-danger');
+    //         break;
+    //     case 'shipped':
+    //         statusButton.classList.add('btn-info');
+    //         break;
+    //     default:
+    //         statusButton.classList.add('btn-primary');
+    // }
+
+
+    
+    // Send an update to the server with the new status
+    // fetch('/updateStatus', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ status, orderId }),
+    // })
+    // .then(response => {
+    //     if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //     }
+    //     return response.json();
+    // })
+    // .then(data => {
+    //     console.log('Status updated successfully:', data);
+    //     // You might want to show a success message to the user here
+    // })
+    // .catch(error => {
+    //     console.error('Error updating status:', error);
+    //     // You might want to show an error message to the user here
+    // });
+}
+                </script>
+                
+                
+                
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Use event delegation to handle clicks for dynamically generated dropdown items
+    document.querySelectorAll('.dropdown-menu').forEach(function(menu) {
+        menu.addEventListener('click', function(event) {
+            if(event.target.classList.contains('dropdown-item')) {
+
+                const selectedValue = event.target.getAttribute('data-value');
+                const orderId = document.getElementById("orderidd").value
+                const productId = document.getElementById("productId").value
+                console.log('Selected Value:', selectedValue);
+               
+
+                fetch('/admin/returnRequests',{
+                  method:'POST',
+                  headers: {'Content-Type': 'application/json'},
+                  body: JSON.stringify({ selectedValue ,orderId,productId}),
+
+                })
+                .then(response=>response.json())
+              .then(response =>{
+                if(response.success){
+                   
+                    
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Status updated successfully',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+        
+                    location.reload();
+                }); 
+                }else{
+                    console.log("error in returnRequest script");
+                    
+                }
+              })
+
+
+            }
+        });
+    });
+});
+
+</script>
+
+
+
+
+
+
+
+            </div>
+            <!-- table-responsive //end -->
+        </div>
+        <!-- card-body end// -->
+    </div>
+    <!-- card end// -->
+    <!-- <div class="pagination-area mt-15 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">16</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div> -->
+</section>
+
+
+
+
+
+
+
+<%- include('../layout/admin/adminFooter') %>

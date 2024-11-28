@@ -1,0 +1,153 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocked</title>
+</head>
+<style>
+    HTML CSSResult Skip Results Iframe
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background: #1C3144;
+  overflow: hidden;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row {
+  width: auto;
+}
+
+.message-box {
+  color: white;
+  font-weight: bold;
+  width: 600px;
+  text-align: center;
+}
+
+.title {
+  color: #31E981;
+  font-size: 50px;
+}
+
+.message {
+  font-size: 20px;
+}
+
+.mail-to {
+  display: block;
+  color: white;
+  font-size: 18px;
+}
+</style>
+<body>
+    <div class="container">
+        <div class="row">
+           <div class="message-box">
+             <h1 class="title">Ooops! Website Blocked!</h1>
+             <p class="message">The requested website is blocked. If you need access to the website click below.</p>
+             <a href="mailto:athirajlaiju@gmail.com" class="mail-to">Request access to website</a>
+          </div>
+        </div>
+      </div>
+</body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocked</title>
+    <style>
+      html,
+      body {
+          height: 100%;
+          width: 100%;
+          background: #1C3144;
+          overflow: hidden;
+          margin: 0;
+          font-family: Arial, sans-serif;
+      }
+
+      .container {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+
+      .message-box {
+          color: white;
+          font-weight: bold;
+          width: 600px;
+          text-align: center;
+      }
+
+      .title {
+          color: #31E981;
+          font-size: 50px;
+      }
+
+      .message {
+          font-size: 20px;
+      }
+
+      .mail-to,
+      .redirect-btn {
+          display: block;
+          color: white;
+          font-size: 18px;
+          margin-top: 20px;
+          text-decoration: none;
+          border: 2px solid white;
+          padding: 10px 20px;
+          border-radius: 5px;
+          text-align: center;
+          cursor: pointer;
+      }
+
+      .redirect-btn {
+          background-color: #31E981;
+      }
+
+      .redirect-btn:hover {
+          background-color: #28a745;
+      }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="message-box">
+                <h1 class="title">Ooops! Website Blocked!</h1>
+                <p class="message">The requested website is blocked. You will be redirected to the login page shortly.</p>
+                <a href="mailto:athirajlaiju@gmail.com" class="mail-to">Request access to website</a>
+                <button class="redirect-btn" onclick="window.location.href='/login';">Go to Login Page</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script>
+        // Redirect to the login page after 5 seconds
+        setTimeout(function() {
+            window.location.href = '/login'; // Replace 'login.html' with the actual path to your login page
+        }, 5000); // Time in milliseconds (5000ms = 5 seconds)
+    </script> -->
+</body>
+</html>

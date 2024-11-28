@@ -1,0 +1,123 @@
+<%- include('../layout/User/header') %>
+
+<main class="main">
+    <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url(../userAssets/assets/images/banners/countdown-begins-antique-timer-sand-flowing-endlessly-generated-by-ai.jpg)">
+        <div class="container">
+            <div class="form-box">
+                <div class="form-tab">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="delivery-address" role="tabpanel" aria-labelledby="delivery-address-tab">
+                            <form id="addressForm" action="#" method="post" onsubmit="return submitForm()">
+                                <div class="form-container">
+                                    
+                                        <h2 class="checkout-title">Delivery Address</h2>
+
+                                        <div class="form-group">
+                                            <label>Name *</label>
+                                            <input type="text" class="form-control" id="addname" name="name" required>
+                                            <p id="nameError" style="color: red;"></p>
+                                        </div><!-- End .form-group -->
+
+                                        <div class="row">
+                                        <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Mobile Number *</label>
+                                            <input type="tel" class="form-control" id="addmobile" name="mobile" required>
+                                            <p id="mobileError" style="color: red;"></p>
+                                        </div>
+                                        </div><!-- End .form-group -->
+
+                                        <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Pincode *</label>
+                                            <input type="text" class="form-control" id="addpin" name="pincode" required>
+                                            <p id="pincodeError" style="color: red;"></p>
+                                        </div><!-- End .form-group -->
+                                    </div>
+                                    </div>
+
+                                        <div class="form-group">
+                                            <label>Address *</label>
+                                            <input type="text" class="form-control" id="addaddress" name="address" placeholder="Enter your address" required>
+                                            <p id="addressError" style="color: red;"></p>
+                                        </div><!-- End .form-group -->
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>City *</label>
+                                                    <input type="text" class="form-control" id="addcity" name="city" required>
+                                                    <p id="cityError" style="color: red;"></p>
+                                                </div><!-- End .form-group -->
+                                            </div><!-- End .col-sm-6 -->
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>State *</label>
+                                            <select class="form-control" id="addstate" name="state" required>
+                                            <option value="" selected disabled>Select your state</option>
+                                            <option value="Kerala">Kerala</option>
+                                            <option value="Tamil Nadu">Tamil Nadu</option>
+                                            <option value="Karnataka">Karnataka</option>
+                                            <option value="Goa">Goa</option>
+                                            <option value="Mumbai">Mumbai</option>
+                                          
+                                            </select>
+                                                </div><!-- End .form-group -->
+                                                <p id="stateError" style="color: red;"></p>
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
+
+                                        <button type="submit" class="btn btn-outline-primary btn-block">
+                                            Submit Address
+                                        </button>
+                                   
+                                </div><!-- End .form-container -->
+                            </form>
+
+                          
+                        </div><!-- End .tab-pane -->
+                    </div><!-- End .tab-content -->
+                </div><!-- End .form-tab -->
+            </div><!-- End .form-box -->
+        </div><!-- End .container -->
+    </div><!-- End .login-page section-bg -->
+</main><!-- End .main -->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+ <script>
+    function submitForm() {
+        
+        const name = document.getElementById('addname').value.trim();
+        const mobile = document.getElementById('addmobile').value.trim();
+        const pincode = document.getElementById('addpin').value.trim();
+        const address = document.getElementById('addaddress').value.trim();
+        const city = document.getElementById('addcity').value.trim();
+        const state = document.getElementById('addstate').value.trim();
+
+       
+        if (!name || !mobile || !pincode || !address || !city || !state) {
+            
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: 'All fields are required.',
+            });
+
+            return false;  
+        }
+
+       
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Address submitted successfully.',
+        });
+
+        return true;  
+    }
+</script> 
+
+
+

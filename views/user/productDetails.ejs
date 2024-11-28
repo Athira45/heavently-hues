@@ -1,0 +1,508 @@
+<%- include('../layout/User/header') %>
+
+<style>
+    .col-md-6 {
+    padding-right: 10px;
+    padding-left: 130px;
+}
+
+
+</style>
+
+
+<main class="main">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+        <div class="container d-flex align-items-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/products">Products</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><%=viewProduct.name%></li>
+            </ol>
+       
+
+        <nav class="product-pager ml-auto" aria-label="Product">
+
+            <%if(viewProduct.stock <= 0){%>
+                <span class="badge badge-danger">Out of stock</span>
+                <%} else if(viewProduct.stock < 10){%>
+                    <span class="badge badge-warning">Limited Stock</span>
+                    <% } else {%>
+                        <span class="badge badge-success">IN Stock</span>
+                        <%} %>
+        </nav>
+    </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="container">
+            <div class="product-details-top">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="product-gallery">
+                            <div class="row">
+                                <figure class="product-main-image">
+                                    <img id="product-zoom" src="/uploads/<%= viewProduct.image[0] %>" alt="product image">
+                                    <a href="#" id="btn-product-gallery" class="btn-product-gallery">
+                                        <i class="icon-arrows"></i>
+                                    </a>
+                                </figure>
+                    
+                                <div id="product-zoom-gallery" class="product-image-gallery">
+                                    <a class="product-gallery-item active" href="#"
+                                       data-image="/uploads/<%= viewProduct.image[0] %>"
+                                       data-zoom-image="/uploads/<%= viewProduct.image[0] %>">
+                                        <img src="/uploads/<%= viewProduct.image[0] %>" alt="product side">
+                                    </a>
+                    
+                                    <a class="product-gallery-item" href="#"
+                                       data-image="/uploads/<%= viewProduct.image[1] %>"
+                                       data-zoom-image="/uploads/<%= viewProduct.image[1] %>">
+                                        <img src="/uploads/<%= viewProduct.image[1] %>" alt="product cross">
+                                    </a>
+                    
+                                    <a class="product-gallery-item" href="#"
+                                       data-image="/uploads/<%= viewProduct.image[2] %>"
+                                       data-zoom-image="/uploads/<%= viewProduct.image[2] %>">
+                                        <img src="/uploads/<%= viewProduct.image[2] %>" alt="product with model">
+                                    </a>
+                                </div><!-- End .product-image-gallery -->
+                            </div><!-- End .row -->
+                        </div><!-- End .product-gallery -->
+                    </div><!-- End .col-md-6 -->
+                    
+           
+                    
+            
+                    <div class="col-md-6">
+                        <div class="product-details">
+                            <h1 class="product-title">
+                                <%=viewProduct.name%>
+                            </h1>
+
+                            <div class="product-content">
+                                <p>
+                                    <%=viewProduct.spec %>
+                                </p>
+                            </div>
+                            <div style="display: flex; justify-content: center; flex-direction: column;">
+                                <div class="product-cat">
+                                    <span>Category:</span>
+                                    <a>
+                                        <%=viewProduct.category.name%>
+                                    </a>
+                                    <!-- <span>Brand:</span>
+                                <a >ikea</a> -->
+
+                                </div>
+                                <!-- <div class="product-cat">
+                                <span>Brand:</span>
+                                <a>IKEA</a>
+                                <span>Brand:</span>
+                                <a >ikea</a> 
+                        
+                            </div> -->
+                            </div>
+                            <div class="ratings-container">
+                                <div class="ratings">
+                                    <div class="ratings-val" style="width: 80%;"></div>
+                                </div>
+                                <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews  )</a>
+                            </div>
+
+                            <!-- <%if(viewProduct.discount){%>
+                                <div class="product-price" style="text-decoration: line-through;">
+                                    ₹ <%=viewProduct.price%>
+                                </div>
+                                <div class="product-price">
+                                    ₹ <%=viewProduct.discount%>
+                                </div>
+                                <% }else{%>
+                                    <div class="product-price">
+                                        ₹ <%=viewProduct.price%>
+                                    </div>
+                                    <%} %> -->
+                                    <%if(viewProduct.discount && viewProduct.category.category_discount ){%>
+                                        <div class="product-price">
+                                            <span class="out-price" style="text-decoration: line-through;">₹ <%=viewProduct.price%></span> 
+                                            <span class="out-price" style="color: green;">₹ <%=viewProduct.discount%></span>
+                                        </div>
+                                        
+                                        <%}else if (!viewProduct.discount && viewProduct.category.category_discount ) {%>
+                                            <div class="product-price">
+                                                <span class="out-price" style="text-decoration: line-through;">₹ <%=viewProduct.price%></span> 
+                                                <span class="out-price" style="color: green;">catOff<%=viewProduct.category.category_discount %>%</span>
+                                            </div>
+
+                                      <%  }else{%>
+                                        <div class="product-price">
+                                            <span class="out-price" style="color: green;" >₹ <%=viewProduct.price%></span> 
+                                           
+                                        </div>
+                                     <% } %>
+
+
+                                       <!-- <div class="product-content">
+                                <p><%=viewProduct.description %> </p>
+                            </div> -->
+
+                                            <!-- End .product-content -->
+
+                                            <!-- <div class="details-filter-row details-row-size">
+                                <label>Color:</label>
+
+                                <div class="product-nav product-nav-thumbs">
+                                    <a href="#" class="active">
+                                        <img src="assets/images/products/single/1-thumb.jpg" alt="product desc">
+                                    </a>
+                                    <a href="#">
+                                        <img src="assets/images/products/single/2-thumb.jpg" alt="product desc">
+                                    </a>
+                                </div>
+                            </div> -->
+                                            <!-- End .details-filter-row -->
+
+                                            <!-- <div class="details-filter-row details-row-size">
+                                <label for="size">Size:</label>
+                                <div class="select-custom">
+                                    <select name="size" id="size" class="form-control">
+                                        <option value="#" selected="selected">Select a size</option>
+                                        <option value="s">Small</option>
+                                        <option value="m">Medium</option>
+                                        <option value="l">Large</option>
+                                        <option value="xl">Extra Large</option>
+                                    </select>
+                                </div>End .select-custom -->
+
+                                            <!-- <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a>
+                            </div>End .details-filter-row -->
+                        
+
+                
+                           
+                           <p>stock: <%= viewProduct.stock%></p>
+                 
+                            
+
+                            <% if (!alreadyCart) { %>
+                                <div class="product-details-action">
+                                    <a href="#" class="btn-product btn-cart" onclick="addtoCart('<%= viewProduct._id %>')">
+                                        <input id="qty" type="hidden" value="<%= viewProduct.stock%>">
+                                        <span>add to cart</span>
+                                    </a>
+                                    <div class="details-action-wrapper">
+                                        <a href="#" class="btn-product btn-wishlist"onclick="addtoWishlist('<%= viewProduct._id %>'); return false;"
+                                            title="Wishlist"></a>
+                                      </div> 
+                                
+                                <% } else { %>
+                                    <div class="product-details-action">
+                                      <a href="/cart" class="btn-product btn-cart">
+                                        <span>Go To Cart</span>
+                                      </a>
+                                    </div>
+                                   
+                                  <% } %>
+
+                                  <!-- <div class="details-action-wrapper">
+                                    <a href="#" class="btn-product btn-wishlist"
+                                        title="Wishlist"><span>add to wishlist</span></a>
+                        </div>  -->
+                                 
+
+                            
+                        </div>
+                    </div>
+                </div>
+             
+            </div>
+            </div>
+       
+
+            <div class="product-details-tab">
+                <ul class="nav nav-pills justify-content-center" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">Additional Information</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
+                        <div class="product-desc-content">
+                            <p><%=viewProduct.description %></p>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
+                        <div class="product-desc-content">
+                            <h3>Material</h3>
+                            <p><%=viewProduct.material %></p>
+                            <h3>Dimensions</h3>
+                            <ul>
+                                <li>Width: <%=viewProduct.width %> cm</li>
+                                <li>Depth: <%=viewProduct.depth %> cm</li>
+                                <li>Height: <%=viewProduct.height %> cm</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2 class="title text-center mb-4">You May Also Like</h2>
+        
+        
+                    <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
+                    data-toggle="owl" data-owl-options='{
+            "nav": false, 
+            "dots": true,
+            "margin": 20,
+            "loop": false,
+            "responsive": {
+                "0": {
+                    "items":1
+                },
+                "480": {
+                    "items":2
+                },
+                "768": {
+                    "items":3
+                },
+                "992": {
+                    "items":4
+                },
+                "1200": {
+                    "items":4,
+                    "nav": true,
+                    "dots": false
+                }
+            }
+            }'>
+            
+            
+            <% relatedProduct.forEach((viewProduct)=>{%>
+                
+                <div class="product product-7 text-center">
+                    <figure class="product-media">
+                        <span class="product-label label-out">Out of Stock</span>
+                        <a href="/productDetails/<%=viewProduct._id%>">
+                            <img src="/uploads/<%=viewProduct.image[0]%>" alt="Product image"
+                                class="product-image">
+                        </a>
+            
+                        <div class="product-action-vertical">
+                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add
+                                    to wishlist</span></a>
+                            <a href="/productDetails/<%=viewProduct._id%>" class="btn-product-icon btn-quickview"
+                                title="Quick view"><span>Quick view</span></a>
+                            <a href="#" class="btn-product-icon btn-compare"
+                                title="Compare"><span>Compare</span></a>
+                        </div>
+                        <div class="product-action">
+                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                        </div>
+                    </figure>
+            
+                    <div class="product-body">
+                        <div class="product-cat">
+                            <a href="#"><%=viewProduct.category.name%></a>
+                        </div>
+                        <h3 class="product-title"><a href="#"><%=viewProduct.name%>
+                                </a></h3>
+
+
+                        <div class="product-price">
+                            <span class="out-price"> ₹ <%=viewProduct.price%> </span>
+                        </div>
+                        <div class="ratings-container">
+                            <div class="ratings">
+                                <div class="ratings-val" style="width: 80%;"></div>
+                                <!-- End .ratings-val -->
+                            </div>
+                            <span class="ratings-text">( 6 Reviews )</span>
+                        </div> 
+                    </div>
+                </div>
+            
+               <% })%>
+                         
+            
+                          
+                                         
+                       
+            
+            
+                                        </div>
+            
+                </div>
+            </div>
+        </div>
+
+       
+
+
+    </div>
+    </div>
+</main>
+
+
+<script>
+    function addtoWishlist(productId) {
+     fetch(`/addingWishlist/${productId}`, {
+         method: 'POST',
+         headers: {
+             'Content-Type': 'application/json',
+         },
+     })
+     .then(response => response.json())
+     .then(data => {
+         if (data.message && data.message.includes('added')) {
+             Swal.fire({
+                 icon: 'success',
+                 title: 'Added!',
+                 text: data.message,
+                 timer: 1500,
+                 showConfirmButton: false
+             });
+         } else if (data.error && data.error.includes('removed')) {
+             Swal.fire({
+                 icon: 'info',
+                 title: 'Removed!',
+                 text: data.error,
+                 timer: 1500,
+                 showConfirmButton: false
+             });
+         } else {
+             // Fallback for unexpected responses
+             Swal.fire({
+                 icon: 'info',
+                 title: 'Status',
+                 text: data.message || data.error || 'Action completed',
+                 timer: 1500,
+                 showConfirmButton: false
+             });
+         }
+     }).catch(error => {
+         console.error('Error:', error);
+         Swal.fire({
+             icon: 'error',
+             title: 'Oops...',
+             text: 'Something went wrong!',
+         });
+     });
+ }
+ </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const mainImage = document.getElementById("product-zoom");
+        const galleryItems = document.querySelectorAll(".product-gallery-item");
+
+        galleryItems.forEach(item => {
+            item.addEventListener("click", function(event) {
+                event.preventDefault();
+
+                // Remove 'active' class from all gallery items
+                galleryItems.forEach(el => el.classList.remove("active"));
+
+                // Add 'active' class to the clicked gallery item
+                this.classList.add("active");
+
+                // Update the main image source
+                const newImageSrc = this.getAttribute("data-image");
+                mainImage.src = newImageSrc;
+            });
+        });
+    });
+</script>
+
+
+<style>
+    .product-main-image {
+        position: relative;
+        overflow: hidden;
+        cursor: zoom-in;
+    }
+
+    .product-main-image img {
+        max-width: 100%;
+        transition: transform 0.3s ease;
+    }
+
+    .product-main-image img.zoomed {
+        transform: scale(2); /* Adjust the zoom level as needed */
+        cursor: zoom-out;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const img = document.getElementById('product-zoom');
+
+        img.addEventListener('click', function() {
+            if (img.classList.contains('zoomed')) {
+                img.classList.remove('zoomed');
+            } else {
+                img.classList.add('zoomed');
+            }
+        });
+    });
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        function addtoCart(proid,userid) {
+           
+            const quantity = parseInt(document.getElementById('qty').value,10);
+              
+            if (isNaN(quantity) || quantity < 1) {
+                  Swal.fire({
+                     icon: 'error',
+                     title: 'Out of Stock',
+                      text: 'Product quantity must be at least 1.',
+                 });
+                return;
+           }
+           fetch(`/addingcart/${proid}/${quantity}/${userid}`, {
+                method: 'POST',
+                headers: {
+                      'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ quantity  }),
+                   
+             
+        })
+        .then((response) => {
+            if (!response.ok) {
+               // Check if the response status is not okay (e.g., 401 Unauthorized)
+            throw new Error('Unauthorized - User not authenticated.');
+             }
+         return response.json();
+      })
+      .then((data) => {
+          console.log('Response from backend:', data);
+                
+         Swal.fire({
+            icon: 'success',
+            title: 'Product added to cart!',
+             showConfirmButton: false,
+              timer: 1500,
+          });
+                            
+             setTimeout(() => {
+               location.reload();
+          }, 1500);
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+                
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Error adding to cart',
+                  text: error.message || 'An error occurred while adding the product to the cart.',
+              });
+          });
+        }
+    </script>
+
+
+    <!-- Main JS File -->
+    <script src="/userAssets/js/main.js"></script>
+    <%- include('../layout/User/footer') %>

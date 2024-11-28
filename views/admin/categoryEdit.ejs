@@ -1,0 +1,300 @@
+
+<%- include('../layout/admin/adminHeader') %>
+
+<div class="screen-overlay"></div>
+<!-- <aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="index.html" class="brand-wrap">
+            <img src="/adminAssets/AdCategory/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+        </div>
+    </div>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/dashboard">
+                    <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/AllProducts">
+                    <i class="icon material-icons md-shopping_bag"></i>
+                    <span class="text">Products</span>
+                </a>
+                
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/adCategory">
+                        <i class="icon material-icons md-category"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                </li>
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="#">
+                    <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Orders</span>
+                </a>
+             
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="#">
+                    <i class="icon material-icons md-monetization_on"></i>
+                    <span class="text">Coupons</span>
+                </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">offers</span>
+                        
+                    </a>
+                    <div class="submenu">
+                    <a href="#">View offer</a>
+                    <a href="#">Add offer</a>
+                </div>
+                   
+                    </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/adminUsers">
+                            <i class="icon material-icons md-person"></i> 
+                            <span class="text">Users</span>
+                        </a>
+                        </li>                                  
+               
+            </li>
+            
+            <li class="menu-item">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-stars"></i> <span class="text">Brands</span> </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" disabled href="#">
+                    <i class="icon material-icons md-pie_chart"></i>
+                    <span class="text">Sales Report</span>
+                </a>
+            </li>
+        </ul>
+        <hr />
+
+        </nav>
+</aside> -->
+
+
+<!-- <main class="main-wrap"> -->
+    <!-- <header class="main-header navbar">
+        <div class="col-search">
+            <form class="searchform">
+                <div class="input-group">
+                    <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                    <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
+                </div>
+                <datalist id="search_terms">
+                    <option value="Products"></option>
+                    <option value="New orders"></option>
+                    <option value="Apple iphone"></option>
+                    <option value="Ahmed Hassan"></option>
+                </datalist>
+            </form>
+        </div>
+        <div class="col-nav">
+            <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i class="material-icons md-apps"></i></button>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link btn-icon" href="#">
+                        <i class="material-icons md-notifications animation-shake"></i>
+                        <span class="badge rounded-pill">3</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                </li>
+                <li class="dropdown nav-item">
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                        <a class="dropdown-item text-brand" href="#"><img src="/adminAssets/AdCategory/imgs/theme/flag-us.png" alt="English" />English</a>
+                        <a class="dropdown-item" href="#"><img src="/adminAssets/AdCategory/imgs/theme/flag-fr.png" alt="Français" />Français</a>
+                        <a class="dropdown-item" href="#"><img src="/adminAssets/AdCategory/imgs/theme/flag-jp.png" alt="Français" />日本語</a>
+                        <a class="dropdown-item" href="#"><img src="/adminAssets/AdCategory/imgs/theme/flag-cn.png" alt="Français" />中国人</a>
+                    </div>
+                </li>
+                <li class="dropdown nav-item">
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/adminAssets/AdCategory/imgs/people/avatar-2.png" alt="User" /></a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                        <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header> -->
+
+
+
+
+
+ <section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Edit Category</h2>
+                <div>
+                    <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
+                    <button class="btn btn-md rounded font-sm hover-up">Publich</button> -->
+                </div>
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row gx-5">
+                        
+                        <div class="col-lg-9">
+                            <section class="content-body p-xl-4">
+
+                                <!-- <form id="EditCategory-form"   action="/admin/editCategory" method="post" onsubmit="return validateForm()">
+                                    <div class="row mb-4">
+                                        <label class="col-lg-3 col-form-label">Category name*</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" class="form-control"  placeholder="Type here" value="<%= Category ? Category.name : '' %>" id="category-name" required />
+                                           
+                                            <div class="error-message text-danger" id="name-error"></div>
+                                            <% if (messages.error) { %>
+                                                <div class="alert alert-danger"><%= messages.error %></div>
+                                             <% } %>    
+                                        </div>
+                                    </div>                                    
+                                 </div>          
+                                </div>         
+                             </div>
+                                   
+                                    </div>
+                                   
+                                    <br />
+                                    <input type="hidden" id="categoryid" value="<%= Category ? Category._id : '' %>">
+                                 <button class="btn btn-primary" type="submit">Edit Category</button>
+                         </form> -->
+
+
+                         <form id="EditCategory-form" action="/admin/editCategory" method="post" onsubmit="return validateForm()">
+                            <div class="row mb-4">
+                                <label class="col-lg-3 col-form-label">Category name*</label>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" placeholder="Type here" 
+                                           value="<%= Category ? Category.name : '' %>" id="category-name" name="name" required />
+                                    <input type="hidden" id="categoryid" name="categoryId" value="<%= Category ? Category._id : '' %>">
+                        
+                                    <!-- Display error message for category name conflict -->
+                                    <% if (messages.nameError) { %>
+                                        <div class="error-message text-danger" id="name-error"><%= messages.nameError %></div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Edit Category</button>
+                        </form>
+                        
+
+                         
+                            </section>
+                            <!-- content-body .// -->
+                        </div>
+                        <!-- col.// -->
+                    </div>
+                    <!-- row.// -->
+                </div>
+                <!-- card body end// -->
+            </div>
+        </div>
+    </div>
+ </section>
+
+ <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+ <script>
+    function validateForm() {
+        let isValid = true;
+    
+        // Clear previous error messages
+        document.getElementById('name-error').innerText = '';
+        
+        // Validate name
+        const name = document.getElementById('category-name').value.trim();
+        if (name === '') {
+            document.getElementById('name-error').innerText = 'Category name is required';
+            isValid = false;
+        }
+    
+        
+    
+        return isValid;
+    }
+    </script>
+
+<!-- <script>
+    document.getElementById('EditCategory-form').addEventListener('submit', async function (e) {
+        e.preventDefault(); // Prevent form from submitting the usual way
+
+        const name = document.getElementById("category-name").value;
+        const categoryId = document.getElementById("categoryid").value
+        console.log("LLLLLLLLL",name)
+        
+
+        try {
+            fetch('/admin/editCategory',{
+                method:'post',
+                headers:{'Content-type':'application/json'},
+                body:JSON.stringify({name,categoryId}),
+            })
+            .then(response=> response.json())
+            .then(response =>{
+                console.log("RRRRRRRRR",response)
+                if(response.success){
+                    Toastify({
+                    text: "Category added successfully",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                }).showToast();
+                
+                } else {
+                    Toastify({
+                    text: data.message,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+                }).showToast();
+                }
+            })
+           
+           
+           
+        } catch (error) {
+            console.error("Error:", error);
+            
+            Toastify({
+                text: "Internal Server Error",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+            }).showToast();
+        }
+    });
+</script> -->
+
+
+<%- include('../layout/admin/adminFooter') %>

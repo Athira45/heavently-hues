@@ -1,0 +1,170 @@
+
+<%- include('../layout/User/header') %>
+
+<main class="main">
+    <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
+        style="background-image: url(../user/assets/images/banners/countdown-begins-antique-timer-sand-flowing-endlessly-generated-by-ai.jpg)">
+        <div class="container">
+            <div class="form-box">
+                <div class="form-tab">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="delivery-address" role="tabpanel"
+                            aria-labelledby="delivery-address-tab">
+
+                            <form id="addressForm" onsubmit="return submitForm()">
+                                <div class="form-group">
+                                    <label for="name">Name *</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                    <p id="nameErr" style="color: red;"></p>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="mobile">Mobile Number *</label>
+                                            <input type="tel" class="form-control" id="mobile" name="mobile"
+                                                required>
+                                                <p id="mobileErr" style="color: red;"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="pincode">Pincode *</label>
+                                            <input type="number" class="form-control" id="pincode" name="pincode"
+                                                required>
+                                                <p id="pinErr" style="color: red;"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="Address1">Address *</label>
+                                    <input type="text" class="form-control" id="address" name="address"
+                                        placeholder="Enter your address" required>
+                                        <p id="addressErr" style="color: red;"></p>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="City">City *</label>
+                                            <input type="text" class="form-control" id="city" name="city" required>
+                                            <p id="cityErr" style="color: red;"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="state">State *</label>
+                                            <select class="form-control" id="state" name="state" required>
+                                                <option value="" selected disabled>Select your state</option>
+                                                <option value="Kerala">Kerala</option>
+                                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                                <option value="Karnataka">Karnataka</option>
+                                                <option value="Goa">Goa</option>
+                                                <option value="Mumbai">Mumbai</option>
+                                            </select>
+                                        </div>
+                                        <p id="stateErr" style="color: red;"></p>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-outline-primary btn-block">
+                                    Submit Address
+                                </button>
+                            </form>
+                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+                            <script>
+                                async function submitForm() {
+                                    event.preventDefault()
+                                    const name = document.getElementById('name').value.trim();
+                                    const mobile = document.getElementById('mobile').value.trim();
+                                    const pincode = document.getElementById('pincode').value.trim();
+                                    const address = document.getElementById('address').value.trim();
+                                    const city = document.getElementById('city').value.trim();
+                                    const state = document.getElementById('state').value.trim();
+
+                                    const formData = {
+                                        name,
+                                        mobile,
+                                        pincode,
+                                        address,
+                                        city,
+                                        state
+                                    };
+
+                                    if (!name) {
+                                        const message = document.getElementById("nameErr").innerHTML = "Please enter name"
+                                        return
+                                    }
+
+                                    if (!mobile) {
+                                        const message = document.getElementById("mobileErr").innerHTML = "Please enter mobile"
+                                        return
+                                    }
+
+                                    if (!pincode) {
+                                        const message = document.getElementById("pinErr").innerHTML = "Please enter pincode"
+                                        return
+                                    }
+
+                                    if (!address) {
+                                        const message = document.getElementById("addressErr").innerHTML = "Please enter address"
+                                        return
+                                    }
+
+                                    if (!city) {
+                                        const message = document.getElementById("cityErr").innerHTML = "Please enter city"
+                                        return
+                                    }
+
+                                    if (!state) {
+                                        const message = document.getElementById("stateErr").innerHTML = "Please enter state"
+                                        return
+                                    }
+
+
+                                    try {
+                                        const response = await fetch('/addAddressProfile', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: JSON.stringify(formData),
+                                        });
+
+                                        if (!response.ok) {
+                                            throw new Error(`HTTP error! Status: ${response.status}`);
+                                        }
+
+                                        // Display SweetAlert for successful submission
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success',
+                                            text: 'Address submitted successfully!',
+                                        }).then(() => {
+                                            window.location.href='/profile';
+                                        });
+
+                                        return true;  // Allow form submission
+                                    } catch (error) {
+                                        console.error('Error submitting address:', error);
+
+                                        // Display SweetAlert for submission error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Submission Error',
+                                            text: 'There was an error submitting the address.',
+                                        });
+
+                                        return false;  // Prevent form submission
+                                    }
+                                }
+                            </script>
+
+                        </div>
+</body>
+
+</html>
+
+

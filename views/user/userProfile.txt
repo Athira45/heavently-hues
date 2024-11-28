@@ -1,0 +1,987 @@
+<%- include('../layout/User/header') %>
+
+
+
+
+<main class="main">
+    <div class="page-header text-center"
+        style="background-image: url('../user/assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">My Account<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+        <div class="container">
+
+        </div><!-- End .container -->
+    </nav>
+    <style>
+        #addressModal .modal-body {
+            padding: 20px;
+        }
+
+        #addressModal .form-group {
+            margin-bottom: 20px;
+        }
+
+        #addressModal .modal-dialog {
+            margin: 50px auto;
+        }
+    </style>
+
+
+    <div class="page-content">
+        <div class="dashboard">
+            <div class="container">
+                <div class="row">
+                    <aside class="col-md-4 col-lg-3">
+                        <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab"
+                                    href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
+                                    aria-selected="true">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders"
+                                    role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
+                                    role="tab" aria-controls="tab-address" aria-selected="false">Addresses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account"
+                                    role="tab" aria-controls="tab-account" aria-selected="false">Change
+                                    Password</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-wallet-link" data-toggle="tab" href="#tab-wallet"
+                                    role="tab" aria-controls="tab-wallet" aria-selected="false">Wallet</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">LogOut</a>
+                            </li>
+                        </ul>
+                    </aside><!-- End .col-lg-3 -->
+
+                    <div class="col-md-8 col-lg-9">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                                aria-labelledby="tab-dashboard-link">
+                                <div class="col-lg-6">
+                                    <div class="card card-dashboard">
+                                        <div class="card-body" id="userProfile">
+                                            <h3 class="card-title">Profile</h3><!-- End .card-title -->
+
+                                            <p>Name : <%= user.name %><br>
+                                                    Email : <%=user.email%><br>
+                                                        Mobile : <%= user.mobile %><br>
+
+
+                                                            <a href="#" data-toggle="modal"
+                                                                data-target="#editModal">Edit <i
+                                                                    class="icon-edit"></i></a></p>
+                                        </div><!-- End .card-body -->
+                                    </div><!-- End .card-dashboard -->
+
+
+                                </div><!-- End .col-lg-6 -->
+                                <!-- Referral Code: -->
+                                <!-- <div class="input-group">
+                                    <input type="text" class="form-control"
+                                        value="http://kpkwatches.shop/register?referralCode=<%= user.referralCode%>"
+                                        id="referralLink" readonly />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary " style="height: 40px;"
+                                            onclick="copyReferralLink()">Copy</button>
+                                    </div>
+                                </div> -->
+                                <!-- <script>
+                                    function copyReferralLink() {
+                                        var referralLink = document.getElementById("referralLink");
+                                        referralLink.select();
+                                        document.execCommand("copy");
+
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Referral link copied to clipboard!',
+                                            showConfirmButton: false,
+                                            timer: 1500,
+                                        });
+                                    }
+                                </script> -->
+                            </div><!-- .End .tab-pane -->
+
+
+                            <!-- Edit Modal -->
+                            <div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+                                aria-labelledby="editModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editModalLabel">Edit User Details</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Input fields for editing user details -->
+                                            <form id="editForm" 
+                                                style="border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
+                                                <div class="mb-3">
+                                                    <label for="editName" class="form-label">Name:</label>
+                                                    <input type="text" class="form-control" id="editName"
+                                                        value="<%= user.name %>" name="name" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <!-- <label for="editMobile" class="form-label">Mobile:</label>
+                                                    <input type="number" class="form-control" id="editMobile"
+                                                        value="<%= user.mobile %>" name="mobile" required> -->
+
+                                                        <label for="mobile">Mobile Number *</label>
+                                                        <input type="tel" class="form-control" id="mobile" name="mobile"
+                                                        value="<%= user.mobile %>"  required>
+
+                                                </div>
+                                                <!-- Add more input fields as needed -->
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-primary"
+                                                        onclick="editprofile()">Save Changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- -----------------------------------------------------------------------Orders section---------------------------------------------------------------------------------- -->
+                      
+                            
+                            <!-- <div class="tab-pane fade" id="tab-orders" role="tabpanel"
+                                        aria-labelledby="tab-orders-link">
+                                        <section class="vh-70 gradient-custom-2">
+                                            <div class="container py-5 " id="taborders">
+
+                                                <% orders!== "undefind" && orders.forEach(order=> { %>
+                                                    <div class="row align-items-center h-100">
+                                                        <div class="col-md-10 col-lg-8 col-xl-6">
+                                                            <div class="card card-stepper "
+                                                                style="border-radius: 16px;">
+                                                                <div class="card-header p-4">
+                                                                    <div
+                                                                        class="d-flex justify-content-between align-items-center">
+                                                                        <div>
+                                                                            <p class="text-muted mb-2"> Order ID <span
+                                                                                    class="fw-bold text-body">
+                                                                                    <%= order?._id %>
+                                                                                </span></p>
+                                                                            <p class="text-muted mb-0"> Place On <span
+                                                                                    class="fw-bold text-body">
+                                                                                    <%= order.date.toLocaleDateString('en-US',
+                                                                                        { year:'numeric', month: 'short'
+                                                                                        , day: '2-digit'
+                                                                                        }).replace(/\//g, '-' ) %>
+                                                                                </span> </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+
+                                                                
+                                                                
+                                                                <div class="card-body p-4">
+                                                                    <% order.products.forEach(product => { %>
+                                                                        <div class="d-flex flex-row mb-4 pb-2 mt-4">
+                                                                            <div class="flex-fill">
+                                                                                <h5 class="bold">
+                                                                                    <% if (product.productId && product.productId._id) { %>
+                                                                                        <a href="/eachproduct/?id=<%= product.productId._id %>">
+                                                                                            <%= product.name %>
+                                                                                        </a>
+                                                                                    <% } else { %>
+                                                                                        <%= product.name %> (Product no longer available)
+                                                                                    <% } %>
+                                                                                </h5>
+                                                                                <p class="text-muted">Qt: <%= product.quantity %> item</p>
+                                                                                <h4 class="mb-3">
+                                                                                    ₹ <%= product.total %>
+                                                                                    <span class="small text-muted">
+                                                                                        <br> via (<%= order.paymentMode %>)
+                                                                                    </span>
+                                                                                </h4>
+                                                                            </div>
+                                                                            <div>
+                                                                                <% if (product.productId && product.productId.image && product.productId.image[0]) { %>
+                                                                                    <img class="align-self-center img-fluid" src="/uploads/<%= product.productId.image[0] %>" width="150" height="100">
+                                                                                <% } else { %>
+                                                                                    <img class="align-self-center img-fluid" src="/path/to/placeholder-image.jpg" width="150" height="100" alt="Image not available">
+                                                                                <% } %>
+                                                                            </div>
+                                                                        </div>
+                                                                        <p class="text-primary"><%= product.orderStatus %></p>
+                                                                    <% }); %>
+                                                                </div>
+                                                                <a href="/orderdetails?orderId=<%= order._id %>" class="btn btn-primary">View More</a>
+                                                            </div>
+                                                        </div>
+                                                        <% }); %>
+                                                </div>
+                                            </section>
+    
+                                        </div> -->
+    
+                                     
+                                     <!-- ..........  -->
+
+                                     <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                        <section class="vh-70 gradient-custom-2">
+                                            <div class="container py-5" id="taborders">
+                                                <% if (orders && orders.length > 0) { %>
+                                                    <% orders.forEach(order => { %>
+                                                        <div class="row align-items-center h-100">
+                                                            <div class="col-md-10 col-lg-8 col-xl-6">
+                                                                <div class="card card-stepper" style="border-radius: 16px;">
+                                                                    <div class="card-header p-4">
+                                                                        <div class="d-flex justify-content-between align-items-center">
+                                                                            <div>
+                                                                                <p class="text-muted mb-2">Order ID: 
+                                                                                    <span class="fw-bold text-body"><%= order._id %></span>
+                                                                                </p>
+                                                                                <p class="text-muted mb-0">Placed On: 
+                                                                                    <span class="fw-bold text-body">
+                                                                                        <%= order.date.toLocaleDateString('en-US', {
+                                                                                            year: 'numeric', month: 'short', day: '2-digit'
+                                                                                        }).replace(/\//g, '-') %>
+                                                                                    </span>
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                    
+                                                                    <div class="card-body p-4">
+                                                                        <% order.products.forEach(product => { %>
+                                                                            <div class="d-flex flex-row mb-4 pb-2 mt-4">
+                                                                                <div class="flex-fill">
+                                                                                    <h5 class="bold">
+                                                                                        <% if (product.productId && product.productId._id) { %>
+                                                                                            <a href="/eachproduct/?id=<%= product.productId._id %>">
+                                                                                                <%= product.name %>
+                                                                                            </a>
+                                                                                        <% } else { %>
+                                                                                            <%= product.name %> (Product no longer available)
+                                                                                        <% } %>
+                                                                                    </h5>
+                                                                                    <p class="text-muted">Qt: <%= product.quantity %> item</p>
+                                                                                    <h4 class="mb-3">
+                                                                                        <!-- Conditionally show discounted price if applicable -->
+                                                                                        <% if (appliedCoupon && discountedTotal) { %>
+                                                                                            ₹ <%= (product.total - ((order.total - discountedTotal) / order.total) * product.total).toFixed(2) %>
+                                                                                            <span class="small text-muted text-success">(Discount applied)</span>
+                                                                                        <% } else { %>
+                                                                                            ₹ <%= product.total %>
+                                                                                        <% } %>
+                                                                                        <span class="small text-muted">
+                                                                                            <br> via (<%= order.paymentMode %>)
+                                                                                        </span>
+                                                                                    </h4>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <% if (product.productId && product.productId.image && product.productId.image[0]) { %>
+                                                                                        <img class="align-self-center img-fluid" 
+                                                                                             src="/uploads/<%= product.productId.image[0] %>" 
+                                                                                             width="150" height="100">
+                                                                                    <% } else { %>
+                                                                                        <img class="align-self-center img-fluid" 
+                                                                                             src="/path/to/placeholder-image.jpg" 
+                                                                                             width="150" height="100" 
+                                                                                             alt="Image not available">
+                                                                                    <% } %>
+                                                                                </div>
+                                                                            </div>
+                                                                            <p class="text-primary"><%= product.orderStatus %></p>
+                                                                        <% }); %>
+                                                                    </div>
+                                                                    
+                                    
+                                                                    <!-- Show Discount if Applied -->
+                                                                    <div class="card-footer p-4">
+                                                                        <p class="text-muted mb-2">Subtotal: 
+                                                                            <span class="fw-bold text-body">₹<%= order.total %></span>
+                                                                        </p>
+                                    
+                                                                        <% if (appliedCoupon && discountedTotal) { %>
+                                                                            <p class="text-muted mb-2">Discount Applied: 
+                                                                                <span class="fw-bold text-success">₹<%= (order.total - discountedTotal).toFixed(2) %></span>
+                                                                            </p>
+                                                                            <p class="text-muted mb-2">Total After Discount: 
+                                                                                <span class="fw-bold text-body">₹<%= discountedTotal.toFixed(2) %></span>
+                                                                            </p>
+                                                                        <% } else { %>
+                                                                            <p class="text-muted mb-2">Total: 
+                                                                                <span class="fw-bold text-body">₹<%= order.total %></span>
+                                                                            </p>
+                                                                        <% } %>
+                                                                    </div>
+                                    
+                                                                    <a href="/orderdetails?orderId=<%= order._id %>" class="btn btn-primary">View More</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <% }); %>
+                                                <% } else { %>
+                                                    <div class="row align-items-center h-100">
+                                                        <div class="col-12 text-center">
+                                                            <p>No orders found.</p>
+                                                        </div>
+                                                    </div>
+                                                <% } %>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    
+                                     
+                                     
+                                     <!-- aaaaaaaaaaa  -->
+                                        <a hidden href="/" class="btn btn-outline-primary-2"><span>GO SHOP</span><i
+                                                class="icon-long-arrow-right"></i></a>
+                                                    
+                                                   
+
+                     
+
+
+                            <!-- -----------------------------------------------------------------------Address section---------------------------------------------------------------------------------- -->
+
+
+
+                            <div class="tab-pane fade " id="tab-address" role="tabpanel"
+                                        aria-labelledby="tab-address-link">
+                                        <h3 class="card-title">Delivery Addresses</h3>
+
+                                        <div class="row">
+                                            <div class="col-md-12" id="tabaddress">
+                                                <% user.address.forEach((address,index)=>{%>
+                                                    <div class="card card-dashboard">
+                                                        <div class="card-body">
+                                                            <!-- <h3 class="card-title">Billing Address</h3> -->
+                                                            <h3 class="card-title">Address <%= index + 1 %></h3>
+                                                            <!-- End .card-title -->
+                                                            <p>
+                                                                Name:<%= address.name %><br>
+                                                                   Mobile: <%= address.mobile %><br>
+                                                                      Address:  <%= address.address %><br>
+                                                                          Pincode:  <%= address.pincode %><br>
+                                                                              City:  <%= address.city %><br>
+                                                                                  State:  <%= address.state %><br>
+                                                            </p>
+                                                            <a href="#" data-toggle="modal"
+                                                                data-target="#editModal<%=address._id%>">Edit <i
+                                                                    class="icon-edit"></i></a>
+
+
+                                                            <a href="#" style="float: right;"
+                                                                onclick="removeAddress('<%=address._id%>')">Delete <i
+                                                                    class="fa-solid fa-trash"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <%})%>
+                                                        <a href="/addaddress" class="btn btn-primary">Add Address </a>
+                                            </div>
+
+                                            <% user.address.forEach((address)=>{%>
+                                                <div class="modal fade" id="editModal<%= address._id %>" tabindex="-1"
+                                                    role="dialog" aria-labelledby="editModalLabel<%= address._id %>"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <!-- Add your modal content here -->
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title"
+                                                                    id="editModalLabel<%= address._id %>">Edit Address
+                                                                </h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+
+                                                            <div class="modal-body">
+                                                                <!-- Add your form fields with predefined values here -->
+                                                                <form id="editForm<%= address._id %>">
+                                                                    <!-- Example input field (replace with your actual form fields) -->
+                                                                    <div class="modal-body mx-3">
+                                                                        <div class="modal-body mx-3">
+                                                                            <div class="form-group">
+                                                                                <label
+                                                                                    for="editName<%= address._id %>">Name</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    id="editName<%= address._id %>"
+                                                                                    value="<%= address.name %>"
+                                                                                    name="name">
+
+                                                                                <p id="addname" style="color: red"></p>
+                                                                            </div>
+
+                                                                            <div class="form-group">
+                                                                                <label
+                                                                                    for="editMobile<%= address._id %>">Mobile
+                                                                                    Number</label>
+                                                                                <input type="tel" class="form-control"
+                                                                                    id="editMobile<%= address._id %>"
+                                                                                    value="<%= address.mobile %>"
+                                                                                    name="mobile" required>
+                                                                                <p id="addmobile" style="color: red"></p>
+                                                                            </div>
+
+                                                                            <div class="form-group">
+                                                                                <label
+                                                                                    for="editPincode<%= address._id %>">Pincode</label>
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="editPincode<%= address._id %>"
+                                                                                    value="<%= address.pincode %>"
+                                                                                    name="pincode" required>
+                                                                                <p id="addpin" style="color: red"></p>
+                                                                            </div>
+
+                                                                            <div class="form-group">
+                                                                                <label
+                                                                                    for="editAddress<%= address._id %>">Address</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    id="editAddress<%= address._id %>"
+                                                                                    value="<%= address.address %>"
+                                                                                    name="address" required>
+                                                                                <p id="addaddress" style="color: red"></p>
+                                                                            </div>
+
+                                                                            <div class="form-group">
+                                                                                <label
+                                                                                    for="editCity<%= address._id %>">City</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    id="editCity<%= address._id %>"
+                                                                                    value="<%= address.city %>"
+                                                                                    name="city" required>
+                                                                                <p id="addcity" style="color: red"></p>
+                                                                            </div>
+
+                                                                            <div class="form-group">
+                                                                                <label
+                                                                                    for="editState<%= address._id %>">State</label>
+                                                                                <select class="form-control" id="editState<%= address._id %>"  name="state">                                                                                                            
+                                                                                    <option value="<%= address.state %>" selected> <%= address.state %> </option>                                                                              
+                                                                                    <option value="Tamil Nadu">Tamil Nadu</option>
+                                                                                    <option value="Karnataka">Karnataka</option>
+                                                                                    <option value="Goa">Goa</option>
+                                                                                    <option value="Mumbai">Mumbai</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <p id="addstate" style="color: red"></p>
+                                                                        </div>
+
+                                                                        <!-- Add more fields as needed -->
+
+                                                                        <!-- Example Save button -->
+                                                                        <button type="button" class="btn btn-primary"
+                                                                            onclick="saveEdit('<%= address._id %>')">Save
+                                                                            Changes</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <%})%>
+
+                                        </div><!-- End .row -->
+                                    </div><!-- .End .tab-pane -->
+
+
+
+               <!-- -------------------------------------------------------------------------------------------changePassword------------------------------------------------------------------- -->
+
+               <div class="tab-pane fade" id="tab-account" role="tabpanel"
+               aria-labelledby="tab-account-link">
+               <form id="changePasswordForm">
+
+
+                   <label>Current password (leave blank to leave unchanged)</label>
+                   <input type="password" class="form-control" name="currentpassword">
+
+                   <label>New password (leave blank to leave unchanged)</label>
+                   <input type="password" class="form-control" name="newpassword">
+
+                   <label>Confirm new password</label>
+                   <input type="password" class="form-control mb-2" name="confirmnewpassword">
+
+                   <button type="button" class="btn btn-outline-primary-2"
+                       onclick="changePassword()">
+                       <span>SAVE CHANGES</span>
+                       <i class="icon-long-arrow-right"></i>
+                   </button>
+               </form>
+               <div id="successMessage"></div>
+               <div id="errorMessage"></div>
+           </div>
+           
+           <!-- -------------------------------wallet------------------------------------------------ -->
+
+           <div class="tab-pane fade" id="tab-wallet" role="tab-wallet"
+           aria-labelledby="tab-wallet-link">
+           <div class="col-lg-6">
+               <div class="card card-dashboard">
+                   <div class="card-body">
+                       <h3 class="card-title">Wallet Information</h3>
+                       <!-- End .card-title -->
+
+                       <p>
+                           Wallet Balance: <%=wallet.balance  %>
+
+                       </p>
+
+
+                       <a href="/wallet" class="btn btn-primary"> Wallet History
+                       </a>
+
+                   </div><!-- End .card-body -->
+               </div><!-- End .card-dashboard -->
+           </div>
+
+
+                        
+
+                        </div>
+                    </div><!-- End .col-lg-9 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .dashboard -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- <script>
+    function saveEdit(addressId) {
+        
+        Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to update the address.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, update it!',
+        }).then((result)=>{
+            if(result.isConfirmed) {
+                const name = document.getElementById(`editName${addressId}`).value.trim();
+                const mobile = document.getElementById(`editMobile${addressId}`).value.trim();
+                const pincode = document.getElementById(`editPincode${addressId}`).value.trim();
+                const address = document.getElementById(`editAddress${addressId}`).value.trim();
+                const city = document.getElementById(`editCity${addressId}`).value.trim();
+                const state = document.getElementById(`editState${addressId}`).value.trim();
+
+                if (!name) {
+                    const message = document.getElementById("addname").innerHTML = "Please Enter Name"
+                    return
+                }
+
+                if(!mobile) {
+                    const message = document.getElementById("addmobile").innerHTML = "please Enter Mobile"
+                    return
+                }
+
+                if(!pincode) {
+                    const message = document.getElementById("addpin").innerHTML = "please Enter pincode"
+                    return
+                }
+
+                if (!address) {
+                    const message = document.getElementById("addaddress").innerHTML = "Please enter address"
+                    return
+                }
+
+                if (!city) {
+                    const message = document.getElementById("addcity").innerHTML = "Please enter city"
+                    return
+                }
+
+                if (!state) {
+                    const message = document.getElementById("addstate").innerHTML = "Please enter state"
+                    return
+                }
+
+                fetch(`/updateaddress/${addressId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                name,
+                                mobile,
+                                pincode,
+                                address,
+                                city,
+                                state,
+                            }),
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+
+
+                                console.log('Response from the backend:', data);
+                                $('#tabaddress').load('/profile #tabaddress')
+
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Address updated successfully.',
+                                });
+
+                                // window.location.reload();
+
+
+
+                                $(`#editModal${addressId}`).modal('hide');
+
+
+
+                            })
+                            .catch(error => {
+
+
+                                console.error('There was a problem:', error.message);
+
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Failed to update address. Please try again.',
+                                });
+                            });
+                    }
+                });
+            }
+</script> -->
+
+<!-- saveEdit -->
+<script>
+    function saveEdit(addressId) {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to update the address.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, update it!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                const name = document.getElementById(`editName${addressId}`).value.trim();
+                const mobile = document.getElementById(`editMobile${addressId}`).value.trim();
+                const pincode = document.getElementById(`editPincode${addressId}`).value.trim();
+                const address = document.getElementById(`editAddress${addressId}`).value.trim();
+                const city = document.getElementById(`editCity${addressId}`).value.trim();
+                const state = document.getElementById(`editState${addressId}`).value.trim();
+
+
+                if (!name) {
+                    const message = document.getElementById("addname").innerHTML = "Please enter name"
+                    return
+                }
+
+                if (!mobile) {
+                    const message = document.getElementById("addmobile").innerHTML = "Please enter mobile"
+                    return
+                }
+
+                if (!pincode) {
+                    const message = document.getElementById("addpin").innerHTML = "Please enter pincode"
+                    return
+                }
+
+                if (!address) {
+                    const message = document.getElementById("addaddress").innerHTML = "Please enter address"
+                    return
+                }
+
+                if (!city) {
+                    const message = document.getElementById("addcity").innerHTML = "Please enter city"
+                    return
+                }
+
+                if (!state) {
+                    const message = document.getElementById("addstate").innerHTML = "Please enter state"
+                    return
+                }
+
+
+
+
+
+                fetch(`/updateaddress/${addressId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        mobile,
+                        pincode,
+                        address,
+                        city,
+                        state,
+                    }),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+
+
+                        console.log('Response from the backend:', data);
+                        $('#tabaddress').load('/profile #tabaddress')
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Address updated successfully.',
+                        });
+
+                        // window.location.reload();
+
+
+
+                        $(`#editModal${addressId}`).modal('hide');
+
+
+
+                    })
+                    .catch(error => {
+
+
+                        console.error('There was a problem:', error.message);
+
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to update address. Please try again.',
+                        });
+                    });
+            }
+        });
+    }
+</script>
+
+
+
+<!-- edit-profile -->
+<script>
+    function editprofile(){
+        const name = document.getElementById('editName').value.trim();
+        const mobile = document.getElementById('editMobile').value.trim();
+
+        if (name === '' || mobile === '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Please fill in all required fields.',
+                    });
+                    return; 
+                }
+
+                if(!/^\d{10}$/.test(mobile)){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Input',
+                        text: 'Please enter a valid 10-digit mobile number.'
+                    });
+                    return;
+                  }
+
+                  const formData = {
+                    name:name,
+                    mobile:mobile
+                  };
+
+             // Send the data to the server using fetch API
+        fetch('/edit-profile',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response=> response.json())
+        .then(data => {
+            if(data.success){
+                Swal.fire({
+                    icon: 'success',
+                title: 'Success!',
+                text: 'Profile updated successfully!'  
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                     
+                    window.location.href = '/profile';
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                title: 'Update Failed',
+                text: 'Failed to update profile. Please try again.' 
+                });
+            }
+        })
+        .catch(error=>{
+            console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'An error occurred. Please try again later.'
+        });
+     });
+    }
+
+</script>
+
+
+<!-- removeAddress -->
+<script>
+
+    function removeAddress(addressId) {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                deleteAddress(addressId);
+            }
+        });
+    }
+
+    function deleteAddress(addressId) {
+        fetch(`/removeaddress/${addressId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                $('#tabaddress').load('/profile #tabaddress')
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Address removed successfully.',
+                    icon: 'success',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                reloadAddressTab();
+            })
+            .catch(error => {
+
+                console.error('Error removing address:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to remove address.',
+                    icon: 'error',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
+    }
+
+    function reloadAddressTab() {
+        // Use vanilla JavaScript to fetch the content and update the specific div
+        fetch(window.location.href, { method: 'GET' })
+            .then(response => response.text())
+            .then(html => {
+                // Extract the content of the 'tab-address' div from the fetched HTML
+                const tabAddressContent = new DOMParser().parseFromString(html, 'text/html')
+                    .getElementById('tab-address').innerHTML;
+
+                // Update the content of the 'tab-address' div
+                document.getElementById('tab-address').innerHTML = tabAddressContent;
+            })
+            .catch(error => {
+                console.error('Error reloading address tab:', error);
+            });
+    }
+</script>
+
+<!-- changePassword -->
+ <script>
+    function changePassword(){
+         const formData = new FormData(document.getElementById('changePasswordForm'));
+
+         const formObject = {};
+         formData.forEach((value,key)=>{
+            formObject[key] = value;
+         });
+        
+
+        fetch('/changepassword/', {
+            method: 'post',
+            headers: {
+                'Content-Type' : 'application/json',
+            },
+            body: JSON.stringify(formObject),
+        })
+         .then(response =>{
+            if(!response.ok) {
+                throw new Error ('Network response was not ok');
+            }
+            return response.json();
+         })
+         .then(data=>{
+            const successMessageDiv = document.getElementById('successMessage');
+            const errorMessageDiv = document.getElementById('errorMessage');
+
+            if(data.success){
+                $('#changePasswordForm').load('/profile #changePasswordForm')
+                successMessageDiv.textContent = data.message;
+                errorMessageDiv.textContent = '';
+                document.getElementById('changePasswordForm').reset();
+            }else{
+                errorMessageDiv.textContent = data.message;
+                successMessageDiv.textContent = '';
+            }
+         })
+         .catch(error =>{
+            console.error('There was a problem changing the password:',error.message);
+         })
+        }
+
+ </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<%- include('../layout/User/footer') %>

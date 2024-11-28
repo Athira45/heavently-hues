@@ -1,0 +1,291 @@
+
+
+<%- include('../layout/admin/adminHeader') %>
+
+       
+<div class="screen-overlay"></div>
+
+
+    
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Products List</h2>
+                
+            </div>
+            <div>
+               
+                <a href="/admin/addProducts" class="btn btn-primary btn-sm rounded">Create new</a>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <header class="card-header">
+                <div class="row align-items-center">
+                    <div class="col col-check flex-grow-0">
+                       
+                    </div>
+                   
+                   
+                </div>
+            </header>
+            <!-- card-header end// -->
+           
+           <!-- card body -->
+
+
+           <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <!-- <th>Weight</th> -->
+                        <!-- <th>Material</th> -->
+                        <th>Category</th>
+                        <th>stock</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                        <% productList.forEach((result,index)=> { %>
+                            <tr>
+                        <td><%= index+1 %></td>
+                        <td>
+                            <a class="itemside" href="#"></a>
+                         <!-- <% for (let i = 0; i< result.image.length; i++){ %>   
+                            
+                                <img src="/uploads/<%= result.image[i] %>"  alt="Item" width="50" height="50" />
+                           
+                         <% } %> -->
+
+                         <% if (result.image.length > 0) { %>   
+                            <img src="/uploads/<%= result.image[0] %>" alt="Item" width="50" height="50" />
+                        <% } %>
+
+                        </a>
+                        </td>
+                        <td>
+
+                            <a class="itemside" href="#">
+                                <%= result.name %>
+                            </a>
+                        </td>
+                        <td><%= result?.price %></td>
+                        <!-- <td><%= result.Weight%></td> -->
+                        <!-- <td><%= result.Material%></td> -->
+                        <td><%= result?.category?.name %></td>
+                        <td>
+                            <%= result?.stock %>
+                            
+                        </td>
+                        <td>
+                            <% if (result.is_listed === 'Listed') { %>
+                                <span class="badge rounded-pill alert-success">Active</span>
+                              <% } else { %>
+                                <span class="badge rounded-pill alert-danger">Inactive</span>
+                              <% } %>
+                        </td>
+                        <td>
+                            <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> 
+                                <i class="material-icons md-more_horiz"></i> 
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/admin/editproduct?id=<%= result._id %>">Edit</a>
+                                <a class="dropdown-item " href="#" class="btn btn-primary"
+                                                        onclick="toggleProduct('<%= result._id %>', '<%= result.is_listed %>')">
+                                                        <% if(result.is_listed==="Listed" ) { %>
+                                                            Unlist
+                                                            <% } else { %>
+                                                                List
+                                                                <% } %>
+                                                           </a>         
+                                                           <a class="dropdown-item text-danger"
+                                                           onclick="confirmDelete('<%= result._id %>')">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                  <%  }) %>
+                    
+
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+        
+            <!-- card-body end// -->
+        </div>
+        <!-- card end// -->
+
+<!-- --------------------------------------pagination---------------------------------- -->
+        <div class="pagination-area mt-30 mb-50">
+            <!-- <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">16</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                    </li>
+                </ul>
+            </nav> -->
+       
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <% if (currentPage > 1) { %>
+                    <li class="page-item active" id="prev-page">
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>">Prev</a>
+                    </li>
+                    <% } %>
+
+                    <% for(let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    </li>
+                    <% } %>
+
+                    <% if (currentPage < totalPages) { %> 
+                    <li class="page-item" id="next-page">
+                        <a class="page-link" href="?page=<%= currentPage + 1 %>">Nxt</a>
+                    </li>
+                    <% } %>
+                    
+                </ul>
+            </nav> 
+    
+        </div>
+        <div class="toolbox-info">
+            Showing <span><%= (currentPage - 1) * limit + 1 %> - <%= Math.min(currentPage * limit, totalProducts) %> of <%= totalProducts %></span> Products
+        </div>
+
+    </section>
+    <!-- content-main end// -->
+    <footer class="main-footer font-xs">
+        <div class="row pb-30 pt-15">
+            <div class="col-sm-6">
+                <!-- <script>
+                    document.write(new Date().getFullYear());
+                </script>
+                &copy; Nest - HTML Ecommerce Template . -->
+            </div>
+            <!-- <div class="col-sm-6">
+                <div class="text-sm-end">All rights reserved</div>
+            </div> -->
+        </div>
+    </footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function toggleProduct(productId, currentStatus) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `Do you want to ${currentStatus === 'Listed' ? 'unlist' : 'list'} this product?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Correct the function name here
+                window.location.href = `/admin/productList?id=${productId}`;
+            }
+        });
+    }
+
+
+
+    function confirmDelete(productId) {
+        console.log(productId);
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t to Remove this !',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, trigger the deletion by redirecting to the delete URL
+                window.location.href = `/admin/deleteProduct?id=${productId}`;
+            }
+        });
+    }
+</script>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const totalPages = 6;
+        let currentPage = 1;
+    
+        const prevPage = document.getElementById('prev-page');
+        const nextPage = document.getElementById('next-page');
+        const pageLinks = document.querySelectorAll('.pagination .page-link');
+
+        function updatePagination() {
+        pageLinks.forEach((link, index) => {
+            const parentLi = link.parentElement;
+            parentLi.classList.remove('active');
+            if (parseInt(link.textContent) === currentPage) {
+                parentLi.classList.add('active');
+            }
+        });
+
+        prevPage.classList.toggle('disabled', currentPage === 1);
+        nextPage.classList.toggle('disabled', currentPage === totalPages);
+        }
+
+
+        prevPage.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (currentPage > 1) {
+            currentPage--;
+            updatePagination();
+            // Load the previous page's content here
+        }
+    });
+
+    nextPage.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (currentPage < totalPages) {
+            currentPage++;
+            updatePagination();
+            // Load the next page's content here
+        }
+    });
+
+    pageLinks.forEach((link) => {
+        const parentLi = link.parentElement;
+        if (!parentLi.classList.contains('page-link-prev') && !parentLi.classList.contains('page-link-next')) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentPage = parseInt(link.textContent);
+                updatePagination();
+                // Load the selected page's content here
+            });
+        }
+    });
+    updatePagination();
+});
+
+</script>
+
+
+<%- include('../layout/admin/adminFooter') %>
+
+
+
+
+
+
+
+

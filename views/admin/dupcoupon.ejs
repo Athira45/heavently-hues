@@ -1,0 +1,172 @@
+<%- include('../layout/admin/adminHeader') %>
+
+<style>
+    .btn-outline-gradient {
+    background: linear-gradient(45deg, #ff7e5f, #feb47b);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    transition: background 0.3s ease;
+}
+
+.btn-outline-gradient:hover {
+    background: linear-gradient(45deg, #ff6a3d, #fe9b7d);
+}
+
+.table-bordered th, .table-bordered td {
+    border-color: #000;
+    text-align: center;
+}
+
+.pagination .page-link {
+    border-color: #000;
+    color: #000;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #343a40;
+    color: #fff;
+    border-color: #343a40;
+}
+
+.edit-btn {
+    background: linear-gradient(45deg, #FFBA00, #FF6C00);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.edit-btn:hover {
+    background: linear-gradient(45deg, #ff9f00, #ff5a00);
+}
+
+.pagination-container {
+    margin-top: 20px;
+}
+
+</style>
+
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header pt-5">
+            <h3 class="page-title">
+                <span class="page-title-icon btn-primary text-white mr-2">
+                    <i class="mdi mdi-ticket-percent menu-icon"></i>
+                </span>
+                Coupons
+            </h3>
+            <nav aria-label="breadcrumb">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <button class="btn btn-outline-gradient" data-toggle="modal" data-target="#addCouponModal">Add Coupon</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Coupon Table -->
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body table-responsive">
+                    <table class="table table-bordered border-top table-hover">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Coupon Code</th>
+                                <th>Offer Percentage</th>
+                                <th>Min Price</th>
+                                <th>Valid Till</th>
+                                <th>Max Redeemable</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                                    <tr class="text-center">
+                                        <td> coupon.couponCode </td>
+                                        <td> coupon.percentage </td>
+                                        <td>₹ coupon.minPrice </td>
+                                        <td> coupon.expiryDate.toLocaleDateString() </td>
+                                        <td>₹ coupon.maxRedeemAmount </td>
+                                        <td>
+                                            <button class="btn-sm edit-btn" data-toggle="modal" data-target="#editCouponModal">
+                                                Edit
+                                            </button>
+                                            <button class="btn-sm btn-danger" onclick="removeCoupon('')">Delete</button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Edit Coupon Modal -->
+                                    <div class="modal fade" id="editCouponModal" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Edit Coupon</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="editCouponForm">
+                                                        <div class="form-group">
+                                                            <label>Coupon Code</label>
+                                                            <input type="text" class="form-control" name="couponCode" value="" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Offer Percentage</label>
+                                                            <input type="number" class="form-control" name="percentage" value="" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Min Price</label>
+                                                            <input type="number" class="form-control" name="minPrice" value="" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Max Redeemable</label>
+                                                            <input type="number" class="form-control" name="maxRedeemAmount" value="" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Expiry Date</label>
+                                                            <input type="date" class="form-control" name="expiryDate" value="" required>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-gradient-primary">Update Coupon</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                              
+                                <tr>
+                                    <td colspan="6" class="text-center">No coupons available</td>
+                                </tr>
+                          
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container mt-4">
+                    <ul class="pagination justify-content-center">
+                       
+                            <li class="page-item">
+                                <a class="page-link" href="?page">Previous</a>
+                            </li>
+                       
+                            <li class="page-item ">
+                                <a class="page-link" href="?"></a>
+                            </li>
+                       
+                            <li class="page-item">
+                                <a class="page-link" href="?page=">Next</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<%- include('../layout/admin/adminFooter') %>

@@ -1,0 +1,357 @@
+<%- include('../layout/User/header') %>
+
+
+
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Wishlist<span>Shop</span></h1>
+        </div>
+    </div>
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+            </ol>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="container">
+            <table class="table table-wishlist table-mobile">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Stock Status</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <% if (wishlist) { %>
+                        <% wishlist.products.forEach((wishlistItem) => {%>
+                    <tr>
+                        <td class="product-col">
+                            <div class="product">
+                                <figure class="product-media">
+                                    <a href="#">
+                                        <img src="/uploads/<%=wishlistItem.productId.image[0]%>" alt="Product image">
+                                    </a>
+                                </figure>
+
+                                <h3 class="product-title">
+                                    <a href="#"><%= wishlistItem.productId.name %></a>
+                                </h3>
+                            </div>
+                        </td>
+                        <td class="price-col">₹<%=wishlistItem.price%></td>
+                        <td class="stock-col"><span class="in-stock"><%= wishlistItem.stock %></span></td>
+                
+                            <td>
+                               <button class="btn btn-block btn-outline-primary-2" onclick="addtoCart('<%= wishlistItem.productId._id %>')">  
+                                <i class="icon-cart-plus"></i> Add to Cart
+                            </button>
+                            
+                                
+                            </td>
+                        
+
+                        <td class="remove-col"><button class="btn-remove" onclick="removeFromWishlist('<%= wishlistItem.productId._id %>')" ><i class="icon-close"></i></button></td>
+                    </tr>
+                    <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="5" class="text-center">No items in the wishlist.</td>
+                        </tr>
+
+                        <% } %>
+                    <!-- <tr> -->
+                        <!-- <td class="product-col">
+                            <div class="product">
+                                <figure class="product-media">
+                                    <a href="#">
+                                        <img src="assets/images/products/table/product-2.jpg" alt="Product image">
+                                    </a>
+                                </figure>
+
+                                <h3 class="product-title">
+                                    <a href="#">Blue utility pinafore denim dress</a>
+                                </h3>
+                            </div>
+                        </td> -->
+                        <!-- <td class="price-col">$76.00</td> -->
+                        <!-- <td class="stock-col"><span class="in-stock">In stock</span></td> -->
+                        <!-- <td class="action-col">
+                            <button class="btn btn-block btn-outline-primary-2"><i class="icon-cart-plus"></i>Add to Cart</button>
+                        </td> -->
+                        <!-- <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td> -->
+                    <!-- </tr> -->
+                    <!-- <tr>
+                        <td class="product-col">
+                            <div class="product">
+                                <figure class="product-media">
+                                    <a href="#">
+                                        <img src="assets/images/products/table/product-3.jpg" alt="Product image">
+                                    </a>
+                                </figure>
+
+                                <h3 class="product-title">
+                                    <a href="#">Orange saddle lock front chain cross body bag</a>
+                                </h3>
+                            </div>
+                        </td>
+                        <td class="price-col">$52.00</td>
+                        <td class="stock-col"><span class="out-of-stock">Out of stock</span></td>
+                        <td class="action-col">
+                            <button class="btn btn-block btn-outline-primary-2 disabled">Out of Stock</button>
+                        </td>
+                        <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+                    </tr> -->
+                </tbody>
+            </table>
+            <div class="wishlist-share">
+                <div class="social-icons social-icons-sm mb-2">
+                                 </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- <script>
+    function addtoCart(proid,userid) {
+       
+        const quantity = parseInt(document.getElementById('qty').value,10);
+          
+        if (isNaN(quantity) || quantity < 1) {
+              Swal.fire({
+                 icon: 'error',
+                 title: 'Out of Stock',
+                  text: 'Product quantity must be at least 1.',
+             });
+            return;
+       }
+       fetch(`/addingcart/${proid}/${quantity}/${userid}`, {
+            method: 'POST',
+            headers: {
+                  'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ quantity  }),
+               
+         
+    })
+    .then((response) => {
+        if (!response.ok) {
+           // Check if the response status is not okay (e.g., 401 Unauthorized)
+        throw new Error('Unauthorized - User not authenticated.');
+         }
+     return response.json();
+  })
+  .then((data) => {
+      console.log('Response from backend:', data);
+            
+     Swal.fire({
+        icon: 'success',
+        title: 'Product added to cart!',
+         showConfirmButton: false,
+          timer: 1500,
+      });
+                        
+         setTimeout(() => {
+           location.reload();
+      }, 1500);
+  })
+  .catch((error) => {
+      console.error('Error:', error);
+            
+          Swal.fire({
+              icon: 'error',
+              title: 'Error adding to cart',
+              text: error.message || 'An error occurred while adding the product to the cart.',
+          });
+      });
+    }
+</script> -->
+
+<script>
+    async function addtoCart(productid) {
+        console.log("entttttttttttttrrrrrrrrrrr")
+        console.log("proidfffff",productid)
+
+       try {
+        
+        const confirmation = await Swal.fire({
+                title: 'Add to Cart?',
+                text: 'Are you sure you want to add this product to your cart?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, add to cart',
+                cancelButtonText: 'Cancel'
+            });
+            if(confirmation.isConfirmed){
+                console.log("EEEEENttttt")
+                const response = await fetch("/addToCart/" + productid,{
+                    method:'POST',
+                    headers:{
+                        'Content-Type': 'application/json',
+                    },
+                })
+                if(response.ok){
+                    const result = await response.json();
+                    console.log( "asssssssss",result.message)
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Product added to cart!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(()=>{
+                        window.location.reload()
+                    })
+                }else{
+                    console.log("Error adding to cart:",response.statusText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error adding to cart',
+                        text: 'An error occurred while adding the product to the cart.'
+                    });
+                }
+            }
+
+       } catch (error) {
+         console.log("Exception:",error.message);
+         Swal.fire({
+                icon: 'error',
+                title: 'Error adding to cart',
+                text: 'An error occurred while adding the product to the cart.'
+            });
+       }
+        
+    }
+</script>
+
+
+
+
+<!-- <script>
+    async function addToCart(productId) {
+        try {
+            const confirmation = await Swal.fire({
+                title: 'Add to Cart?',
+                text: 'Are you sure you want to add this product to your cart?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, add to cart',
+                cancelButtonText: 'Cancel'
+            });
+
+            if (confirmation.isConfirmed) {
+                const response = await fetch("/addToCart/" + productId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log(result.message);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Product added to cart!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(()=>{
+                        window.location.reload()
+                    })
+                } else {
+                    console.error("Error adding to cart:", response.statusText);
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error adding to cart',
+                        text: 'An error occurred while adding the product to the cart.'
+                    });
+                }
+            }
+        } catch (error) {
+            console.error("Exception:", error.message);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error adding to cart',
+                text: 'An error occurred while adding the product to the cart.'
+            });
+        }
+    }
+</script> -->
+
+<script>
+    async function removeFromWishlist(productId) {
+        try {
+            const confirmation = await Swal.fire({
+                title: 'Remove from Wishlist?',
+                text: 'Are you sure you want to remove this product from your wishlist?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, remove',
+                cancelButtonText: 'Cancel'
+            });
+
+            if (confirmation.isConfirmed) {
+                const response = await fetch("/removeFromWishlist", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ productId: productId }),
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log(result.message);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Product removed from wishlist!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+
+                } else {
+                    console.error("Error removing from wishlist:", response.statusText);
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error removing from wishlist',
+                        text: 'An error occurred while removing the product from the wishlist.'
+                    });
+                }
+            }
+        } catch (error) {
+            console.error("Exception:", error.message);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error removing from wishlist',
+                text: 'An error occurred while removing the product from the wishlist.'
+            });
+        }
+    }
+</script>
+
+
+<%- include('../layout/User/footer') %>

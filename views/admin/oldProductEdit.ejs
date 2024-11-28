@@ -1,0 +1,1626 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Nest Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/adminAssets/AdProductAssets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/adminAssets/AdProductAssets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<style>
+   
+#imageInput {
+    display: block;
+    margin: 20px 0;
+}
+
+/* Style for the image preview */
+#imagePreview {
+    max-width: 100%; /* Ensure it fits within its container */
+    margin-top: 10px;
+}
+
+/* Style for the cropped canvas (optional, if you want to show it) */
+#croppedCanvas {
+    display: block;
+    max-width: 100%; /* Ensure it fits within its container */
+    margin-top: 10px;
+}
+
+/* Style for the crop button */
+#cropButton {
+    display: block;
+    margin: 10px 0;
+    padding: 10px 20px;
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Style for the crop button on hover */
+#cropButton:hover {
+    background-color: #0056b3; /* Darker shade of blue */
+}
+
+
+
+
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .image-container img {
+            max-width: 300px;
+            max-height: 300px;
+            margin-bottom: 10px;
+            cursor: pointer; /* Cursor change to indicate clickable */
+        }
+        .image-container button {
+            margin-right: 10px;
+        }
+        .crop-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .cropper-container {
+            display: none; /* Initially hidden */
+        }
+
+
+
+       
+   
+</style>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/adminAssets/AdProductAssets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+               
+                
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/AllProducts">
+                        <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/adCategory">
+                            <i class="icon material-icons md-category"></i>
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/orders">
+                        <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                 
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/coupons">
+                        <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/categoryoffer">
+                            <i class="icon material-icons md-local_offer"></i>
+                            <span class="text">offers</span>
+                            
+                        </a>
+                        <!-- <div class="submenu">
+                        <a href="#">View offer</a>
+                        <a href="#">Add offer</a>
+                    </div> -->
+                       
+                        </li>
+                        <li class="menu-item ">
+                            <a class="menu-link" href="/admin/adminUsers">
+                                <i class="icon material-icons md-person"></i> 
+                                <span class="text">Users</span>
+                            </a>
+                            </li>                                  
+                   
+                </li>
+                
+                <!-- <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-stars"></i> <span class="text">Brands</span> </a>
+                </li> -->
+                <li class="menu-item">
+                    <a class="menu-link" disabled href="#">
+                        <i class="icon material-icons md-pie_chart"></i>
+                        <span class="text">Sales Report</span>
+                    </a>
+                </li>
+            </ul>
+            <hr />
+            
+            
+            </ul>
+           
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                            <a class="dropdown-item text-brand" href="#"><img src="/adminAssets/AdProductAssets/imgs/theme/flag-us.png" alt="English">English</a>
+                            <a class="dropdown-item" href="#"><img src="/adminAssets/AdProductAssets/imgs/theme/flag-fr.png" alt="Français">Français</a>
+                            <a class="dropdown-item" href="#"><img src="/adminAssets/AdProductAssets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
+                            <a class="dropdown-item" href="#"><img src="/adminAssets/AdProductAssets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/adminAssets/AdProductAssets/imgs/people/avatar-2.png" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="row">
+                <div class="col-6">
+                    <div class="content-header">
+                        <h2 class="content-title">Edit Product</h2>
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <!-- <form  id="addForm"  action="/admin/editProduct/<%= product._id %>" method="post"  enctype="multipart/form-data"> -->
+                                <form id="addForm" enctype="multipart/form-data">
+                                <div class="row">
+                                   
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Product Name</label>
+                                            <input type="text" name="name" placeholder="Type here" class="form-control" value="<%= product.name %>" id="product-name" required>
+                                            <div class="error-message text-danger" id="name-error"></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Description</label>
+                                            <textarea placeholder="Type here" name="description" class="form-control" rows="4" id="description"><%= product.description %></textarea>
+                                            <div class="error-message text-danger" id="description-error"></div>
+                                        </div>
+                                        <!-- <div class="mb-4">
+                                            <label for="" class="form-label" >Brand name</label>
+                                            <select class="form-select">
+                                                <option> Wayfair </option>
+                                                <option> IKEA </option>
+                                                <option> Herman Miller </option>
+                                            </select>
+                                        </div> -->
+                                        <div class="mb-4">
+                                            <label class="form-label">Stock</label>
+                                            <input type="number" name="stock" placeholder="Type here" class="form-control" value="<%= product.stock %>" id="stock" required>
+                                            <div class="error-message text-danger" id="stock-error"></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Specification</label>
+                                            <input type="text" placeholder="Specification" name="spec"  class="form-control" value="<%= product.spec %>" >
+                                            <div class="error-message text-danger" id="spec-error"></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Width</label>
+                                            <input type="number" placeholder="Widhth" name="width"  class="form-control" value="<%= product.width %>" >
+                                            <div class="error-message text-danger" id="width-error"></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Height</label>
+                                            <input type="number" placeholder="height" name="height"  class="form-control" value="<%= product.height %>" >
+                                            <div class="error-message text-danger" id="height-error"></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">depth</label>
+                                            <input type="number" placeholder="depth" name="depth"  class="form-control" value="<%= product.depth %>" >
+                                            <div class="error-message text-danger" id="depth-error"></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Material</label>
+                                            <textarea placeholder="Material" name="material" class="form-control" rows="4" id="material"><%= product.material %></textarea>
+                                            <div class="error-message text-danger" id="material-error"></div>
+                                        </div>
+                                    </div> 
+                                </div>
+                            
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6> Price</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <!-- <label class="form-label">Cost in USD</label> -->
+                                            <input type="number" placeholder="$00.0"name="price" value="<%= product.price %>"  class="form-control">
+                                            <div class="error-message text-danger" id="price-error"></div>
+                                        </div>
+                                    </div> 
+                                </div> 
+                                <div class="mb-4">
+                                    <label class="form-label">Discount</label>
+                                    <input type="number" placeholder="Discount" name="discount"  class="form-control" value="<%= product.discount %>" >
+                                    <div class="error-message text-danger" id="discount-error"></div>
+                                </div>
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6> Category</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Category</label>
+                                            <select class="form-select" id="productCategory" name="category" required>
+                                                <% categories.forEach(category => { %>
+                                                    <option value="<%= category._id %>"><%= category.name %></option>
+                                                <% }); %>
+                                            </select>
+                                            <div class="error-message text-danger" id="category-error"></div>
+                                        </div>
+    
+                                    </div> 
+                                </div> 
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>Media</h6>
+                                    </div>
+                            
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Images</label>
+                                            <h5>Image Preview</h5>
+                                            <div id="imagePreviewContainer" style="display: flex; flex-wrap: nowrap; gap: 10px;">
+                                                <% product.image.forEach((image, index) => { %>
+                                                    <div id="imagePreview<%= index %>" style="display: flex; flex-direction: column; align-items: center;">
+                                                        <img src="/uploads/<%= image %>" alt="Product Image" style="width: 100px; height: 100px; margin-right: 10px;">
+                                                        <button type="button" class="btn btn-danger mt-2 delete-image-btn" data-image-index="<%= index %>" style="font-size: 12px; padding: 2px 6px; width: 60px; height: 25px;" onclick="confirmDelete('<%=product._id %>', '<%= image %>')">Delete</button>
+                                                    </div>
+                                                <% }) %>
+                                            </div>
+                                            
+                                            <canvas id="croppedCanvas" style="display: none;"></canvas>
+                                            <button type="button" id="cropButton" class="btn btn-primary" style="margin-top: 10px;">Crop Image</button>
+                                            
+                                            <label class="form-label">Upload New Images</label>
+                                            <input name="image" class="form-control" type="file" id="imageInput" accept="image/*" multiple>
+                                            <div class="error-message text-danger" id="image-error"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <button type="submit" id="submitForm" class="btn btn-md rounded font-sm hover-up" style="width: 15%; height: 55px; margin-right: 10px; font-size: 15px;">Update Product</button>
+                            </form>
+   
+
+                                <div>
+                                    <!-- <button type="submit" id="addForm" class="btn btn-md rounded font-sm hover-up">Edit</button> -->
+                                   
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section> 
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                   
+                </div>
+                <div class="col-sm-6">
+                
+                </div>
+            </div>
+        </footer>
+    </main>
+
+      
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+    <script src="/adminAssets/AdProductAssets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/adminAssets/AdProductAssets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/adminAssets/AdProductAssets/js/vendors/select2.min.js"></script>
+    <script src="/adminAssets/AdProductAssets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/adminAssets/AdProductAssets/js/vendors/jquery.fullscreen.min.js"></script>
+    
+    <script src="/adminAssets/AdProductAssets/js/main.js?v=1.1" type="text/javascript"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- <script>
+        function displaySelectedImages(input) {
+            const selectedImagesContainer = document.getElementById("selectedImagesContainer");
+            selectedImagesContainer.innerHTML = " ";
+
+            for(let i=0; i<input.files.length; i++) {
+                const file = input.files[i];
+                const reader = new FileReader();
+                const cropContainer = document.createElement("div");
+                cropContainer.classList.add("image-crop-container");
+                cropContainer.innerHTML = `
+                  <div class = "image-container">
+                    <img id="image${i}" src = "" alt="Select an image to crop" class="img-thumbnail" >
+                    </div>
+                    
+                    <button class="crop-button" id="cropButton${i}"> Crop Image ${i + 1}</button>
+
+
+                `;
+                selectedImagesContainer.appendChild(cropContainer);
+                const image = cropContainer.querySelector(`#image${i}`);
+                const cropButton = cropContainer.querySelector(`#cropButton${i}`);
+
+                reader.onload = () =>{
+                    image.src = reader.result;
+                    let cropper = new Cropper(image, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                    });
+
+                    cropButton.addEventListener("click",(event)=>{
+                        event.preventDefault();
+                        if(cropper) {
+                            const canvas = cropper.getCroppedCanvas({
+                                width: 800, // Increased size for better quality
+                                height: 800, // Increased size for better quality
+                                imageSmoothingEnabled: true,
+                                imageSmoothingQuality: 'high',
+
+                            });
+                            const croppedImageDataURL = canvas.toDataURL('image/jpeg',1.0);
+                            image.src=croppedImageDataURL;
+                            const croppedImageFile = dataURLToFile(croppedImageDataURL, file.name);
+                            const currentFiles = Array.from(input.files); 
+                            currentFiles[i] = croppedImageFile;
+
+                            const newFileList = createFileList(currentFiles);
+                            input.files = newFileList;
+                            cropper.destroy();
+                            cropper = null;
+
+                        }else{
+                            cropper = new Cropper(image, {
+                                aspectRatio: 1,
+                                viewMode: 1,
+                            });
+                        }
+                    })
+                }
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+
+         // Function to convert dataURL to File
+         function dataURLToFile(dataURL, fileName) {
+            const arr = dataURL.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            return new File([u8arr], fileName, { type: mime });
+        }
+
+        // Function to create a FileList from an array of Files
+        function createFileList(files) {
+            const fileList = new DataTransfer();
+
+            files.forEach((file) => {
+                fileList.items.add(file);
+            });
+
+            return fileList.files;
+        }
+
+
+    </script> -->
+    
+
+     <!-- <script> 
+        document.getElementById('submitForm').addEventListener('click', function(event) {
+            event.preventDefault();
+            
+            let valid = true;
+        
+           
+            const name = document.querySelector('input[name="name"]').value.trim();
+            const description = document.querySelector('textarea[name="description"]').value.trim();
+            const stock = document.querySelector('input[name="stock"]').value;
+            const price = document.querySelector('input[name="price"]').value;
+            const spec = document.querySelector('input[name="spec"]').value;
+            const width = document.querySelector('input[name="width"]').value;
+            const height = document.querySelector('input[name="height"]').value;
+            const depth = document.querySelector('input[name="depth"]').value;
+            const material = document.querySelector('textarea[name="material"]').value;
+            const category = document.querySelector('#productCategory').value;
+            const image = document.querySelector('input[name="image"]').files;
+           
+        
+            // Clear previous error messages
+            document.getElementById('name-error').innerText = '';
+            document.getElementById('description-error').innerText = '';
+            document.getElementById('stock-error').innerText = '';
+            document.getElementById('price-error').innerText = '';
+            document.getElementById('spec-error').innerText = '';
+            document.getElementById('width-error').innerText = '';
+            document.getElementById('height-error').innerText = '';
+            document.getElementById('depth-error').innerText = '';
+            document.getElementById('material-error').innerText = '';
+            document.getElementById('category-error').innerText = '';
+            document.getElementById('image-error').innerText = '';
+
+            // Validate Product Name
+            if (!name) {
+                valid = false;
+                document.getElementById('name-error').innerText = 'Product name required';
+            }
+        
+            // Validate Description
+            if (!description) {
+                valid = false;
+                document.getElementById('description-error').innerText = 'Description required';
+            }
+        
+            // Validate Stock
+            if (stock <= 0) {
+                valid = false;
+                document.getElementById('stock-error').innerText = 'Stock cannot be negative or zero';
+            }
+
+            // Validate specification
+            if (!spec) {
+                valid = false;
+                document.getElementById('spec-error').innerText = 'Please enter a specifications';
+            }
+
+             // Validate Material
+             if (!material) {
+                valid = false;
+                document.getElementById('material-error').innerText = 'Please enter a material';
+            }
+
+
+             // Validate width
+             if (width <= 0) {
+                valid = false;
+                document.getElementById('width-error').innerText = 'Width cannot be negative or zero';
+            }
+
+            // Validate height
+            if (height <= 0) {
+                valid = false;
+                document.getElementById('height-error').innerText = 'height cannot be negative or zero';
+            }
+
+         // Validate depth
+         if (depth <= 0) {
+                valid = false;
+                document.getElementById('depth-error').innerText = 'depth cannot be negative or zero';
+            }
+
+            // Validate Price
+            if (price <= 0) {
+                valid = false;
+                document.getElementById('price-error').innerText = 'Price cannot be negative ';
+            }
+        
+            // Validate Category
+            if (!category) {
+                valid = false;
+                document.getElementById('category-error').innerText = 'Please select a category';
+            }
+        
+
+            if (image.length === 0) {
+    valid = false;
+    document.getElementById('image-error').innerText = 'Please select at least one image';
+} else if (image.length > 3) {
+    valid = false;
+    document.getElementById('image-error').innerText = 'You can upload a maximum of 3 images';
+}
+
+
+            if (!valid) {
+        return;
+    }
+
+
+    // Submit the form if validation passes
+    document.querySelector('#addForm').submit();
+        });
+
+
+
+        function confirmDelete(imageId, productId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, send a DELETE request to the delete URL
+                fetch(`/admin/deleteImage/${productId}/${imageId}`, {
+
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("log response",response)
+                        window.location.reload()
+                    } else {
+                        Swal.fire('Error!', 'Failed to delete image.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Error!', 'An error occurred while deleting the image.', 'error');
+                });
+            }
+        });
+    }
+
+
+        </script> -->
+
+
+        <!-- <script> 
+            document.getElementById('submitForm').addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                let valid = true;
+            
+               
+                const name = document.querySelector('input[name="name"]').value.trim();
+                const description = document.querySelector('textarea[name="description"]').value.trim();
+                const stock = document.querySelector('input[name="stock"]').value;
+                const price = document.querySelector('input[name="price"]').value;
+                const spec = document.querySelector('input[name="spec"]').value;
+                const width = document.querySelector('input[name="width"]').value;
+                const height = document.querySelector('input[name="height"]').value;
+                const depth = document.querySelector('input[name="depth"]').value;
+                const material = document.querySelector('textarea[name="material"]').value;
+                const category = document.querySelector('#productCategory').value;
+                const imageInput = document.querySelector('input[name="image"]').files;
+                const images = imageInput.files;
+                const currentImagesCount = document.querySelectorAll('#imagePreviewContainer img').length;
+               
+            
+                // Clear previous error messages
+                document.getElementById('name-error').innerText = '';
+                document.getElementById('description-error').innerText = '';
+                document.getElementById('stock-error').innerText = '';
+                document.getElementById('price-error').innerText = '';
+                document.getElementById('spec-error').innerText = '';
+                document.getElementById('width-error').innerText = '';
+                document.getElementById('height-error').innerText = '';
+                document.getElementById('depth-error').innerText = '';
+                document.getElementById('material-error').innerText = '';
+                document.getElementById('category-error').innerText = '';
+                document.getElementById('image-error').innerText = '';
+    
+                // Validate Product Name
+                if (!name) {
+                    valid = false;
+                    document.getElementById('name-error').innerText = 'Product name required';
+                }
+            
+                // Validate Description
+                if (!description) {
+                    valid = false;
+                    document.getElementById('description-error').innerText = 'Description required';
+                }
+            
+                // Validate Stock
+                if (stock <= 0) {
+                    valid = false;
+                    document.getElementById('stock-error').innerText = 'Stock cannot be negative or zero';
+                }
+    
+                // Validate specification
+                if (!spec) {
+                    valid = false;
+                    document.getElementById('spec-error').innerText = 'Please enter a specifications';
+                }
+    
+                 // Validate Material
+                 if (!material) {
+                    valid = false;
+                    document.getElementById('material-error').innerText = 'Please enter a material';
+                }
+    
+    
+                 // Validate width
+                 if (width <= 0) {
+                    valid = false;
+                    document.getElementById('width-error').innerText = 'Width cannot be negative or zero';
+                }
+    
+                // Validate height
+                if (height <= 0) {
+                    valid = false;
+                    document.getElementById('height-error').innerText = 'height cannot be negative or zero';
+                }
+    
+             // Validate depth
+             if (depth <= 0) {
+                    valid = false;
+                    document.getElementById('depth-error').innerText = 'depth cannot be negative or zero';
+                }
+    
+                // Validate Price
+                if (price <= 0) {
+                    valid = false;
+                    document.getElementById('price-error').innerText = 'Price cannot be negative ';
+                }
+            
+                // Validate Category
+                if (!category) {
+                    valid = false;
+                    document.getElementById('category-error').innerText = 'Please select a category';
+                }
+
+
+             const totalImages = currentImagesCount + images.length;
+             
+             if (totalImages > 3) {
+        valid = false;
+        document.getElementById('image-error').innerText = 'You can upload a maximum of 3 images.';
+    } else if (totalImages === 0) {
+        valid = false;
+        document.getElementById('image-error').innerText = 'Please select at least one image.';
+    }
+            
+    
+    //             if (image.length === 0) {
+    //     valid = false;
+    //     document.getElementById('image-error').innerText = 'Please select at least one image';
+    // } else if (image.length > 3) {
+    //     valid = false;
+    //     document.getElementById('image-error').innerText = 'You can upload a maximum of 3 images';
+    // }
+    
+    
+                if (!valid) {
+            return;
+        }
+    
+    
+//         // Submit the form if validation passes
+//         document.querySelector('#addForm').submit();
+//             });
+
+//         // Function to delete image and update input field validation dynamically
+//         document.querySelectorAll('.delete-image-btn').forEach(button => {
+//             button.addEventListener('click',function (event){
+//                 event.preventDefault();
+//                 const imageIndex = this.dataset.imageIndex;
+
+//                 // Remove the selected image preview
+//         document.getElementById(`imagePreview${imageIndex}`).remove();
+
+//          // Recheck total images after deletion
+//          const remainingImagesCount = document.querySelectorAll('#imagePreviewContainer img').length;
+
+//          // If less than 3 images are present, allow new image uploads
+//          if (remainingImagesCount < 3) {
+//             document.getElementById('imageInput').disabled = false;
+//         }
+
+//             })
+//         });
+
+//         // Disable image input initially if 3 images are already present
+// window.addEventListener('load', function () {
+//     const currentImagesCount = document.querySelectorAll('#imagePreviewContainer img').length;
+
+//     if (currentImagesCount >= 3) {
+//         document.getElementById('imageInput').disabled = true;
+//     }
+// });
+            
+
+
+
+            function confirmDelete(imageId, productId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If confirmed, send a DELETE request to the delete URL
+                    fetch(`/admin/deleteImage/${productId}/${imageId}`, {
+    
+                        method: 'DELETE'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log("log response",response)
+                            window.location.reload()
+                        } else {
+                            Swal.fire('Error!', 'Failed to delete image.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire('Error!', 'An error occurred while deleting the image.', 'error');
+                    });
+                }
+            });
+        }
+    
+    
+            </script> -->
+
+
+
+         <script> 
+        document.getElementById('submitForm').addEventListener('click', function(event) {
+            event.preventDefault();
+            
+            let valid = true;
+        
+           
+            const name = document.querySelector('input[name="name"]').value.trim();
+            const description = document.querySelector('textarea[name="description"]').value.trim();
+            const stock = document.querySelector('input[name="stock"]').value;
+            const price = document.querySelector('input[name="price"]').value;
+            const spec = document.querySelector('input[name="spec"]').value;
+            const width = document.querySelector('input[name="width"]').value;
+            const height = document.querySelector('input[name="height"]').value;
+            const depth = document.querySelector('input[name="depth"]').value;
+            const material = document.querySelector('textarea[name="material"]').value;
+            const category = document.querySelector('#productCategory').value;
+            const image = document.querySelector('input[name="image"]').files;
+           
+        
+            // Clear previous error messages
+            document.getElementById('name-error').innerText = '';
+            document.getElementById('description-error').innerText = '';
+            document.getElementById('stock-error').innerText = '';
+            document.getElementById('price-error').innerText = '';
+            document.getElementById('spec-error').innerText = '';
+            document.getElementById('width-error').innerText = '';
+            document.getElementById('height-error').innerText = '';
+            document.getElementById('depth-error').innerText = '';
+            document.getElementById('material-error').innerText = '';
+            document.getElementById('category-error').innerText = '';
+            document.getElementById('image-error').innerText = '';
+
+            // Validate Product Name
+            if (!name) {
+                valid = false;
+                document.getElementById('name-error').innerText = 'Product name required';
+            }
+        
+            // Validate Description
+            if (!description) {
+                valid = false;
+                document.getElementById('description-error').innerText = 'Description required';
+            }
+        
+            // Validate Stock
+            if (stock <= 0) {
+                valid = false;
+                document.getElementById('stock-error').innerText = 'Stock cannot be negative or zero';
+            }
+
+            // Validate specification
+            if (!spec) {
+                valid = false;
+                document.getElementById('spec-error').innerText = 'Please enter a specifications';
+            }
+
+             // Validate Material
+             if (!material) {
+                valid = false;
+                document.getElementById('material-error').innerText = 'Please enter a material';
+            }
+
+
+             // Validate width
+             if (width <= 0) {
+                valid = false;
+                document.getElementById('width-error').innerText = 'Width cannot be negative or zero';
+            }
+
+            // Validate height
+            if (height <= 0) {
+                valid = false;
+                document.getElementById('height-error').innerText = 'height cannot be negative or zero';
+            }
+
+         // Validate depth
+         if(depth){
+         if (depth <= 0) {
+                valid = false;
+                document.getElementById('depth-error').innerText = 'depth cannot be negative or zero';
+            }
+        }
+
+            // Validate Price
+            if (price <= 0) {
+                valid = false;
+                document.getElementById('price-error').innerText = 'Price cannot be negative ';
+            }
+        
+            // Validate Category
+            if (!category) {
+                valid = false;
+                document.getElementById('category-error').innerText = 'Please select a category';
+            }
+        
+
+            if (image.length === 0) {
+    valid = false;
+    document.getElementById('image-error').innerText = 'Please select at least one image';
+} else if (image.length > 3) {
+    valid = false;
+    document.getElementById('image-error').innerText = 'You can upload a maximum of 3 images';
+}
+
+
+            if (!valid) {
+        return;
+    }
+
+
+    // Submit the form if validation passes
+    document.querySelector('#addForm').submit();
+        });
+
+
+
+        function confirmDelete( productId,imageId) {
+            console.log("enterrrrrrrrrr")
+            console.log("prod :",productId)
+            console.log("image :",imageId)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, send a DELETE request to the delete URL
+                fetch(`/admin/deleteImage/${productId}/${imageId}`, {
+
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("log response",response)
+                        window.location.reload()
+                    } else {
+                        Swal.fire('Error!', 'Failed to delete image.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Error!', 'An error occurred while deleting the image.', 'error');
+                });
+            }
+        });
+    }
+
+
+        </script> 
+
+
+
+
+        
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script> -->
+</body>
+
+</html>
+
+
+
+
+// <!--------------------------------------------------------------- adminn router  --------------------------------------------------------->
+
+const path = require('path');
+const express=require('express');
+const router=express();
+const session = require('express-session');
+const multer = require('multer');
+const config = require('../config/config');
+const productController = require('../controller/productController');
+const orderController = require('../controller/orderController');
+const couponController = require('../controller/couponController');
+const offerController = require('../controller/offerController');
+
+router.set('view engine','ejs');
+router.set('views',path.join(__dirname,'../views/admin'));
+
+const adminController = require('../controller/adminController');
+const adminAuth = require('../middleware/adminAuth');
+
+const categoryController = require('../controller/categoryController');
+
+
+router.get('/adlogin',adminAuth.isLogin,adminController.LoadAdLogin);
+router.post('/adlogin',adminController.verifyLogin);
+
+
+
+//dashboard
+router.get('/dashboard',adminAuth.verify,adminController.LoadDashboard);
+
+
+// 
+router.get('/dashboard',(req,res)=>{
+  if(!req.session.user){
+    res.redirect('/');
+  }else{
+    res.render('dashboard',{user:credential.name});
+  }
+});
+
+
+
+router.get('/adCategory',categoryController.LoadAdminCategory);
+//insert category
+router.post('/adCategory',categoryController.insertCategory);
+
+//edit category
+router.get('/editcategory',categoryController.LoadEditCategory);
+router.post('/editCategory',categoryController.updateCategory);
+
+//deleteCategory
+router.get('/deleteCategory',categoryController.deleteCategory);
+
+
+//category status
+router.get("/listcategory", categoryController.listUnlistCategory);
+
+router.get('/allProducts',productController.LoadAllProducts);
+router.get('/addProducts',productController.LoadAdProducts);
+
+
+//all user
+router.get('/adminUsers',adminController.LoadAdminUsers);
+
+router.get('/alluserlist',adminController.listUnlistUser);
+
+//.............
+// multer handler middleware
+const multerErrorHandler = (err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    // A Multer error occurred when uploading.
+    if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+      return res.status(400).json({ error: 'Too many files uploaded' });
+    }
+    return res.status(400).json({ error: err.message });
+  } else if (err) {
+    // An unknown error occurred when uploading.
+    return res.status(500).json({ error: 'File upload error' });
+  }
+  // Everything went fine.
+  next();
+};
+
+
+
+//.end middleware........
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, path.join(__dirname, '../public/uploads'));
+  },
+  filename: function (req, file, cb) {
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString().replace(/:/g, '-').replace(/\..+/, '');
+      const name = formattedDate + '_' + file.originalname;
+      cb(null, name);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// router.post('/addproducts', upload.array('image', 5),multerErrorHandler, productController.uploadProduct);
+router.post('/addproducts', upload.array('image', 3), multerErrorHandler, productController.uploadProduct);
+
+
+//delete image from editpage
+
+// router.delete('/deleteImage/:productId/:imageId', adminAuth.verify, productController.imageDelete);
+router.delete('/deleteImage/:productId/:imageId', productController.imageDelete);
+
+
+
+
+//Edit product
+router.get('/editProduct',productController.LoadEditProduct);
+// router.post('/editProduct/:id', upload.array('image', 3), productController.handleEditProduct);
+router.post('/editProduct/:id', upload.array('images', 10), productController.handleEditProduct);
+
+//list unlist product
+router.get('/productList',productController.listunlistProduct);
+
+//delete product
+
+router.get('/deleteProduct',productController.productDelete);
+
+//----------------------------------------orderManagement--------------------------------------------------------
+router.get('/orders',adminAuth.verify,orderController.loadOrder);
+router.get('/orders/:orderId/items/:itemId',orderController.itemDetails);
+// router.get('/itemd',orderController.itemDetails);
+
+router.post('/returnRequests',orderController.returnReq);
+
+
+//----------------------------------------------------coupons-------------------------------------------------------
+router.get('/coupons',couponController.loadCoupons);
+router.post('/coupons/add',couponController.addCoupon);
+router.put('/coupons/edit',couponController.editCoupon);
+router.delete('/coupons/delete',couponController.deleteCoupon);
+
+// --------------------------------------------offer----------------------------------------------------------
+router.get('/categoryoffer',offerController.loadOffer);
+router.post('/addCategoryOff',offerController.addCategoryOffer)
+router.post('/categoryPercentageEdit',offerController.categoryOffer);
+
+
+router.post('/updateStatus',orderController.statusUpdate);
+
+// -------------------------salesReport------------------------------------------- 
+router.get('/reports',adminController.salesReport);
+
+// router.post('/salesReport',adminController.saleRreports)
+
+router.get("/500",adminController.InternalServer);
+
+
+module.exports = router;
+
+
+<!-- product controller  -->
+
+const Products = require("../models/productModel");
+const multer = require('multer');
+const Categories = require("../models/categoryModel");
+const Cart = require('../models/cartModel')
+const path = require('path');
+const fs = require('fs');
+
+const LoadAdProducts = async(req,res)=>{
+    try {
+        const categories = await Categories.find();
+        res.render('AddProducts',{categories});
+    } catch (error) {
+        console.error('Error loading dashboard:', error);
+       
+    }
+}
+
+//Load edit product
+
+const LoadAllProducts = async(req,res)=>{
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const skip = (page - 1) * limit;
+        const totalProducts = await Products.countDocuments();
+        const totalPages = Math.ceil(totalProducts / limit);// calculate total pages
+       // Fetch products for the current page
+        const productList = await Products.find()
+        .populate('category')
+        .skip(skip)
+        .limit(limit);
+
+        const categoryData = await Categories.find();
+
+        res.render('AllProducts', {
+            productList,
+            categoryData,
+            currentPage: page,
+            totalPages: totalPages,
+            totalProducts: totalProducts,
+            limit: limit
+        });
+
+        
+       
+    } catch (error) {
+        console.error('Error loading dashboard:', error);
+        res.redirect("/500");
+    }
+}
+
+
+
+
+
+const LoadEditProduct = async (req, res) => {
+    try {
+
+        
+        const productId = req.query.id; 
+       
+        // console.log("yaaahhhhhhhhhhhhhhhhhhhh",productId);
+        const product = await Products.findById(productId); 
+        
+        const categories = await Categories.find();
+        
+        res.render("productEdit", { product, categories });
+
+    } catch (error) {
+   console.log("error from loadEdit prdt", error)
+        res.redirect("/500")
+    }
+}
+
+// const handleEditProduct = async (req, res) => {
+//     try {
+//         // console.log('edit product')
+//         const productId = req.params.id;
+//         // const images = req.files.map(file => file.filename);
+//         const { name, description, price,discount, category,stock,spec,width,depth,height,material } = req.body;
+//         // const images = req.files ? req.files.map(file => file.filename) : [];
+
+//         const existingProduct = await Products.findById(productId);
+
+//         if (!existingProduct) {
+//             return res.status(404).send('Product not found');
+//         }
+
+       
+//         existingProduct.name = name;
+//         existingProduct.description = description;
+//         existingProduct.price = price;
+//         existingProduct.discount = discount;
+//         existingProduct.category = category;
+       
+//         existingProduct.stock = stock;
+//         existingProduct.spec = spec;
+//         existingProduct.depth = depth;
+//         existingProduct.width = width;
+//         existingProduct.height=height;
+//         existingProduct.material = material;
+//         // existingProduct.image = images;
+
+        
+//         // Save the updated product
+//         await existingProduct.save();
+//         res.redirect("/admin/allProducts");
+//     } catch (error) {
+//         console.log(error.message);
+//         res.redirect("/500")
+       
+        
+//     }
+// };
+   
+
+
+
+const handleEditProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const { name, description, price, discount, category, stock, spec, width, depth, height, material } = req.body;
+        const deletedImages = req.body.deletedImages ? JSON.parse(req.body.deletedImages) : [];
+
+        const existingProduct = await Products.findById(productId);
+
+        if (!existingProduct) {
+            return res.status(404).send('Product not found');
+        }
+
+        // Update basic information
+        existingProduct.name = name;
+        existingProduct.description = description;
+        existingProduct.price = price;
+        existingProduct.discount = discount;
+        existingProduct.category = category;
+        existingProduct.stock = stock;
+        existingProduct.spec = spec;
+        existingProduct.depth = depth;
+        existingProduct.width = width;
+        existingProduct.height = height;
+        existingProduct.material = material;
+
+        // Handle image deletion
+        existingProduct.image = existingProduct.image.filter(img => !deletedImages.includes(img));
+
+        // Handle new images
+        if (req.files && req.files.length > 0) {
+            const newImages = req.files.map(file => file.filename);
+            existingProduct.image = [...existingProduct.image, ...newImages].slice(0, 3); 
+        }
+
+        // Save the updated product
+        await existingProduct.save();
+
+        // Delete files for removed images
+        for (const deletedImage of deletedImages) {
+            const imagePath = path.join(__dirname, '../public/uploads', deletedImage);
+            fs.unlink(imagePath, (err) => {
+                if (err) console.error(`Failed to delete image: ${deletedImage}`, err);
+            });
+        }
+
+        res.redirect("/admin/allProducts");
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send('An error occurred while updating the product');
+    }
+};
+
+
+// const uploadProduct = async(req,res)=>{
+//     try {
+       
+//         const images = req.files.map(file => file.filename);
+//         // console.log('this is the image',images);
+
+//         const { name, description, price, discount, categoryId, status ,stock,spec,width,depth,height,material} = req.body;
+
+//         const newProduct = new Products({
+//             name,
+//             description,
+//             price,
+//             discount,
+//             category: categoryId,
+//             status,
+//             // brand,
+//             stock,
+//             spec,
+//            width,
+//            depth,
+//            height,
+//             material,
+//             image: images,
+//         });       
+//         await newProduct.save();
+//         // console.log("new pro:",newProduct);
+//          res.redirect('/admin/allProducts')
+
+//     }catch (error) {
+//         console.error('Error loading uploadproduct:', error);
+//         res.redirect("/500")
+//     }
+// }
+
+
+
+
+
+
+
+
+const uploadProduct = async (req, res) => {
+    try {
+        console.log("Request body:", req.body);
+        console.log("Request files:", req.files);
+
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ message: 'No files uploaded' });
+        }
+
+        const images = req.files.map(file => file.filename);
+        console.log('Processed images:', images);
+
+        const { name, description, price, discount, categoryId, status, stock, spec, width, depth, height, material } = req.body;
+
+        const newProduct = new Products({
+            name, price, description, discount, category: categoryId, status, stock, spec, width, depth, height, material, image: images
+        });
+
+        await newProduct.save();
+        
+        res.status(200).json({ message: 'Product uploaded successfully', newProduct });
+    } catch (error) {
+        console.error('Error uploading product:', error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+}
+
+
+
+const productDelete = async (req, res) => {
+    try {
+        const productId = req.query.id;
+        const deleteProduct = await Products.findByIdAndDelete(productId);
+
+        if (!deleteProduct) {
+            return res.status(404).send('Product not found');
+        }     
+        // res.redirect("/admin/editProduct");
+        res.redirect("/admin/AllProducts");
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        res.redirect("/500");
+    }
+};
+
+
+const imageDelete = async (req, res) => {
+    try {
+        console.log('entrrr delete')
+        const { productId, imageId } = req.params;
+       console.log('prod and img',productId,imageId)
+
+        const product = await Products.findById(productId);
+
+        
+        if (!product) {
+            return res.status(404).send('Product not found');
+        }
+
+        
+        if (imageId < 0 || imageId >= product.image.length) {
+            return res.status(400).send('Invalid image ID');
+        }
+
+        const filenameToDelete = product.image[imageId]; 
+        const filePath = path.join(__dirname, '../public/uploads', filenameToDelete); 
+
+
+        
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error('Error deleting file:', err);
+                return res.status(500).send('Error deleting file');
+            }
+        });
+
+        
+        product.image.splice(imageId, 1);
+        await product.save();
+    //  console.log("img deleted")
+       res.status(200).send('img deleteee')
+    } catch (error) {
+        console.error('Error deleting image:', error.message);
+        res.status(500).send('Server error');
+    }
+};
+
+
+
+
+
+const listunlistProduct = async (req, res) => {
+    try {
+        const id = req.query.id;
+        console.log("id")
+        const product = await Products.findOne({ _id: id });
+        if (product) {
+            const newStatus = product.is_listed === "Listed" ? "Unlisted" : "Listed";
+            const updatedProduct = await product.findByIdAndUpdate(id, { $set: { is_listed: newStatus } }, { new: true });
+            const allProducts = await product.find();
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
+
+            res.redirect("/admin/allProducts")
+        } else {
+            res.send("Unlisting failed");
+        }
+    } catch (error) {
+        console.log("err in listunlist product :", error);
+        res.redirect("/500")
+        // res.status(500).send("Internal Server Error");
+    }
+};
+
+
+const renderProductDetails = async(req,res)=>{
+    try{
+        const userid = req.session.user_id;
+      const queryProduct = req.params.id;
+    
+    const user = req.session?.userData ? req.session?.userData : null;
+
+       
+      const viewProduct = await Products.findById(queryProduct)
+      .populate({
+        path:'category',
+        populate:{
+            path:'offer',
+            match:{
+                startingDate: {$lte: new Date()},
+                expiryDate: {$gte: new Date()}
+            }
+        }
+      })
+      .populate({
+        path:'offer',
+        match:{
+            startingDate: { $lte: new Date() },
+            expiryDate: { $gte: new Date() }
+        }
+      })
+      .exec();
+      if (!viewProduct) {
+        return res.status(404).send('Product not found');
+      }
+
+      let discountProductprice = 0;
+      let discountCategoryprice = 0;
+      let discountProductPercentage;
+      let discountCategoryPercentage;
+     
+      if(viewProduct.offer) {
+        discountProductprice = viewProduct.price - (viewProduct.price * viewProduct.offer.discount / 100);
+        discountProductPercentage = viewProduct.offer.discount;
+    } else if (viewProduct.category?.offer) {
+        discountCategoryprice = viewProduct.price - (viewProduct.price * viewProduct.category.offer.discount / 100);
+        discountCategoryPercentage = viewProduct.category.offer.discount;
+      
+      }
+
+
+    const relatedProduct = await Products.find({category:viewProduct.category,
+        _id: { $ne: viewProduct._id }  
+     } ).limit(4);
+
+      
+   
+    const checkCart = await Cart.findOne({ userid});
+    let alreadyCart = false;
+    if(checkCart){
+        alreadyCart = checkCart.products.some(product => product.productId.toString() === queryProduct);
+    }
+      res.render("productDetails",{user,viewProduct,relatedProduct, discountProductprice,discountProductPercentage,discountCategoryprice,discountCategoryPercentage,alreadyCart }) ;
+     
+    }catch(error){
+      console.log("error in productDetails",error);
+      res.redirect("/500")
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
+
+
+
+const userProducts = async(req,res)=>{
+
+    try {
+        
+        const user = req.session?.userData ? req.session?.userData : null;
+       
+        const page = parseInt(req.query.page) || 1;
+        const limit = 9;
+        const skip = (page - 1) * limit;
+        const totalProducts = await Products.countDocuments();
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        const productList = await Products.find()
+         .populate('category')
+         .skip(skip)
+         .limit(limit);
+        const categories = await Categories.find()
+        productList.forEach(product =>{
+            // console.log('product',product.category)
+        })
+       
+        res.render("products",{user,productList,categories,currentPage:page , totalPages:totalPages , totalProducts})
+    } catch (error) {
+        console.log("error in userProducts funtn",error);
+        res.redirect("/500")
+    }
+}
+
+
+
+
+
+
+
+
+module.exports = {
+    LoadAdProducts,
+    LoadAllProducts,
+    uploadProduct,
+    LoadEditProduct,
+    handleEditProduct,
+    productDelete,
+    listunlistProduct,
+    renderProductDetails,
+    imageDelete,
+    userProducts,
+}
+
+
+

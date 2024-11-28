@@ -1,0 +1,481 @@
+
+
+<%- include('../layout/User/header') %>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css">
+ <style>
+    .cart-item-quantity {
+    display: inline-flex;
+    align-items: center;
+}
+
+.cart-item-quantity button {
+    background-color: #ddd;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.cart-item-quantity button:hover {
+    background-color: #bbb;
+}
+
+.cart-item-quantity span {
+    margin: 0 10px;
+    font-size: 16px;
+}
+
+</style> 
+
+
+
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('/userAssets/assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Shopping Cart<span>Shop</span></h1>
+        </div>
+    </div>
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+            </ol>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="cart">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <table class="table table-cart table-mobile">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(locals.cartData && cartData) { %>
+                                    <% if (cartData.products && cartData.products.length > 0) { %>
+                                        <% cartData.products.forEach(product => { %> 
+                                            <tr data-product-id="<%= product.productId._id %>">
+                                                <td class="product-col">
+                                                    <div class="product">
+                                                        <figure class="product-media">
+                                                            <a href="/productDetails/?id=<%= product.productId._id %>">
+                                                                <img src="/uploads/<%= product.productId.image[0] %>" alt="Product image">
+                                                            </a>
+                                                        </figure>
+                                                        <h3 class="product-title">
+                                                            <a href="/productDetails/?id=<%= product.productId._id %>">
+                                                               <%= product.productId.name %>
+                                                            </a>
+                                                        </h3>
+                                                    </div>
+                                                </td>
+                                                <td class="price-col">₹ <%= product.productId.price %></td> 
+                                                    
+                                                   
+                                                
+
+                                              
+                                                <td class="quantity-col">
+                                                    <div class="cart-item-quantity" id="decrease-btn">
+                                                        
+                                                       
+                                                  
+                                                        <div class="cart-item-quantity"
+                                                        data-cart-id="<%= cartData ? cartData._id : '' %>"
+                                                        data-product-id="<%= product.productId ? product.productId._id : '' %>"
+                                                        data-max-quantity="<%= product.productId ? product.productId.quantity : 1 %>">
+
+
+                                                        <!-- <button class="decrease-btn" onclick="decreaseQuantity('<%= product.productId._id %>', '<%= product.quantity %>')">-</button>
+                                                        <p class="quantity-value"><%= product.quantity %></p>
+                                                        <button class="increase-btn" onclick="updateQuantity('<%= product.productId._id %>', '<%= product.quantity %>', '<%= product.productId.stock %>')">+</button>
+                                                        -->
+
+                                                        <button class="decrease-btn" onclick="decreaseQuantity('<%= product.productId._id %>')">-</button>
+                                                        <p class="quantity-value"><%= product.quantity %></p>
+                                                        <button class="increase-btn" onclick="updateQuantity('<%= product.productId._id %>', '<%= product.productId.stock %>')">+</button>
+
+                                                    </div>
+                                                 </div>    
+                                                </td>                                        
+                                                <td class="total-col">₹<%= product.totalPrice %></td>
+                                                <input type="text" id="cartid" value="<%=cartData._id%>" hidden>
+                                                <td class="remove-col">
+                                                    <!-- <button class="btn-remove" onclick="removeFromCart('<%= product.productId._id %>')">
+                                                        <i class="icon-close"></i>
+                                                    </button> -->
+                                                    <button class="btn-remove" onclick="removeFromCart('<%= product.productId._id %>')">
+                                                        <i class="icon-close"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="5">Your cart is empty</td>
+                                            </tr>
+        
+                                    <% } %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5">Your cart is empty</td>
+                                        </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+
+                        <div class="cart-bottom">
+                            <div class="cart-discount">
+                               
+                            </div>
+
+                            <!-- <a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a> -->
+                        </div>
+                    </div>
+                    <aside class="col-lg-3">
+                        <div class="summary summary-cart">
+                            <h3 class="summary-title">Cart Total</h3>
+
+                            <table class="table table-summary">
+                                <tbody>
+                                   
+                                    <tr class="summary-subtotal">
+                                        <td>Subtotal:</td>
+                                        <td id="sub-total"> ₹ <%= locals.totalPriceTotal %></td>
+                                    </tr>
+                                    <!-- <tr class="summary-shipping">
+                                        <td>Shipping:</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="summary-shipping-row">
+                                        <td>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
+                                                <label class="custom-control-label" for="free-shipping">Free Shipping</label>
+                                            </div>
+                                        </td>
+                                        <td>$0.00</td>
+                                    </tr>
+                                    <tr class="summary-shipping-row">
+                                        <td>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="standart-shipping" name="shipping" class="custom-control-input">
+                                                <label class="custom-control-label" for="standart-shipping">Standart:</label>
+                                            </div>
+                                        </td>
+                                        <td>$10.00</td>
+                                    </tr>
+
+                                    <tr class="summary-shipping-row">
+                                        <td>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
+                                                <label class="custom-control-label" for="express-shipping">Express:</label>
+                                            </div>
+                                        </td>
+                                        <td>$20.00</td>
+                                    </tr>
+
+                                    <tr class="summary-shipping-estimate">
+                                        <td>Estimate for Your Country<br> <a href="#">Change address</a></td>
+                                        <td>&nbsp;</td>
+                                    </tr> -->
+
+                                    <tr class="summary-total">
+                                        <td>Total:</td>
+                                        <td id="total-price">₹ <%= locals?.totalPriceTotal %></td>
+                                    </tr>
+                                   
+                                </tbody>
+                            </table>
+
+                            <a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block" role="button" disable id="checkoutBtn"
+                            <% if(cartData?.products?.length === 0) {%> onclick='return false' <%}%>>PROCEED TO CHECKOUT</a>
+                        </div>
+
+                        <!-- <a href="#" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a> -->
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0"></script>
+
+<script>
+   function removeFromCart(productId) {
+    
+    console.log('productId,',productId)
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You are about to remove this item from the cart.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, remove it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/removeFromCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId: productId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response from server:', data);
+
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message || 'Something went wrong.',
+                        icon: 'error'
+                    });
+                }
+            })
+            .catch(error => {
+                // console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An unexpected error occurred.',
+                    icon: 'error'
+                });
+            });
+        }
+    });
+}
+</script>
+
+
+<script>
+    function updateQuantity(productId, maxStock) {
+    const quantityElement = document.querySelector(`[data-product-id="${productId}"] .quantity-value`)
+    const currentQuantity = parseInt(quantityElement.textContent);
+
+    const newQuantity = parseInt(currentQuantity) + 1;
+    
+    if (newQuantity > maxStock) {
+        
+        showToast("Stock quantity limit reached");
+        return;
+    }
+    updateCartQuantity(productId, 1);
+}
+
+function decreaseQuantity(productId) {
+    const quantityElement = document.querySelector(`[data-product-id="${productId}"] .quantity-value`);
+    const currentQuantity = parseInt(quantityElement.textContent);
+    const newQuantity = parseInt(currentQuantity) - 1;
+    if (newQuantity < 1) {
+    
+        showToast("Quantity cannot be less than 1");
+        return;
+    }
+    updateCartQuantity(productId, -1);
+}
+
+function updateCartQuantity(productId, quantityChange) {
+    fetch(`/update-cart-quantity/${productId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quantity: quantityChange })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // console.log("lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll",data);
+        if (data.success) {
+            updateDOM(data);
+        } else {
+            showToast(data.message || "Error updating quantity");
+        }
+    })
+    .catch((error) => {
+        console.error('Error innnnnnnnnnnnnnnnn:', error);
+        showToast("An error occurred while updating the cart");
+    });
+}
+
+function updateDOM(data) {
+    const productRow = document.querySelector(`[data-product-id="${data.productId}"]`).closest('tr');
+    if (productRow) {
+        productRow.querySelector('.quantity-value').textContent = data.newQuantity;
+        productRow.querySelector('.total-col').textContent = `₹${data.newTotalPrice}`;
+        
+        const subtotalElement = document.getElementById('sub-total');
+        if (subtotalElement) {
+            subtotalElement.textContent = `₹${data.newSubtotal}`;
+        }
+
+        const totalElement = document.getElementById('total-price');
+        if(totalElement){
+            totalElement.textContent = `₹${data.newSubtotal}`;
+        }
+    }
+}
+
+function showToast(message) {
+    Toastify({
+        text: message,
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "center",
+        backgroundColor: "#4CAF50",
+    }).showToast();
+}
+</script>
+
+
+<!-- <script>
+    function updateQuantity(productId,productQty,productQty33,subtotal) {
+  
+   let protwo=Number(productQty33)
+   let proone=Number(productQty)
+
+   if(proone==protwo){
+   
+    document.getElementById('productStock').value=productQty
+    Toastify({
+                text: "stock quantity is over",
+                duration: 3000, 
+                close: true,
+                gravity: "top", 
+                position: `center`,
+                backgroundColor: "#4CAF50", 
+            }).showToast();
+           return
+   }
+    fetch(`/update-cart-quantity/${productId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quantity: 1 })
+    })
+    .then(response => response.json())
+
+    .then(data =>{
+        if(data.success){
+           
+
+            
+            location.reload();
+        }
+    })
+    .catch((error) => console.error('Error:', error));
+}
+
+</script>
+
+<script>
+   function decreaseQuantity(productId) {
+    fetch(`/decreaseQty/${productId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quantity: -1 })
+    })
+
+    .then(response => response.json())
+
+    .then(data =>{
+        if(data.success){
+          
+           location.reload();
+        }
+    })
+    .catch((error) => console.error('Error:', error));
+
+   }
+</script> -->
+
+    <!-- <script>
+        function updateQuantit(cartId, productId, action) {
+            if (!cartId || !productId) {
+                console.error('Missing cart ID or product ID');
+                return;
+            }
+        
+            const quantitySpan = document.querySelector(`[data-cart-id="${cartId}"][data-product-id="${productId}"] .quantity-value`);
+            if (!quantitySpan) {
+                console.error('Quantity span not found');
+                return;
+            }
+        
+            let currentQuantity = parseInt(quantitySpan.textContent);
+            let newQuantity = action === 'increase' ? currentQuantity + 1 : Math.max(1, currentQuantity - 1);
+        
+            fetch('/update-cart-quantity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    cartId,
+                    productId,
+                    quantity: newQuantity
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update quantity');
+                }
+                return response.json();
+            })
+            .then(result => {
+                quantitySpan.textContent = result.newQuantity;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners to all quantity buttons
+            document.querySelectorAll('.cart-item-quantity').forEach(container => {
+                const cartId = container.dataset.cartId;
+                const productId = container.dataset.productId;
+                
+                if (cartId && productId) {
+                    container.querySelector('.decrease-btn').addEventListener('click', function() {
+                        updateQuantity(cartId, productId, 'decrease');
+                    });
+                    container.querySelector('.increase-btn').addEventListener('click', function() {
+                        updateQuantity(cartId, productId, 'increase');
+                    });
+                }
+            });
+        });
+        </script> -->
+
+<%- include('../layout/User/footer') %>

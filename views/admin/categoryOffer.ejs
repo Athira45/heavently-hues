@@ -1,0 +1,442 @@
+
+<%- include('../layout/admin/adminHeader') %>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+ 
+        <section class="content-main">
+                <div class="content-header">
+                    <div>
+                        <h2 class="content-title card-title">CategoryOffers</h2>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-gradient btn-primary" data-toggle="modal" data-target="#addCategoryOffer">Add offer</button>
+                    </div>
+                </div>
+               
+                <!-- <div>
+                    <input type="text" placeholder="Search by name" class="form-control bg-white" />
+                </div> -->
+            
+                <div class="main-panel">
+                    <div class="content-wrapper">
+                        <div class="col-lg-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body table-responsive">
+                                    <table class="table table-bordered border-top table-hover">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>Category Name</th>
+                                                <th>Discount</th>
+                                                <th>Starting Date</th>
+                                                <th>Expiry Date</th>
+                                                <!-- <th>Status</th> -->
+                                                <th>Action</th>
+                                                
+                                               
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                              
+
+                                            <% categories.forEach(category => { %>
+                                                 <tr class="text-center">
+                                                     <td><%= category.name %></td>
+                                                     <td><%= category.category_discount %></td>
+                                                   <td>  <%= category.startingDate ? new Date(category.startingDate).toLocaleDateString() : 'N/A' %></td>
+                                                 <td>    <%= category.expiryDate ? new Date(category.expiryDate).toLocaleDateString() : 'N/A' %> </td>
+     
+                                         
+                                                     <td>
+                                                        <button 
+                                                        class="btn-sm edit-btn" 
+                                                        style="background: linear-gradient(45deg, #FFBA00, #FF6C00); border: none; color: white; padding: 8px 16px; border-radius: 4px; transition: background 0.3s ease;" 
+                                                        data-category-id="<%= category._id %>"
+                                                        data-category-name="<%= category.name %>"
+                                                        data-category-discount="<%= category.category_discount %>"
+                                                        data-category-starting-date="<%= category.startingDate %>"
+                                                        data-category-expiry-date="<%= category.expiryDate %>"
+                                                        onclick="showEditModal(this)">
+                                                        Edit
+                                                    </button>
+                                                    
+                                         
+                                                         <button class="btn-sm btn-danger status-btn" onclick="removeOffer('<%= category._id %>')">Delete</button>
+                                                     </td>
+                                                 </tr>
+                                            <% }) %>  
+                                         </tbody>
+                                         
+                                    </table>
+                                </div>
+                              
+                                 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCategoryModalLabel">Edit Category Offer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form id="editCategoryForm">
+                <div class="modal-body">
+                    <input type="hidden" name="categoryId" id="categoryId">
+                    
+                    <div class="form-group">
+                        <label for="categoryDiscount">Discount</label>
+                        <input type="number" class="form-control" id="categoryDiscount" name="discount">
+                        <small id="discountError" class="text-danger"></small>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="startingDate">Starting Date</label>
+                        <input type="date" class="form-control" id="startingDate" name="startingDate">
+                        <small id="startingDateError" class="text-danger"></small>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="expiryDate">Expiry Date</label>
+                        <input type="date" class="form-control" id="expiryDate" name="expiryDate">
+                        <small id="expiryDateError" class="text-danger"></small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="saveCategory">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+  
+
+
+ 
+
+     </section> 
+     
+      <!---------------------- add category offer------------------ -->
+
+      <div class="modal fade" id="addCategoryOffer" tabindex="-1" role="dialog" aria-labelledby="addCategoryOfferLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoryOfferLabel">Add Category Offer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCatOfferForm">
+                        <div class="form-group">
+                            <label for="" class="mb-2 form-check form-check-inline" style="width: 45%;">
+                                <select class="form-select" id="productCategory" name="categoryId">
+                                    <option value="">Select Category</option>
+                                    <% categories.forEach(category => { %>
+                                        <% if(!category.category_discount > 0){ %>
+                                            <option value="<%= category._id %>"><%= category.name %></option>
+
+                                     <%   } %>
+                                    
+                                        
+                                    <% }) %>
+                                </select>
+                                <div class="error-message text-danger" id="category-error"></div>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="categoryDiscount">Discount</label>
+                            <input type="number" class="form-control" id="categoryDiscountt"  >
+                            <small id="discountErrorr" class="text-danger"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="startingDate">Starting Date</label>
+                            <input type="date" class="form-control" id="startingDatee"  >
+                            <small id="startingDateErrorr" class="text-danger"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="date" class="form-control" id="expiryDatee"  >
+                            <small id="expiryDateErrorr" class="text-danger"></small>
+                        </div>
+                        
+                       
+                        <button type="submit" class="btn btn-primary">Add offer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+     </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+        <!-- <script>
+            function showEditModal(button) {
+                // Get data from the clicked button
+                const categoryId = $(button).data('category-id');
+                const categoryName = $(button).data('category-name');
+                const categoryDiscount = $(button).data('category-discount');
+                const startingDate = $(button).data('category-starting-date');
+                const expiryDate = $(button).data('category-expiry-date');
+        
+                // Populate the modal fields with the retrieved data
+                $('#editCategoryModal #categoryId').val(categoryId);
+                $('#editCategoryModal #categoryName').val(categoryName);
+                $('#editCategoryModal #categoryDiscount').val(categoryDiscount);
+                $('#editCategoryModal #startingDate').val(startingDate);
+                $('#editCategoryModal #expiryDate').val(expiryDate);
+        
+                // Show the modal
+                $('#editCategoryModal').modal('show');
+            }
+        </script> -->
+
+
+<script>
+    function showEditModal(button) {
+    // Get the data attributes from the clicked button
+    const categoryId = button.getAttribute('data-category-id');
+    const categoryDiscount = button.getAttribute('data-category-discount');
+    const startingDate = button.getAttribute('data-category-starting-date');
+    const expiryDate = button.getAttribute('data-category-expiry-date');
+
+    // Set the values in the modal inputs
+    document.getElementById('categoryId').value = categoryId;
+    document.getElementById('categoryDiscount').value = categoryDiscount;
+    
+    // Convert the dates to proper format for date inputs
+    document.getElementById('startingDate').value = startingDate ? new Date(startingDate).toISOString().split('T')[0] : '';
+    document.getElementById('expiryDate').value = expiryDate ? new Date(expiryDate).toISOString().split('T')[0] : '';
+    
+    // Show the modal
+    $('#editCategoryModal').modal('show');
+}
+
+</script>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+
+        const addCategoryForm = document.getElementById('addCategoryOffer');
+
+        addCategoryForm.addEventListener('submit', async function(e) {
+            e.preventDefault();  
+
+         const discount = document.getElementById('categoryDiscountt').value;
+         const startingDate = document.getElementById('startingDatee').value;
+         const expiryDate = document.getElementById('expiryDatee').value;
+         const categorySelect = document.getElementById('productCategory');
+        const categoryId = categorySelect.value;
+
+        console.log("Selected category ID:", categoryId);
+
+         let isValid = true;
+
+            if (!discount || isNaN(discount) || discount <= 0 || discount >= 30) {
+                document.getElementById('discountErrorr').textContent = 'Please enter a valid discount percentage between 0 and 30.';
+                isValid = false;
+            } else {
+                document.getElementById('discountErrorr').textContent = '';
+            }
+
+            if (!startingDate) {
+                document.getElementById('startingDateErrorr').textContent = 'Please select a starting date.';
+                isValid = false;
+            } else {
+                document.getElementById('startingDateErrorr').textContent = '';
+            }
+
+            if (!expiryDate) {
+                document.getElementById('expiryDateErrorr').textContent = 'Please select an expiry date.';
+                isValid = false;
+            } else {
+                document.getElementById('expiryDateErrorr').textContent = '';
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            if (expiryDate < today) {
+                document.getElementById('expiryDateErrorr').textContent = 'Expiry date must be greater than today\'s date.';
+                isValid = false;
+            }else {
+                document.getElementById('expiryDateErrorr').textContent = '';
+            }
+
+            if (new Date(expiryDate) <= new Date(startingDate)) {
+                document.getElementById('expiryDateErrorr').textContent = 'The expiry date must be after the starting date.';
+                isValid = false;
+             
+            }else {
+                document.getElementById('expiryDateErrorr').textContent = '';
+            }
+
+            if (!isValid) {
+                return;
+            }
+         
+console.log("sssssssssssssssssssss")
+fetch('/admin/addCategoryOff', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                discount,
+                startingDate,
+                expiryDate,
+                categoryId
+            })
+         
+
+        }) 
+        .then(response => {
+            console.log("Received response from server:", response);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Parsed response data:", data);
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Offer added successfully',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    $('#addCategoryOffer').modal('hide');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                });
+
+            }
+
+
+
+          
+            
+        })
+    })
+})
+    
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const editCategoryForm = document.getElementById('editCategoryForm');
+
+        // Listen for the form submission
+        editCategoryForm.addEventListener('submit', async function(e) {
+            e.preventDefault();  // Prevent the default form submission
+            
+            // Get values from form fields
+            const discountPercentage = document.getElementById("categoryDiscount").value.trim();
+            const startingDate = document.getElementById("startingDate").value.trim();
+            const expiryDate = document.getElementById("expiryDate").value.trim();
+            const categoryId = document.getElementById("categoryId").value;
+
+            // Validation
+            let isValid = true;
+
+            if (!discountPercentage || isNaN(discountPercentage) || discountPercentage < 0 || discountPercentage > 100) {
+                document.getElementById('discountError').textContent = 'Please enter a valid discount percentage between 0 and 100.';
+                isValid = false;
+            } else {
+                document.getElementById('discountError').textContent = '';
+            }
+
+            if (!startingDate) {
+                document.getElementById('startingDateError').textContent = 'Please select a starting date.';
+                isValid = false;
+            } else {
+                document.getElementById('startingDateError').textContent = '';
+            }
+
+            if (!expiryDate) {
+                document.getElementById('expiryDateError').textContent = 'Please select an expiry date.';
+                isValid = false;
+            } else {
+                document.getElementById('expiryDateError').textContent = '';
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            if (expiryDate < today) {
+                document.getElementById('expiryDateError').textContent = 'Expiry date must be greater than today\'s date.';
+                isValid = false;
+            }else {
+                document.getElementById('expiryDateError').textContent = '';
+            }
+
+            if (new Date(expiryDate) <= new Date(startingDate)) {
+                document.getElementById('expiryDateError').textContent = 'The expiry date must be after the starting date.';
+                isValid = false;
+             
+            }else {
+                document.getElementById('expiryDateError').textContent = '';
+            }
+
+            if (!isValid) {
+                return;
+            }
+
+            // Send the data via fetch
+            fetch('/admin/categoryPercentageEdit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    discountPercentage, startingDate, expiryDate, categoryId
+                })
+            })
+            .then(response => response.json())
+            .then(response => {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Offer updated successfully',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        $('#editCategoryModal').modal('hide');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    });
+                } else {
+                    console.log("Error occurred");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+<%- include('../layout/admin/adminFooter') %>

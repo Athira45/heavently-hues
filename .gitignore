@@ -1,0 +1,15 @@
+# Ignore node_modules directory
+node_modules/
+.npm/
+# Ignore environment variable files
+.env
+# Ignore logs
+*.log
+# Ignore Yarn lock file (if using Yarn)
+yarn.lock
+# Ignore temporary files created by IDEs and editors
+.idea/
+.vscode/
+# Ignore OS-specific files (e.g., macOS)
+.DS_Store
+Thumbs.db

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form by Colorlib</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="/userAssets/signupAssets/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="/userAssets/signupAssets/css/style.css">
+
+    <style>
+        .error-message {
+            color: red;
+            display: none;
+        }
+    </style>
+
+
+</head>
+<body>
+
+    <div class="main">
+
+        
+        <!-- Sing in  Form -->
+        <section class="sign-in">
+            <div class="container">
+                <div class="signin-content">
+                    <div class="signin-image">
+                        <figure><img src="/userAssets/signupAssets/images/signin-image.jpg" alt="sing up image"></figure>
+                        <a href="/register" class="signup-image-link">Create an account</a>
+                    </div>
+
+                    <div class="signin-form">
+                        <h2 class="form-title">Sign In</h2>
+                        <!-- <form action="/login" method="POST" class="register-form" id="login-form" onsubmit="return validationForm()">
+                            <div class="form-group">
+                                <label for="email"><i class="zmdi zmdi-email"></i></label>
+                                <input type="email" name="email" id="email" placeholder="Your Email"/>
+                                <p id="emailErr" class="error-message" style="color: red;"></p>
+                            </div>
+                           
+                            <div class="form-group">
+                                <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" name="password" id=" password" placeholder="Password"/>
+                                <p id="passwordErr" class="error-message" style="color: red;"></p>
+                            </div>-->
+
+                            <!-- <div class="form-group">
+                                <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                                 <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label> 
+                                 <a href="#" class="">Forgot Password</a> 
+
+                            </div> -->
+                           <!-- <div class="form-group form-button">
+                                <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                            </div>
+
+                            <div class="social-login">
+                                <span class="social-label">Or login with</span>
+                                <ul class="socials">
+                                     <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li> -->
+                                    <!-- <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li> 
+                                    <li><a href="/auth/google"><i class="display-flex-center zmdi zmdi-google "></i></a></li>
+                                </ul>
+                            </div>
+
+                        </form> -->
+
+
+
+                        <form action="/login" method="POST" class="register-form" id="login-form" onsubmit="return validationForm()">
+                            <div class="form-group">
+                                <label for="email"><i class="zmdi zmdi-email"></i></label>
+                                <input type="email" name="email" id="email" placeholder="Your Email"/>
+                                <p id="emailErr" class="error-message">Please enter a valid email address.</p>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" name="password" id="password" placeholder="Password"/>
+                                <p id="passwordErr" class="error-message">Password must be at least 6 characters long.</p>
+                            </div>
+                    
+                            <!-- <div class="form-group">
+                                <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                            </div> -->
+                            
+                            <div class="form-group form-button">
+                                <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                                <div class="form-group">
+                                    <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                                    <!-- <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label> -->
+                                     <a href="/forgotpassword" class="">Forgot Password</a> 
+    
+                                </div>
+                            </div>
+                    
+                            <div class="social-login">
+                                <span class="social-label">Or login with</span>
+                                <ul class="socials">
+                                    <li><a href="/auth/google"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
+                                </ul>
+                            </div>
+                        </form>                       
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+
+    <script>
+        function validationForm() {
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            var emailErr = document.getElementById('emailErr');
+            var passwordErr = document.getElementById('passwordErr');
+
+            var isValid = true;
+
+            // Email validation
+            if (!validateEmail(email)) {
+                emailErr.style.display = 'block';
+                isValid = false;
+            } else {
+                emailErr.style.display = 'none';
+            }
+
+            // Password validation
+            if (password.length < 6) {
+                passwordErr.style.display = 'block';
+                isValid = false;
+            } else {
+                passwordErr.style.display = 'none';
+            }
+
+            return isValid;
+        }
+
+        function validateEmail(email) {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+    </script>
+
+
+    <!-- <script>
+         function validationForm(){
+            var email = document.getElementById("email");
+         var password = document.getElementById("password");
+         //err msg
+      const emailErr = document.getElementById('emailErr');
+    const passwordErr = document.getElementById('passwordErr');
+       //reset errs
+       emailErr.textContent = '';
+    passwordErr.textContent = '';
+
+    let isValid = true;
+
+    //Email validation
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email.value === '') {
+      emailErr.textContent = 'Email is required';
+      isValid = false;
+    } else if (!emailPattern.test(email.value)) {
+      emailErr.textContent = 'Invalid email format';
+      isValid = false;
+    }
+       
+//password validation
+if (password.value === '') {
+      passwordErr.textContent = 'Password is required';
+      isValid = false;
+    } else if (password.value.length < 6) {
+      passwordErr.textContent = 'Password must be at least 6 characters long';
+      isValid = false;
+    }else if (password.value !== password.value.trim()) {
+      passwordErr.textContent = 'Avoid trailing space';
+      isValid = false;
+    }
+
+    return isValid;
+
+         }
+
+
+    </script> -->
+
+    <!-- JS -->
+    <script src="/userAssets/signupAssets/vendor/jquery/jquery.min.js"></script>
+    <script src="/userAssets/signupAssets/js/main.js"></script>
+</body>
+</html>

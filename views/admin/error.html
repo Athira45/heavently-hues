@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Order Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f7f7;
+        }
+
+        .card-header {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .order-card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 10px;
+        }
+
+        .table thead th {
+            border-bottom: 2px solid #343a40;
+        }
+
+        .btn-status {
+            font-size: 1rem;
+        }
+
+        .total-box {
+            font-size: 1.5rem;
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        .total-box span {
+            color: #007bff;
+        }
+
+        .icon-text {
+            display: flex;
+            align-items: center;
+        }
+
+        .icon-text i {
+            margin-right: 10px;
+            color: #007bff;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            border-radius: 30px;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+
+        select.form-control {
+            border-radius: 30px;
+        }
+
+        .product-image {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .product-info img {
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Order Details</h2>
+
+    <!-- Order Info -->
+    <div class="card order-card">
+        <div class="card-header">
+            <strong>Order ID:</strong> <%= order._id %>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="icon-text"><i class="fas fa-user"></i><strong>Customer Name:</strong> <%= order.customerName %></p>
+                    <p class="icon-text"><i class="fas fa-envelope"></i><strong>Email:</strong> <%= order.customerEmail %></p>
+                    <p class="icon-text"><i class="fas fa-phone"></i><strong>Mobile:</strong> <%= order.customerMobile %></p>
+                </div>
+                <div class="col-md-6">
+                    <p class="icon-text"><i class="fas fa-map-marker-alt"></i><strong>Shipping Address:</strong> <%= order.shippingAddress %></p>
+                    <p class="icon-text"><i class="fas fa-calendar-alt"></i><strong>Order Date:</strong> <%= order.orderDate.toLocaleDateString() %></p>
+                    <p class="icon-text"><i class="fas fa-credit-card"></i><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
+                </div>
+            </div>
+            <p class="icon-text">
+                <i class="fas fa-clipboard-check"></i><strong>Order Status:</strong>
+                <select id="order-status" class="form-control w-50 d-inline ml-2" onchange="updateOrderStatus('<%= order._id %>')">
+                    <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %> >Pending</option>
+                    <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %> >Shipped</option>
+                    <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %> >Delivered</option>
+                    <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %> >Cancelled</option>
+                </select>
+            </p>
+        </div>
+    </div>
+
+    <!-- Ordered Items -->
+    <h3 class="mt-5 text-center">Ordered Items</h3>
+    <div class="table-responsive mt-4">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>Product Image</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% order.items.forEach(item => { %>
+            <tr>
+                <td class="product-info">
+                    <img src="<%= item.imageUrl %>" alt="<%= item.productName %>" class="product-image">
+                </td>
+                <td><%= item.productName %></td>
+                <td>$<%= item.price.toFixed(2) %></td>
+                <td><%= item.quantity %></td>
+                <td>$<%= (item.price * item.quantity).toFixed(2) %></td>
+            </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Total Price -->
+    <div class="text-right">
+        <p class="total-box">Total: <span>$<%= order.totalPrice.toFixed(2) %></span></p>
+    </div>
+</div>
+
+<script>
+    function updateOrderStatus(orderId) {
+        const status = document.getElementById('order-status').value;
+
+        fetch(`/admin/orders/${orderId}/update-status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: status })
+        }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Order status updated successfully!');
+                } else {
+                    alert('Failed to update order status.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('An error occurred.');
+            });
+    }
+</script>
+
+</body>
+</html>

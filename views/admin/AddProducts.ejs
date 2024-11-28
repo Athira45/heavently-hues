@@ -1,0 +1,1318 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Nest Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/adminAssets/AdProductAssets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/adminAssets/AdProductAssets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<style>
+   
+#imageInput {
+    display: block;
+    margin: 20px 0;
+}
+
+/* Style for the image preview */
+#imagePreview {
+    max-width: 100%; /* Ensure it fits within its container */
+    margin-top: 10px;
+}
+
+/* Style for the cropped canvas (optional, if you want to show it) */
+#croppedCanvas {
+    display: block;
+    max-width: 100%; /* Ensure it fits within its container */
+    margin-top: 10px;
+}
+
+/* Style for the crop button */
+#cropButton {
+    display: block;
+    margin: 10px 0;
+    padding: 10px 20px;
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Style for the crop button on hover */
+#cropButton:hover {
+    background-color: #0056b3; /* Darker shade of blue */
+}
+
+</style>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/adminAssets/AdProductAssets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+               
+                
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/AllProducts">
+                        <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/adCategory">
+                            <i class="icon material-icons md-category"></i>
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                 
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a class="menu-link" href="#">
+                            <i class="icon material-icons md-local_offer"></i>
+                            <span class="text">offers</span>
+                            
+                        </a>
+                        <div class="submenu">
+                        <a href="#">View offer</a>
+                        <a href="#">Add offer</a>
+                    </div>
+                       
+                        </li>
+                        <li class="menu-item ">
+                            <a class="menu-link" href="/admin/adminUsers">
+                                <i class="icon material-icons md-person"></i> 
+                                <span class="text">Users</span>
+                            </a>
+                            </li>                                  
+                   
+                </li>
+                
+                <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-stars"></i> <span class="text">Brands</span> </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" disabled href="#">
+                        <i class="icon material-icons md-pie_chart"></i>
+                        <span class="text">Sales Report</span>
+                    </a>
+                </li>
+            </ul>
+            <hr />
+
+            
+                
+                
+               
+                
+                
+            </ul>
+           
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                            <a class="dropdown-item text-brand" href="#"><img src="/adminAssets/AdProductAssets/imgs/theme/flag-us.png" alt="English">English</a>
+                            <a class="dropdown-item" href="#"><img src="/adminAssets/AdProductAssets/imgs/theme/flag-fr.png" alt="Français">Français</a>
+                            <a class="dropdown-item" href="#"><img src="/adminAssets/AdProductAssets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
+                            <a class="dropdown-item" href="#"><img src="/adminAssets/AdProductAssets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/adminAssets/AdProductAssets/imgs/people/avatar-2.png" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="row">
+                <div class="col-6">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Product</h2>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                         <!-- <form  id="addForm"  action="/admin/addProducts" method="post"  enctype="multipart/form-data"> -->
+                            <form  id="addForm" enctype="multipart/form-data" >
+                            <div class="row">
+                                
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Product Name</label>
+                                        <input type="text" placeholder="Type here" name="name"  class="form-control">
+                                        <div class="error-message text-danger" id="name-error"></div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
+                                        <textarea placeholder="Type here" class="form-control" name="description" rows="4"></textarea>
+                                        <div class="error-message text-danger" id="description-error"></div>
+                                    </div>
+                                    <!-- <div class="mb-4">
+                                        <label for="" class="form-label" >Brand name</label>
+                                        <select class="form-select">
+                                            <option> Wayfair </option>
+                                            <option> IKEA </option>
+                                            <option> Herman Miller </option>
+                                        </select>
+                                    </div> -->
+                                    <div class="mb-4">
+                                        <label class="form-label">Stock</label>
+                                        <input type="number" placeholder="stock" name="stock"  class="form-control">
+                                        <div class="error-message text-danger" id="stock-error"></div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Specification</label>
+                                        <input type="text" placeholder="Specification" name="spec"  class="form-control">
+                                        <div class="error-message text-danger" id="spec-error"></div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Width</label>
+                                        <input type="number" placeholder="Widhth" name="width"  class="form-control">
+                                        <div class="error-message text-danger" id="width-error"></div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Height</label>
+                                        <input type="number" placeholder="height" name="height"  class="form-control">
+                                        <div class="error-message text-danger" id="height-error"></div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Depth</label>
+                                        <input type="number" placeholder="depth" name="depth"  class="form-control">
+                                        <div class="error-message text-danger" id="depth-error"></div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Material</label>
+                                        <textarea placeholder="material" class="form-control" name="material" rows="4"></textarea>
+                                        <div class="error-message text-danger" id="material-error"></div>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div>
+                         <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6> Pricing</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <!-- <label class="form-label">Cost in USD</label> -->
+                                        <input type="number" placeholder="$00.0"name="price" class="form-control">
+                                        <div class="error-message text-danger" id="price-error"></div>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <div class="mb-4">
+                                <label class="form-label">Discount</label>
+                                <input type="number" placeholder="Discount" name="discount"  class="form-control">
+                                <div class="error-message text-danger" id="discount-error"></div>
+                            </div>
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6> Category</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label for="" class="mb-2 form-check form-check-inline" style="width: 45%;">
+                                            <select class="form-select"  id="productCategory" name="categoryId" required>
+                                      
+                                                <option value="">Select Category</option>
+                                                <% categories.forEach(category => { %>
+                                                    <option value="<%= category._id %>" ><%= category.name %></option>
+                                                  <% }); %>
+                                            </select>
+                                            <div class="error-message text-danger" id="category-error"></div>
+                                        </label>
+                                       
+                                        
+                                       
+                                        
+                                       
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6> Media</h6>
+                                </div>
+                               
+                                
+                              
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Images</label>
+                                        <input name="image" class="form-control" type="file" id="imageInput" accept="image/*" required multiple>
+                                        <!-- <input type="file" id="imageInput" name="image" multiple> -->
+
+                                        <div class="error-message text-danger" id="image-error"></div>
+                                    </div>
+                                    <div id="imagePreviewContainer" style="display: none;">
+                                        <h5>Image Preview</h5>
+                                        <div id="imagePreviews"></div>
+                                        <img id="cropImage" style="display: none; max-width: 100%;" />
+                                        <button type="button" id="cropButton" class="btn btn-primary" style="margin-top: 10px;">Crop Image</button>
+                                        <canvas id="croppedCanvas" style="display: none;"></canvas>
+                                    </div>
+                                </div>
+                                
+
+                                
+
+
+
+                                
+
+                            </div> <!-- .row end// -->
+
+                            <div>
+                   
+                                <button type="button" id="submitForm" class="btn btn-md rounded font-sm hover-up" > Add Product</button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    
+                </div>
+                <div class="col-sm-6">
+                   
+                </div>
+            </div>
+        </footer>
+    </main>
+
+
+
+
+    <script src="/adminAssets/AdProductAssets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/adminAssets/AdProductAssets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/adminAssets/AdProductAssets/js/vendors/select2.min.js"></script>
+    <script src="/adminAssets/AdProductAssets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/adminAssets/AdProductAssets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/adminAssets/AdProductAssets/js/main.js?v=1.1" type="text/javascript"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+    <!-- <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('imageInput');
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            const imagePreviews = document.getElementById('imagePreviews');
+            const cropButton = document.getElementById('cropButton');
+            const croppedCanvas = document.getElementById('croppedCanvas');
+            const cropImage = document.getElementById('cropImage');
+            const imageError = document.getElementById('image-error');
+            const submitForm = document.getElementById('submitForm');
+            let cropper;
+    
+            // Form submission validation
+            submitForm.addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                let valid = true;
+    
+                // Get form values
+                const name = document.querySelector('input[name="name"]').value.trim();
+                const description = document.querySelector('textarea[name="description"]').value.trim();
+                const stock = document.querySelector('input[name="stock"]').value;
+                const price = document.querySelector('input[name="price"]').value;
+                const spec = document.querySelector('input[name="spec"]').value;
+                const width = document.querySelector('input[name="width"]').value;
+                const height = document.querySelector('input[name="height"]').value;
+                const depth = document.querySelector('input[name="depth"]').value;
+                const material = document.querySelector('textarea[name="material"]').value;
+                const category = document.querySelector('#productCategory').value;
+                const images = imageInput.files;
+    
+                // Clear previous error messages
+                document.getElementById('name-error').innerText = '';
+                document.getElementById('description-error').innerText = '';
+                document.getElementById('stock-error').innerText = '';
+                document.getElementById('price-error').innerText = '';
+                document.getElementById('spec-error').innerText = '';
+                document.getElementById('width-error').innerText = '';
+                document.getElementById('height-error').innerText = '';
+                document.getElementById('depth-error').innerText = '';
+                document.getElementById('material-error').innerText = '';
+                document.getElementById('category-error').innerText = '';
+                imageError.innerText = '';
+    
+                // Validate Product Name
+                if (!name) {
+                    valid = false;
+                    document.getElementById('name-error').innerText = 'Product name required';
+                }
+    
+                // Validate Description
+                if (!description) {
+                    valid = false;
+                    document.getElementById('description-error').innerText = 'Description required';
+                }
+    
+                // Validate Stock
+                if (stock <= 0) {
+                    valid = false;
+                    document.getElementById('stock-error').innerText = 'Stock cannot be negative or zero';
+                }
+    
+                // Validate specification
+                if (!spec) {
+                    valid = false;
+                    document.getElementById('spec-error').innerText = 'Please enter specifications';
+                }
+    
+                // Validate Material
+                if (!material) {
+                    valid = false;
+                    document.getElementById('material-error').innerText = 'Please enter material';
+                }
+    
+                // Validate width
+                if (width < 0) {
+                    valid = false;
+                    document.getElementById('width-error').innerText = 'Width cannot be negative';
+                }
+    
+                // Validate height
+                if (height <= 0) {
+                    valid = false;
+                    document.getElementById('height-error').innerText = 'Height cannot be negative or zero';
+                }
+    
+                // Validate depth
+                if (depth < 0) {
+                    valid = false;
+                    document.getElementById('depth-error').innerText = 'Depth cannot be negative or zero';
+                }
+    
+                // Validate Price
+                if (price <= 0) {
+                    valid = false;
+                    document.getElementById('price-error').innerText = 'Price cannot be negative or zero';
+                }
+    
+                // Validate Category
+                if (!category) {
+                    valid = false;
+                    document.getElementById('category-error').innerText = 'Please select a category';
+                }
+    
+                // Validate Image
+                if (images.length === 0) {
+                    valid = false;
+                    imageError.innerText = 'Please select images';
+                } else if (images.length > 3) {
+                    valid = false;
+                    imageError.innerText = 'You can upload a maximum of 3 images';
+                }
+    
+                if (!valid) return; // Stop submission if validation fails
+    
+                // If validation passes, submit the form
+                document.querySelector('#addForm').submit();
+            });
+    
+            // Image preview and cropping logic
+            imageInput.addEventListener('change', function(event) {
+                const files = event.target.files;
+    
+                if (files.length > 3) {
+                    imageError.innerText = 'You can upload a maximum of 3 images';
+                    // Clear the file input
+                    imageInput.value = '';
+                    // Clear existing previews
+                    imagePreviewContainer.style.display = 'none';
+                    imagePreviews.innerHTML = '';
+                    return;
+                }
+    
+                imageError.innerText = ''; // Clear any previous error
+                imagePreviewContainer.style.display = 'block';
+                imagePreviews.innerHTML = '';
+    
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const reader = new FileReader();
+    
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.maxWidth = '100px';
+                        img.style.margin = '5px';
+                        img.style.cursor = 'pointer';
+    
+                        img.addEventListener('click', function() {
+                            cropImage.src = e.target.result;
+                            cropImage.style.display = 'block';
+    
+                            // Initialize or destroy previous cropper
+                            if (cropper) {
+                                cropper.destroy();
+                            }
+    
+                            cropper = new Cropper(cropImage, {
+                                aspectRatio: 1,
+                                viewMode: 1,
+                                autoCropArea: 1,
+                            });
+                        });
+    
+                        imagePreviews.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+    
+            // Crop image logic
+            cropButton.addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                if (cropper) {
+                    const canvas = cropper.getCroppedCanvas();
+    
+                    croppedCanvas.width = canvas.width;
+                    croppedCanvas.height = canvas.height;
+                    const ctx = croppedCanvas.getContext('2d');
+                    ctx.drawImage(canvas, 0, 0);
+    
+                    croppedCanvas.toBlob(function(blob) {
+                        const formData = new FormData();
+                        formData.append('image', blob, 'croppedImage.png');
+    
+                        fetch('/admin/addProducts', {
+                            method: 'POST',
+                            body: formData,
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                    });
+    
+                    // Clean up the cropper
+                    cropImage.style.display = 'none';
+                    cropper.destroy();
+                    cropper = null;
+                }
+            });
+        });
+    </script> -->
+
+
+ <!-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('imageInput');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const imagePreviews = document.getElementById('imagePreviews');
+    const cropButton = document.getElementById('cropButton');
+    const croppedCanvas = document.getElementById('croppedCanvas');
+    const cropImage = document.getElementById('cropImage');
+    const imageError = document.getElementById('image-error');
+    const submitForm = document.getElementById('submitForm');
+    let cropper;
+    let croppedImageData = []; // Array to store cropped image data
+
+    // Form submission validation
+    submitForm.addEventListener('click', function(event) {
+        event.preventDefault();
+        
+        let valid = true;
+
+        // Get form values
+        const name = document.querySelector('input[name="name"]').value.trim();
+        const description = document.querySelector('textarea[name="description"]').value.trim();
+        const stock = document.querySelector('input[name="stock"]').value;
+        const price = document.querySelector('input[name="price"]').value;
+        const discount = document.querySelector('input[name="discount"]').value;
+        const spec = document.querySelector('input[name="spec"]').value;
+        const width = document.querySelector('input[name="width"]').value;
+        const height = document.querySelector('input[name="height"]').value;
+        const depth = document.querySelector('input[name="depth"]').value;
+        const material = document.querySelector('textarea[name="material"]').value;
+        const category = document.querySelector('#productCategory').value;
+        const images = imageInput.files;
+
+        // Clear previous error messages
+        document.getElementById('name-error').innerText = '';
+        document.getElementById('description-error').innerText = '';
+        document.getElementById('stock-error').innerText = '';
+        document.getElementById('price-error').innerText = '';
+        document.getElementById('discount-error').innerText = '';
+        document.getElementById('spec-error').innerText = '';
+        document.getElementById('width-error').innerText = '';
+        document.getElementById('height-error').innerText = '';
+        document.getElementById('depth-error').innerText = '';
+        document.getElementById('material-error').innerText = '';
+        document.getElementById('category-error').innerText = '';
+        imageError.innerText = '';
+
+        // Validate Product Name
+        if (!name) {
+            valid = false;
+            document.getElementById('name-error').innerText = 'Product name required';
+        }
+
+        // Validate Description
+        if (!description) {
+            valid = false;
+            document.getElementById('description-error').innerText = 'Description required';
+        }
+
+        // Validate Stock
+        if (stock <= 0) {
+            valid = false;
+            document.getElementById('stock-error').innerText = 'Stock cannot be negative or zero';
+        }
+
+        // Validate specification
+        if (!spec) {
+            valid = false;
+            document.getElementById('spec-error').innerText = 'Please enter specifications';
+        }
+
+        // Validate Material
+        if (!material) {
+            valid = false;
+            document.getElementById('material-error').innerText = 'Please enter material';
+        }
+
+        // Validate width
+        if (width < 0) {
+            valid = false;
+            document.getElementById('width-error').innerText = 'Width cannot be negative';
+        }
+
+        // Validate height
+        if (height <= 0) {
+            valid = false;
+            document.getElementById('height-error').innerText = 'Height cannot be negative or zero';
+        }
+
+        // Validate depth
+        if (depth < 0) {
+            valid = false;
+            document.getElementById('depth-error').innerText = 'Depth cannot be negative or zero';
+        }
+
+        // Validate Price
+        if (price <= 0) {
+            valid = false;
+            document.getElementById('price-error').innerText = 'Price cannot be negative or zero';
+        }
+
+        // Validate discount
+        if (discount && price) {
+            if (discount >= price|| discount <= 0) {
+                valid = false;
+                document.getElementById('discount-error').innerText = 'Discount should be less than price and cannot be negative or zero';
+            }
+        }
+
+        // Validate Category
+        if (!category) {
+            valid = false;
+            document.getElementById('category-error').innerText = 'Please select a category';
+        }
+
+        // Validate Image
+        if (images.length === 0) {
+            valid = false;
+            imageError.innerText = 'Please select images';
+        } else if (images.length > 3) {
+            valid = false;
+            imageError.innerText = 'You can upload a maximum of 3 images';
+        }
+
+        if (!valid) return; // Stop submission if validation fails
+
+        // If validation passes, submit the form
+        document.querySelector('#addForm').submit();
+    });
+
+    // Image preview and cropping logic
+    imageInput.addEventListener('change', function(event) {
+        const files = event.target.files;
+
+        if (files.length > 3) {
+            imageError.innerText = 'You can upload a maximum of 3 images';
+            // Clear the file input
+            imageInput.value = '';
+            // Clear existing previews
+            imagePreviewContainer.style.display = 'none';
+            imagePreviews.innerHTML = '';
+            return;
+        }
+
+        imageError.innerText = ''; // Clear any previous error
+        imagePreviewContainer.style.display = 'block';
+        imagePreviews.innerHTML = '';
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100px';
+                img.style.margin = '5px';
+                img.style.cursor = 'pointer';
+
+                img.addEventListener('click', function() {
+                    cropImage.src = e.target.result;
+                    cropImage.style.display = 'block';
+
+                    // Initialize or destroy previous cropper
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+
+                    cropper = new Cropper(cropImage, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        autoCropArea: 1,
+                    });
+                });
+
+                imagePreviews.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Handle crop button
+    cropButton.addEventListener('click', function() {
+        if (cropper) {
+            const croppedCanvas = cropper.getCroppedCanvas();
+            croppedCanvas.toBlob(function(blob) {
+                const croppedImg = document.createElement('img');
+                croppedImg.src = URL.createObjectURL(blob);
+                croppedImg.style.maxWidth = '100px';
+                imagePreviews.appendChild(croppedImg);
+                croppedImageData.push(blob); // Save cropped image data
+            });
+            cropImage.style.display = 'none';
+            cropper.destroy();
+            cropper = null;
+        }
+    });
+});
+
+</script>  -->
+    
+
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('imageInput');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const imagePreviews = document.getElementById('imagePreviews');
+    const cropButton = document.getElementById('cropButton');
+    const croppedCanvas = document.getElementById('croppedCanvas');
+    const cropImage = document.getElementById('cropImage');
+    const imageError = document.getElementById('image-error');
+    const submitForm = document.getElementById('submitForm');
+    let cropper;
+    let currentImageIndex;
+    let croppedImageData = []; // Array to store cropped image data
+
+    // Form submission validation
+    submitForm.addEventListener('click', function(event) {
+        event.preventDefault();
+        
+        let valid = true;
+
+        // Get form values
+        const name = document.querySelector('input[name="name"]').value.trim();
+        const description = document.querySelector('textarea[name="description"]').value.trim();
+        const stock = document.querySelector('input[name="stock"]').value;
+        const price = document.querySelector('input[name="price"]').value;
+        const discount = document.querySelector('input[name="discount"]').value;
+        const spec = document.querySelector('input[name="spec"]').value;
+        const width = document.querySelector('input[name="width"]').value;
+        const height = document.querySelector('input[name="height"]').value;
+        const depth = document.querySelector('input[name="depth"]').value;
+        const material = document.querySelector('textarea[name="material"]').value;
+        const category = document.querySelector('#productCategory').value;
+        const images = imageInput.files;
+
+        // Clear previous error messages
+        document.getElementById('name-error').innerText = '';
+        document.getElementById('description-error').innerText = '';
+        document.getElementById('stock-error').innerText = '';
+        document.getElementById('price-error').innerText = '';
+        document.getElementById('discount-error').innerText = '';
+        document.getElementById('spec-error').innerText = '';
+        document.getElementById('width-error').innerText = '';
+        document.getElementById('height-error').innerText = '';
+        document.getElementById('depth-error').innerText = '';
+        document.getElementById('material-error').innerText = '';
+        document.getElementById('category-error').innerText = '';
+        imageError.innerText = '';
+
+        // Validate Product Name
+        if (!name) {
+            valid = false;
+            document.getElementById('name-error').innerText = 'Product name required';
+        }
+
+        // Validate Description
+        if (!description) {
+            valid = false;
+            document.getElementById('description-error').innerText = 'Description required';
+        }
+
+        // Validate Stock
+        if (stock <= 0) {
+            valid = false;
+            document.getElementById('stock-error').innerText = 'Stock cannot be negative or zero';
+        }
+
+        // Validate specification
+        if (!spec) {
+            valid = false;
+            document.getElementById('spec-error').innerText = 'Please enter specifications';
+        }
+
+        // Validate Material
+        if (!material) {
+            valid = false;
+            document.getElementById('material-error').innerText = 'Please enter material';
+        }
+
+        // Validate width
+        if (width < 0) {
+            valid = false;
+            document.getElementById('width-error').innerText = 'Width cannot be negative';
+        }
+
+        // Validate height
+        if (height <= 0) {
+            valid = false;
+            document.getElementById('height-error').innerText = 'Height cannot be negative or zero';
+        }
+
+        // Validate depth
+        if (depth < 0) {
+            valid = false;
+            document.getElementById('depth-error').innerText = 'Depth cannot be negative or zero';
+        }
+
+        // Validate Price
+        if (price <= 0) {
+            valid = false;
+            document.getElementById('price-error').innerText = 'Price cannot be negative or zero';
+        }
+
+        // Validate discount
+        if (discount && price) {
+            if (discount >= price|| discount <= 0) {
+                valid = false;
+                document.getElementById('discount-error').innerText = 'Discount should be less than price and cannot be negative or zero';
+            }
+        }
+
+        // Validate Category
+        if (!category) {
+            valid = false;
+            document.getElementById('category-error').innerText = 'Please select a category';
+        }
+
+        // Validate Image
+        if (images.length === 0) {
+            valid = false;
+            imageError.innerText = 'Please select images';
+        } else if (images.length > 3) {
+            valid = false;
+            imageError.innerText = 'You can upload a maximum of 3 images';
+        }
+
+        if (!valid) return; // Stop submission if validation fails
+
+
+      const formData =new FormData();
+      formData.append('name', name);
+        formData.append('description', description);
+        formData.append('stock', stock);
+        formData.append('price', price);
+        formData.append('discount', discount);
+        formData.append('spec', spec);
+        formData.append('width', width);
+        formData.append('height', height);
+        formData.append('depth', depth);
+        formData.append('material', material);
+        formData.append('category', category);
+
+        croppedImageData.forEach((blob, index) => {
+            formData.append(`image${index}`, blob); // Append cropped images as form data
+        });
+        fetch('/admin/addProducts', {
+    method: 'POST',
+    body: formData,
+})
+.then(response => {
+    if (!response.ok) {
+        return response.json().then(result => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: result.message || 'An error occurred',
+                confirmButtonText: 'OK'
+            });
+            throw new Error(result.message || 'An error occurred'); // Log the actual error message
+        });
+    }
+    return response.json(); // Parse the response to JSON if it's OK
+})
+.then(data => {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Product uploaded successfully',
+        confirmButtonText: 'OK'
+    });
+    console.log("Product uploaded successfully");
+    window.location.href = '/admin/allProducts';
+})
+.catch(error => {
+    console.error('Error uploading product:', error.message); // Log the actual error message
+});
+
+
+    })
+
+    // Image preview and cropping logic
+    imageInput.addEventListener('change', function(event) {
+        const files = event.target.files;
+
+        if (files.length > 3) {
+            imageError.innerText = 'You can upload a maximum of 3 images';
+            imageInput.value = '';  // Clear the file input
+            imagePreviewContainer.style.display = 'none'; 
+            imagePreviews.innerHTML = ''; // Clear existing previews
+            return;
+        }
+
+        imageError.innerText = ''; // Clear any previous error
+        imagePreviewContainer.style.display = 'block';
+        imagePreviews.innerHTML = '';// Clear existing previews
+        croppedImageData = []; // Clear cropped images data
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100px';
+                img.style.margin = '5px';
+                img.style.cursor = 'pointer';
+
+                // Save the original file data to croppedImageData initially
+                croppedImageData[i] = file;
+
+                img.addEventListener('click', function() {
+                    cropImage.src = e.target.result;
+                    cropImage.style.display = 'block';
+                    currentImageIndex = i; // Track the index of the image being cropped
+
+                    // Initialize or destroy previous cropper
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+
+                    cropper = new Cropper(cropImage, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        autoCropArea: 1,
+                    });
+                });
+
+                imagePreviews.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+   
+
+    cropButton.addEventListener('click', function() {
+        if (cropper) {
+            cropper.getCroppedCanvas().toBlob(function(blob) {
+                // Replace the original image with the cropped one
+                croppedImageData[currentImageIndex] = blob;
+
+                const croppedImg = document.createElement('img');
+                croppedImg.src = URL.createObjectURL(blob);
+                croppedImg.style.maxWidth = '100px';
+                croppedImg.style.margin = '5px';
+
+                // Replace the original image preview
+                imagePreviews.childNodes[currentImageIndex].src = croppedImg.src;
+
+                cropImage.style.display = 'none';
+                cropper.destroy();
+                cropper = null;
+            });
+        }
+    });
+});
+
+</script>  -->
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('imageInput');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const imagePreviews = document.getElementById('imagePreviews');
+    const cropButton = document.getElementById('cropButton');
+    const croppedCanvas = document.getElementById('croppedCanvas');
+    const cropImage = document.getElementById('cropImage');
+    const imageError = document.getElementById('image-error');
+    const submitForm = document.getElementById('submitForm');
+    let cropper;
+    let currentImageIndex;
+    let croppedImageData = []; // Array to store cropped image data
+
+    // Form submission validation
+    submitForm.addEventListener('click', function(event) {
+        event.preventDefault();
+        
+        let valid = true;
+
+        // Get form values
+        const name = document.querySelector('input[name="name"]').value.trim();
+        const description = document.querySelector('textarea[name="description"]').value.trim();
+        const stock = document.querySelector('input[name="stock"]').value;
+        const price = document.querySelector('input[name="price"]').value;
+        const discount = document.querySelector('input[name="discount"]').value;
+        const spec = document.querySelector('input[name="spec"]').value;
+        const width = document.querySelector('input[name="width"]').value;
+        const height = document.querySelector('input[name="height"]').value;
+        const depth = document.querySelector('input[name="depth"]').value;
+        const material = document.querySelector('textarea[name="material"]').value;
+        const category = document.querySelector('#productCategory').value;
+        const images = imageInput.files;
+
+        // Clear previous error messages
+        document.getElementById('name-error').innerText = '';
+        document.getElementById('description-error').innerText = '';
+        document.getElementById('stock-error').innerText = '';
+        document.getElementById('price-error').innerText = '';
+        document.getElementById('discount-error').innerText = '';
+        document.getElementById('spec-error').innerText = '';
+        document.getElementById('width-error').innerText = '';
+        document.getElementById('height-error').innerText = '';
+        document.getElementById('depth-error').innerText = '';
+        document.getElementById('material-error').innerText = '';
+        document.getElementById('category-error').innerText = '';
+        imageError.innerText = '';
+
+        // Validate Product Name
+        if (!name) {
+            valid = false;
+            document.getElementById('name-error').innerText = 'Product name required';
+        }
+
+        // Validate Description
+        if (!description) {
+            valid = false;
+            document.getElementById('description-error').innerText = 'Description required';
+        }
+
+        // Validate Stock
+        if (stock <= 0) {
+            valid = false;
+            document.getElementById('stock-error').innerText = 'Stock cannot be negative or zero';
+        }
+
+        // Validate specification
+        if (!spec) {
+            valid = false;
+            document.getElementById('spec-error').innerText = 'Please enter specifications';
+        }
+
+        // Validate Material
+        if (!material) {
+            valid = false;
+            document.getElementById('material-error').innerText = 'Please enter material';
+        }
+
+        // Validate width
+        if (width < 0) {
+            valid = false;
+            document.getElementById('width-error').innerText = 'Width cannot be negative';
+        }
+
+        // Validate height
+        if (height <= 0) {
+            valid = false;
+            document.getElementById('height-error').innerText = 'Height cannot be negative or zero';
+        }
+
+        // Validate depth
+        if (depth < 0) {
+            valid = false;
+            document.getElementById('depth-error').innerText = 'Depth cannot be negative or zero';
+        }
+
+        // Validate Price
+        if (price <= 0) {
+            valid = false;
+            document.getElementById('price-error').innerText = 'Price cannot be negative or zero';
+        }
+
+        // Validate discount
+        if (discount && price) {
+            if (discount >= price|| discount <= 0) {
+                valid = false;
+                document.getElementById('discount-error').innerText = 'Discount should be less than price and cannot be negative or zero';
+            }
+        }
+
+        // Validate Category
+        if (!category) {
+            valid = false;
+            document.getElementById('category-error').innerText = 'Please select a category';
+        }
+
+        // Validate Image
+        if (images.length === 0) {
+            valid = false;
+            imageError.innerText = 'Please select images';
+        } else if (images.length > 3) {
+            valid = false;
+            imageError.innerText = 'You can upload maximum of 3 images';
+        }
+
+        if (!valid) return; // Stop submission if validation fails
+
+
+      const formData =new FormData();
+      formData.append('name', name);
+        formData.append('description', description);
+        formData.append('stock', stock);
+        formData.append('price', price);
+        formData.append('discount', discount);
+        formData.append('spec', spec);
+        formData.append('width', width);
+        formData.append('height', height);
+        formData.append('depth', depth);
+        formData.append('material', material);
+        formData.append('categoryId', category);
+
+        croppedImageData.forEach((blob, index) => {
+            formData.append('image', blob, `image${index}.jpg`);
+        });
+        fetch('/admin/addProducts', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(result => {
+                    throw new Error(result.message || 'An error occurred');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Product uploaded successfully',
+                confirmButtonText: 'OK'
+            });
+            console.log("Product uploaded successfully");
+            window.location.href = '/admin/allProducts';
+        })
+        .catch(error => {
+            console.error('Error uploading product:', error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.message || 'An error occurred',
+                confirmButtonText: 'OK'
+            });
+        });
+    });
+
+    // Image preview and cropping logic
+    imageInput.addEventListener('change', function(event) {
+        const files = event.target.files;
+
+        if (files.length > 3) {
+            imageError.innerText = 'You can upload a maximum of 3 images';
+            imageInput.value = '';  // Clear the file input
+            imagePreviewContainer.style.display = 'none'; 
+            imagePreviews.innerHTML = ''; // Clear existing previews
+            return;
+        }
+
+        imageError.innerText = ''; 
+        imagePreviewContainer.style.display = 'block';
+        imagePreviews.innerHTML = '';// Clear existing previews
+        croppedImageData = []; // Clear cropped images data
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100px';
+                img.style.margin = '5px';
+                img.style.cursor = 'pointer';
+
+                // Save the original file data to croppedImageData initially
+                croppedImageData[i] = file;
+
+                img.addEventListener('click', function() {
+                    cropImage.src = e.target.result;
+                    cropImage.style.display = 'block';
+                    currentImageIndex = i; // Track the index of the image being cropped
+
+                    // Initialize or destroy previous cropper
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+
+                    cropper = new Cropper(cropImage, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        autoCropArea: 1,
+                    });
+                });
+
+                imagePreviews.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+   
+
+    cropButton.addEventListener('click', function() {
+        if (cropper) {
+            cropper.getCroppedCanvas().toBlob(function(blob) {
+                // Replace the original image with the cropped one
+                croppedImageData[currentImageIndex] = blob;
+
+                const croppedImg = document.createElement('img');
+                croppedImg.src = URL.createObjectURL(blob);
+                croppedImg.style.maxWidth = '100px';
+                croppedImg.style.margin = '5px';
+
+                // Replace the original image preview
+                imagePreviews.childNodes[currentImageIndex].src = croppedImg.src;
+
+                cropImage.style.display = 'none';
+                cropper.destroy();
+                cropper = null;
+            });
+        }
+    });
+});
+
+</script>
+              
+</body>
+
+</html>
