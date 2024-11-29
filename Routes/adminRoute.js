@@ -66,16 +66,16 @@ router.get('/alluserlist',adminController.listUnlistUser);
 // multer handler middleware
 const multerErrorHandler = (err, req, res, next) => {
   if (err instanceof multer.MulterError) {
-    // A Multer error occurred when uploading.
+    
     if (err.code === 'LIMIT_UNEXPECTED_FILE') {
       return res.status(400).json({ error: 'Too many files uploaded' });
     }
     return res.status(400).json({ error: err.message });
   } else if (err) {
-    // An unknown error occurred when uploading.
+  
     return res.status(500).json({ error: 'File upload error' });
   }
-  // Everything went fine.
+ 
   next();
 };
 

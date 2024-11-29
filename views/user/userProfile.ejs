@@ -188,48 +188,6 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
-                   
-                                                                
-                                                                <!-- <div class="card-body p-4">
-                                                                    <% order.products.forEach(product => { %>
-                                                                        <div class="d-flex flex-row mb-4 pb-2 mt-4">
-                                                                            <div class="flex-fill">
-                                                                                <h5 class="bold">
-                                                                                    <% if (product.productId && product.productId._id) { %>
-                                                                                        <a href="/eachproduct/?id=<%= product.productId._id %>">
-                                                                                            <%= product.name %>
-                                                                                        </a>
-                                                                                    <% } else { %>
-                                                                                        <%= product.name %> (Product no longer available)
-                                                                                    <% } %>
-                                                                                </h5>
-                                                                                <p class="text-muted">Qt: <%= product.quantity %> item</p>
-                                                                                <h4 class="mb-3">
-                                                                                    ₹ <%= product.total %>
-                                                                                    <span class="small text-muted">
-                                                                                        <br> via (<%= order.paymentMode %>)
-                                                                                    </span>
-                                                                                </h4>
-                                                                            </div>
-                                                                            <div>
-                                                                                <% if (product.productId && product.productId.image && product.productId.image[0]) { %>
-                                                                                    <img class="align-self-center img-fluid" src="/uploads/<%= product.productId.image[0] %>" width="150" height="100">
-                                                                                <% } else { %>
-                                                                                    <img class="align-self-center img-fluid" src="/path/to/placeholder-image.jpg" width="150" height="100" alt="Image not available">
-                                                                                <% } %>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <% if (product.paymentStatus === "failed") { %>
-                                                                              <button class="btn btn-danger">Retry Payment</button>
-                                                                            <% } else { %>
-                                                                              <p class="text-primary"><%= product.orderStatus %></p>
-                                                                            <% } %>
-                                                                          </div>
-                                                                       
-                                                                    <% }); %>
-                                                                </div> -->
                                                                 
                                                                 <div class="card-body p-4">
                                                                     <% order.products.forEach(product => { %>

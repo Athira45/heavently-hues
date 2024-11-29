@@ -557,53 +557,6 @@ const DecreaseQty = async(req,res)=>{
 }
 
 
-// const couponSave = async(req,res)=>{
-//     try {
-
-        
-//         const {discountValue} = req.body;
-//         req.session.saveCoupon = discountValue;
-
-       
-//         res.json({success:true})
-//     } catch (error) {
-//        console.log("error in coupon save",error); 
-//     }
-// }
-
-// const couponSave = async (req, res) => {
-//     try {
-//       const { totalPrice, couponCode,discountValue } = req.body; // receive total price and coupon code
-//       const coupon = await Coupon.findOne({ couponCode }); // check if coupon exists
-//       console.log("totalPrice passed from frndend",totalPrice)
-  
-//       if (coupon) {
-//         // const discountValue = (coupon.percentage / 100) * totalPrice; // calculate discount
-//         // const discountedTotal = totalPrice - discountValue;
-//         // console.log("discountedTotal",discountedTotal);
-  
-//         // Store the discounted total and coupon information in the session
-//         req.session.discountedTotal = totalPrice;
-//         req.session.appliedCoupon = couponCode;
-//         req.session.discountValue = discountValue;
-//         req.session.discountPercentage = coupon.percentage;
-//         console.log("req.session.discountedTotal",req.session.discountedTotal)
-//         // req.session.discountedTotal = discountedTotal;
-//         // req.session.appliedCoupon = couponCode;
-//         // req.session.discountValue = discountValue;
-//         // req.session.discountPercentage = coupon.discountPercentage;
-
-  
-//         // res.json({ success: true, discountedTotal }); // send back updated total
-//         res.json({ success: true, totalPrice});
-//       } else {
-//         res.json({ success: false, message: 'Invalid coupon code' });
-//       }
-//     } catch (error) {
-//       console.error("Error in coupon save:", error);
-//       res.status(500).json({ success: false, error: 'Internal server error' });
-//     }
-//   };
 
 const couponSave = async (req, res) => {
     try {
@@ -633,6 +586,23 @@ const couponSave = async (req, res) => {
       res.status(500).json({ success: false, error: 'Internal server error' });
     }
   };
+
+
+
+
+  const removeCoupon = async (req, res) => {
+    try {
+        req.session.couponSave = null; // Clear the coupon from the session
+        req.session.saveCoupon = false;
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error removing coupon:', error);
+        res.status(500).json({ success: false });
+    }
+};
+
+
+
   
 
 module.exports = {
@@ -645,4 +615,5 @@ module.exports = {
     DecreaseQty,
     updateQuantity,
     couponSave,
+    removeCoupon,
 }

@@ -89,6 +89,8 @@ router.post('/decreaseQty/:id',cartController.DecreaseQty);
 
 //--------------------------------------checkout----------------------------------
 router.post('/saveCoupon',cartController.couponSave);
+router.post('/remove-coupon',cartController.removeCoupon);
+
 router.get("/checkout",cartController.loadCheckout);
 router.get("/address",cartController.loadAddAddress);
 router.post("/address",cartController.addAddress);

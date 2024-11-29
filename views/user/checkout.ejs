@@ -368,20 +368,39 @@
                                     </tbody>
                                 </table>
                         
-                                <% if(locals.disCoupon){%>
+                                <!-- <% if(locals.disCoupon){%>
                                     <div class="coupon-section">
-                                        <!-- <input type="text" class="form-control" id="couponCode" placeholder="Enter coupon code"> -->
+                                        
                                          <input type="hidden" id="couponPercentage" value="<%= disCoupon.percentage%>">
 
                                         <button class="btn btn-outline-primary-2 btn-sorder btn-block apply-coupon-btn" >Coupon Applied</button>
                                     </div>
                                 <%}else{%>
                                     <div class="coupon-section">
-                                        <!-- <input type="text" class="form-control" id="couponCode" placeholder="Enter coupon code"> -->
+                                       
                                         <button class="btn btn-outline-primary-2 btn-sorder btn-block apply-coupon-btn" onclick="applyCoupon()">ApplyCoupon</button>
                                     </div>
-                                <%}%>
-                               
+                                <%}%> -->
+
+                                <% if (locals.disCoupon) { %>
+                                    <div class="coupon-section">
+                                        <input type="hidden" id="couponPercentage" value="<%= disCoupon.percentage %>">
+                                        <button 
+                                            class="btn btn-outline-primary-2 btn-sorder btn-block apply-coupon-btn" 
+                                            onclick="resetCoupon()">
+                                            Coupon Applied
+                                        </button>
+                                    </div>
+                                <% } else { %>
+                                    <div class="coupon-section">
+                                        <button 
+                                            class="btn btn-outline-primary-2 btn-sorder btn-block apply-coupon-btn" 
+                                            onclick="applyCoupon()">
+                                            Apply Coupon
+                                        </button>
+                                    </div>
+                                <% } %>
+                                
                                 
                         
                                 <div class="accordion-summary" id="accordion-payment">
@@ -408,27 +427,11 @@
     </div>
 </main>
 
+<link rel="preload" href="your-resource-url.js" as="script">
+
 <!--------------------------------coupon modal---------------------------------- -->
 
-
 <!-- <div id="discountModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Available Discounts</h2>
-        <div class="discount-item">
-            <% coupon.forEach((element) => { %>
-            <span class="discount-code"><%= element.couponCode %></span>
-            <span class="discount-minPrice">Min Price: ₹<%= element.minPrice %></span>
-            <span class="discount-maxRedeemAmount">Max Redeem: ₹<%= element.maxRedeemAmount %></span>
-            <span class="discount-percentage"><%= element.percentage %>% discount</span>
-            <button class="apply-btn" data-coupon="<%= element.couponCode %>" data-percentage="<%= element.percentage %>">Apply Coupon</button>
-            <% }) %>
-        </div>
-    </div>
-</div> -->
-
-
-<div id="discountModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <h2>Available Discounts</h2>
@@ -448,8 +451,31 @@
             <% }) %>
         </div>
     </div>
-</div>
+</div> -->
 
+<div id="discountModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Available Discounts</h2>
+        <% coupon.forEach((element) => { %>
+            <div class="discount-item">
+                <label for="coupon-<%= element.couponCode %>" class="form-label">
+                    <strong>Coupon Code:</strong> <%= element.couponCode %>
+                </label>
+                <p><strong>Min Price:</strong> ₹<%= element.minPrice %></p>
+                <p><strong>Max Redeem Amount:</strong> ₹<%= element.maxRedeemAmount %></p>
+                <p><strong>Discount:</strong> <%= element.percentage %>%</p>
+                <button 
+                class="apply-btn" 
+                data-coupon="<%= element.couponCode %>" 
+                data-percentage="<%= element.percentage %>"
+                data-maxredeem="<%= element.maxRedeemAmount %>">
+                Apply Coupon
+            </button>
+            </div>
+        <% }) %>
+    </div>
+</div>
 
 
 <!-- CSS -->
@@ -533,168 +559,12 @@ fetch('/placeorder', {
 
         );
 
-//     console.log("script loaded");
-//     function sendSelection(event) {
 
-//         console.log("entered into sendSeletion ");
-//         event.preventDefault(); // Prevent the default form submission
-
-//         const paymentMethod = document.getElementById("payment").value;
-//         const selectedRadio = document.querySelector('input[name="selectedAddress"]:checked');
-
-
-// console.log('paymentMethod',paymentMethod);
-// console.log('selectedRadio',selectedRadio);
-
-
-    
-//         if (!selectedRadio) {
-//             Swal.fire({
-//                 icon: 'warning',
-//                 title: 'Please select an address',
-//                 text: 'You must select an address before proceeding.',
-//             });
-//             return;
-//         }
-
-//         const selectedValue = JSON.parse(selectedRadio.value);
-//         const couponCode = ""; // Initialize or fetch your coupon code if necessary
-
-//         if ('Razorpay') {
-
-// console.log("mmmmmmmmmmmmmmmmmm");
-//     return
-// }
-//         fetch('/placeorde', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({
-//                 paymentMethod: paymentMethod,
-//                 selectedValue: selectedValue,
-//             }),
-//         })
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log('Backend response:', data);
-
-//             if (data.success) {
-               
-
-                
-//                     window.location.href = '/ordersuccess';
-                
-//             } else if (data.message) {
-                
-//                 Swal.fire({
-//                     title: 'Order Processing Failed',
-//                     text: data.message,
-//                     icon: 'error',
-//                     confirmButtonText: 'OK'
-//                 });
-//             }
-//         })
-//         .catch(error => {
-//             console.error('Error:', error);
-//         });
-  
-// }
 </script>   
 
-<!-- nmmmmmmmmmmmmmmmmmmmmmmmm -->
- <!-- <script>
-    document.getElementById('placeOrder').addEventListener('click', function(e) {
-    e.preventDefault();
-
-    const paymentMethod = document.getElementById("payment").value;
-    const selectedRadio = document.querySelector('input[name="selectedAddress"]:checked');
-    const total = document.getElementById("grandTotal").value;
-    const walletElement = document.getElementById("walletbalance");
-    const walletBalance = walletElement.getAttribute("data-balance");
-
-    // const couponCode = this.getAttribute('data-coupon');
-
-    console.log("total val",totalValue)
-
-   
-    const totalAmt = Number(total);
-    // console.log("totalAMT:", typeof(totalAmt));
-    console.log('paymentMethod:', paymentMethod);
-
-    if (!selectedRadio) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Please select an address',
-            text: 'You must select an address before proceeding.',
-        });
-        return;
-    }
-
-    const selectedValue = JSON.parse(selectedRadio.value);
-    console.log("dffffffffffff")
-    const discountAmount = parseFloat(document.getElementById('discountAmount').innerText) || 0;
-    const discountPercentage = parseFloat(document.querySelector('.apply-btn[data-percentage]').getAttribute('data-percentage')) || 0;
-
-    // const couponDiscount = parseFloat( document.getElementById("discountAmount").innerText)
-    // const couponPercentage = parseFloat(document.getElementById("couponPercentage").value) || 0; // Retrieve from hidden field or set default
-    console.log("nbbbgeeeeeeeettttttttttttfter")
-    console.log("couponDiscount",discountValue)
-    console.log("couponPercentage",percentage)
-
-    if (paymentMethod === 'Razorpay') {
-        initiateRazorPayPayment(totalAmt, paymentMethod, selectedValue);
-        return;
-    }
-
-    if (paymentMethod === 'wallet') {
-        saveWalletOrder(totalAmt, paymentMethod, selectedValue, walletBalance);
-        return;
-    }
-
-    fetch('/placeorder', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            paymentMethod: paymentMethod,
-            selectedValue: selectedValue,
-            // couponDiscount: couponDiscount,
-            // couponPercentage: couponPercentage
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Backend response:', data);
-
-        if (data.success) {
-            window.location.href = '/ordersuccess';
-        } else if (data.message) {
-            Swal.fire({
-                title: 'Order Processing Failed',
-                text: data.message,
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-});
-
-</script>  -->
-
-
-
-
-
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-
+<link rel="preload" href="script.js" as="script">
+<link rel="preload" href="style.css" as="style">
 
 
 <script>
@@ -802,215 +672,14 @@ if(data){
 };
 </script>
 
-<!-- apply coupon  -->
-<!-- <script>
+<!-- add coupon  -->
+ <script>
 
 document.addEventListener('DOMContentLoaded', function() {
     // Function to open the modal
     function applyCoupon() {
-        const modal = document.getElementById("discountModal");
-        modal.style.display = "block";
-    }
-
-    // Function to close the modal
-    function closeModal() {
-        const modal = document.getElementById("discountModal");
-        modal.style.display = "none";
-    }
-
-    // Close the modal if the user clicks outside of it
-    window.onclick = function(event) {
-        const modal = document.getElementById("discountModal");
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
-
-    // Attach event listener to the apply coupon button
-    const applyCouponBtn = document.querySelector('.apply-coupon-btn');
-    if (applyCouponBtn) {
-        applyCouponBtn.addEventListener('click', applyCoupon);
-    }
-
-    // Attach event listeners to all coupon buttons
-    const couponButtons = document.querySelectorAll('#couponbtn');
-    couponButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const discountText = this.previousElementSibling.innerText;
-            const discountValue = parseFloat(discountText.replace(/[^0-9.-]+/g, ''));
-
-            const total = document.getElementById('grandTotal');
-            const totalValue = parseFloat(total.innerText.replace('₹', '').replace(',', '').trim());
-            const granddTotal = Number(totalValue) - Number(discountValue);
-
-            fetch('/saveCoupon', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({discountValue})
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.success){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: 'Coupon added successfully!'  
-                    }).then((result) => {
-                        if(result.isConfirmed){
-                            closeModal();
-                            document.getElementById('grandTotal').innerText = '₹' + grandTotal.toFixed(2);
-                            document.querySelector('.coupon-section').innerHTML = `
-                                <button class="btn btn-outline-primary-2 btn-sorder btn-block apply-coupon-btn">Coupon Applied</button>
-                            `;
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Update Failed',
-                        text: 'Failed to update profile. Please try again.' 
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'An error occurred. Please try again later.'
-                });
-            });
-        });
-    });
-
-    // Attach event listener to close button
-    const closeBtn = document.querySelector('.close');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeModal);
-    }
-});
-</script> -->
-
-
-
-<script>
-
-// document.addEventListener('DOMContentLoaded', function() {
-//     // Function to open the modal
-//     function applyCoupon() {
-//         document.getElementById("discountModal").style.display = "block";
-//     }
-
-//     // Function to close the modal
-//     function closeModal() {
-//         document.getElementById("discountModal").style.display = "none";
-//     }
-
-//     // Attach event listeners to all coupon buttons
-//     const couponButtons = document.querySelectorAll('.apply-btn');
-//     couponButtons.forEach(button => {
-//         button.addEventListener('click', function() {
-//             const couponCode = this.getAttribute('data-coupon');
-//             const percentage = parseFloat(this.getAttribute('data-percentage'));  // Convert percentage to float
-            
-//             if (isNaN(percentage)) {
-//                 console.error('Invalid percentage value:', percentage);
-//                 Swal.fire({
-//                     icon: 'error',
-//                     title: 'Invalid Coupon',
-//                     text: 'The discount percentage is invalid.'
-//                 });
-//                 return;
-//             }
-
-//             // Parse the total value from the grand total element using value instead of innerText
-//             const totalElement = document.getElementById('grandTotal');
-//             const totalValue = parseFloat(totalElement.value.replace('₹', '').replace(',', '').trim());
-
-//             if (isNaN(totalValue)) {
-//                 console.error('Invalid total value:', totalValue);
-//                 Swal.fire({
-//                     icon: 'error',
-//                     title: 'Total Calculation Error',
-//                     text: 'There was an issue calculating the total.'
-//                 });
-//                 return;
-//             }
-
-//             // Calculate the discount value
-//             const discountValue = (percentage / 100) * totalValue;
-//             const discountedTotal = totalValue - discountValue;
-
-//             console.log(`Applying coupon ${couponCode} with discount ₹${discountValue.toFixed(2)}`);
-
-//             // Send coupon data to the backend
-//             fetch('/saveCoupon', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json'
-//                 },
-//                 body: JSON.stringify({ totalPrice: discountedTotal, couponCode })  // Pass the discounted total
-//             })
-//             .then(response => response.json())
-//             .then(data => {
-//                 if (data.success) {
-//                     Swal.fire({
-//                         icon: 'success',
-//                         title: 'Coupon Applied!',
-//                         text: `You saved ₹${discountValue.toFixed(2)}!`
-//                     }).then(() => {
-//                         closeModal();
-//                         totalElement.value = discountedTotal.toFixed(2); // Update the total on the page
-//                         document.querySelector('.coupon-section').innerHTML = `
-//                             <button class="btn btn-outline-primary-2 btn-sorder btn-block apply-coupon-btn">Coupon Applied</button>
-//                         `;
-//                     });
-//                 } else {
-//                     Swal.fire({
-//                         icon: 'error',
-//                         title: 'Coupon Failed',
-//                         text: data.message || 'Invalid coupon.'
-//                     });
-//                 }
-//             })
-//             .catch(error => {
-//                 console.error('Error:', error);
-//                 Swal.fire({
-//                     icon: 'error',
-//                     title: 'Oops...',
-//                     text: 'An error occurred. Please try again later.'
-//                 });
-//             });
-//         });
-//     });
-
-//     // Attach event listener to the apply coupon button
-//     const applyCouponBtn = document.querySelector('.apply-coupon-btn');
-//     if (applyCouponBtn) {
-//         applyCouponBtn.addEventListener('click', applyCoupon);
-//     }
-
-//     // Close modal functionality
-//     const closeBtn = document.querySelector('.close');
-//     if (closeBtn) {
-//         closeBtn.addEventListener('click', closeModal);
-//     }
-
-//     // Close modal if user clicks outside of it
-//     window.onclick = function(event) {
-//         const modal = document.getElementById("discountModal");
-//         if (event.target === modal) {
-//             modal.style.display = "none";
-//         }
-//     };
-// });
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Function to open the modal
-    function applyCoupon() {
+        console.log('.....ith entha avastha...........');
+        
         document.getElementById("discountModal").style.display = "block";
     }
 
@@ -1093,12 +762,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         title: 'Coupon Applied!',
                         text: `You saved ₹${discountValue.toFixed(2)}!`
                     }).then(() => {
-                        closeModal();
-                        totalElement.value = discountedTotal.toFixed(2); // Update the hidden input value
-                        document.querySelector('.coupon-section').innerHTML = `
-                            <button class="btn btn-outline-primary-2 btn-sorder btn-block apply-coupon-btn">Coupon Applied</button>
-                        `;
-                    });
+    closeModal();
+    totalElement.value = discountedTotal.toFixed(2); // Update the hidden input value
+    document.querySelector('.coupon-section').innerHTML = `
+        <button class="btn btn-outline-primary-2 btn-sorder btn-block apply-coupon-btn" onclick="resetCoupon()">Coupon Applied</button>
+    `;
+});
+
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -1140,14 +810,94 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-    </script>
 
+    </script> 
 
+<script>
+    function resetCoupon() {
+ console.log('checkinh function');
+ 
 
+        fetch('/remove-coupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to reset coupon');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    console.log('ibde ethandoooooooooooooo');
+                    
+                    location.reload(); // Refresh the page to reset the coupon state
+                } else {
+                    console.error('Error from server:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error resetting coupon:', error);
+            });
+    }
+</script>
 
+<!-- remove coupon include but its not work  -->
+    <!-- <script>
+        function openCouponModal() {
+    document.getElementById("discountModal").style.display = "block";
+}
 
+function closeModal() {
+    document.getElementById("discountModal").style.display = "none";
+}
 
+function applyCoupon(couponCode, percentage) {
+    fetch('/saveCoupon', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ couponCode, percentage }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Coupon Applied',
+                    text: `Coupon ${couponCode} applied successfully!`,
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Coupon Failed',
+                    text: data.message,
+                });
+            }
+        });
+}
 
+function removeCoupon() {
+    fetch('/remove-coupon', { method: 'POST' })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Coupon Removed',
+                    text: 'The applied coupon has been removed.',
+                }).then(() => {
+                    location.reload();
+                });
+            }
+        });
+}
+
+    </script> -->
 
 <script>
     const saveOrderRazor = async (razorResponse,selectedPayment,selectedValue) => {
@@ -1167,17 +917,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
         const data = await response.json();
   
-        //saving payment
-        // const verifyData = await fetch("/razor-verify", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     ...razorResponse,
-        //     orderId: data.newOrder.orderId,
-        //   }),
-        // });
   
         if (data) {
           Swal.fire({
