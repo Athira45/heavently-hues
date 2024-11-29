@@ -53,10 +53,9 @@ router.get('/google/callback',passport.authenticate('google',{failureRedirect:'/
 
 router.get('/forgotpassword',UserAuth.isLogout,userController.forgotpassward);
 router.post('/forgotOTP',userController.forgotOtpPage);
-router.get('/verifyForgotOtp',userController.FverifyOtp);
-router.post('/resetpassword',userController.resetPage);
-
-
+router.post('/verifyForgotOtp',userController.FverifyOtp);
+router.get('/resetpassword', userController.resetPage);
+router.post('/resetpassword', userController.resetPassword);
 
 //------------------products--------------------------
 router.get('/productDetails/:id',productController.renderProductDetails);

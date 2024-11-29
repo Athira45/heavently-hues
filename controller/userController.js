@@ -167,83 +167,113 @@ const forgotpassward = async(req,res)=>{
 }
 
 //enter otp forgot passwrd
-const forgotOtpPage = async(req,res)=>{
+const forgotOtpPage = async(req,res) => {
   try {
-    const {email} = req.body;
-    const userExist = await User.findOne({email});
+    const { email } = req.body;
+    const userExist = await User.findOne({ email });
 
-    if(!userExist){
-      res.render('signup',{err:"user not found"});
+    if (!userExist) {
+      return res.render('signup', { err: "User not found" });
     }
-    const createOtp =  generateOtp(email);
-    
+    const createOtp = generateOtp(email);
 
+    // Send email
+    const sentEmail = await sendOTPverificationEmail(email, createOtp);
+    console.log("OTP:", createOtp);
 
-//sent email
-    const sentEmail =   await sendOTPverificationEmail(email,createOtp);
-    console.log("otp:",createOtp);
-    // req.session.email = email;
-    // res.render('forgotOtp');
-    console.log("sentEmail :",sentEmail)//true
-    if(!sentEmail){
-      return res.json("email.error");
+    if (!sentEmail) {
+      return res.json({ success: false, message: "Email error" });
     }
-    req.session.userOtp = createOtp
-    req.session.userData = {email};
-    console.log("req.session.userData :",req.session.userData)
-    res.render("forgotOtp",{email: req.session.userData.email,otpErr: null});
-  
+
+    req.session.userOtp = createOtp;
+    req.session.userData = { email };
+    console.log("Session user data:", req.session.userData);
+
+    // Render OTP page with email and no error message
+    res.render("forgotOtp", { email: req.session.userData.email, otpErr: null });
   } catch (error) {
-    console.log("error in forgot otp funtn:" , error);
+    console.error("Error in forgot OTP function:", error);
     res.redirect('/500');
   }
 }
 
 
+
 //verify forgotpassword otp
 
-const FverifyOtp = async(req,res)=>{
-  console.log("enter in to FverifyOtp ")
-   try {
-    const userId = req.session.user_id;
-    const {OTP} = req.body;
+const FverifyOtp = async (req, res) => {
+  console.log("Entering FverifyOtp");
 
-    if (OTP === req.session.createOtp) {
-    
-      const timestamp = Date.now(); 
-      const randomString = Math.random().toString(36).substring(2, 10); 
+  try {
+    const userId = req.session.user_id;
+    const { OTP } = req.body;
+
+    if (OTP === req.session.userOtp) {
+      // OTP is correct
+      const timestamp = Date.now();
+      const randomString = Math.random().toString(36).substring(2, 10);
       const googleId = `${randomString}${timestamp}`;
-      
-      res.json({ success: true, redirectUrl: '/resetpassword' });
-      // res.render('resetPassword',{userId});
-      
-      return
+
+      // Clear OTP session
+      req.session.userOtp = null;
+
+      return res.json({ success: true, redirectUrl: '/resetpassword' });
     } else {
+      // OTP is incorrect
       res.status(400).json({ success: false, message: "Invalid OTP, please try again" });
     }
   } catch (error) {
     console.error("Error verifying OTP", error);
     res.redirect("/500");
   }
-
 }
 
 
 
+
+
+
+//reset password page render
+const resetPage = async (req, res) => {
+  console.log("Entering resetPage function");
+  try {
+    // Check if the user is authorized for password reset using the session
+    const { userData } = req.session;
+
+    if (!userData) {
+      return res.redirect('/forgotpassword'); // If no user session, redirect to forgot password page
+    }
+
+    // Render the reset password page with user data
+    res.render('resetPassword', { email: userData.email });
+    console.log("resetPassword view rendered successfully");
+  } catch (error) {
+    console.log("error from resetPage function:", error);
+    res.redirect("/500");
+  }
+};
 
 
 //reset password
-const resetPage = async (req,res)=>{
-  console.log("Entering resetPage function");
+const resetPassword = async (req, res) => {
   try {
-    console.log("Attempting to render resetPassword view");
-    res.render('resetPassword');
-    console.log("resetPassword view rendered successfully");
+    const { newPassword, confirmPassword } = req.body;
+
+    // Check if passwords match
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ success: false, message: "Passwords do not match." });
+    }
+
+    // Proceed with password update logic
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await User.updateOne({ _id: req.session.userId }, { password: hashedPassword });
+
+    res.status(200).json({ success: true, message: "Password reset successful." });
   } catch (error) {
-    console.log("error from resetPage function :",error);
-    res.redirect("/500");
+    console.error("Error during password reset:", error);
+    res.status(500).json({ success: false, message: "Internal server error." });
   }
-}
+};
 
 
 
@@ -313,31 +343,39 @@ const loadRegister = async (req, res) => {
 
 async function sendOTPverificationEmail(email,otp){
   try{
+
 const transporter = nodemailer.createTransport({
-  service:'gmail',
-  port:587,
-  secure:false,
-  requireTLS:true,
-  auth:{
-    user:process.env.NODEMAILER_EMAIL,
-    // pass:"ldcv lfps gjii eece"
-    pass:process.env.NODEMAILER_PASSWORD
-  }
-
-})
-
-const info = await transporter.sendMail ({
-  from:process.env.NODEMAILER_EMAIL,
-  to:email,
-  subject:"Verify your account",
-  text:`Your OTP is ${otp}`,
-  html:`<b>Your OTP: ${otp}</b>`,
-
+  service: 'gmail',
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: process.env.NODEMAILER_EMAIL,
+    pass: process.env.NODEMAILER_PASSWORD,
+  },
 });
-// console.log("Email content:",mailOptions)
-// const info = await transporter.sendMail(mailOptions);
 
-// console.log("email sent info:",info);
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('SMTP configuration error:', error);
+  } else {
+    console.log('SMTP server is ready to take messages:', success);
+  }
+});
+
+
+const info = await transporter.sendMail({
+  from: process.env.NODEMAILER_EMAIL,
+  to: email,
+  subject: "Verify your account",
+  text: `Your OTP is ${otp}`,
+  html: `<b>Your OTP: ${otp}</b>`,
+});
+
+console.log('Email sent info:', info);
+return info.accepted.length > 0;
+
+
 return info.accepted.length >0;
 
   }catch(error){
@@ -394,65 +432,202 @@ const securePassword = async (password)=>{
 }
 
 //otp verification
-const verifyOtp = async(req, res) => {
-  try {
-    const { otp } = req.body;
-    // console.log("otp:",otp)
+// const verifyOtp = async(req, res) => {
+//   try {
+//     const { otp } = req.body;
+//     // console.log("otp:",otp)
 
-    if (otp == req.session.userOtp) {
-      const user = req.session.userData;
-      const passwordHash = await securePassword(user.password);
-      const timestamp = Date.now(); 
-      const randomString = Math.random().toString(36).substring(2, 10); 
-      const googleId = `${randomString}${timestamp}`;
+//     if (otp == req.session.userOtp) {
+//       const user = req.session.userData;
+//       const passwordHash = await securePassword(user.password);
+//       const timestamp = Date.now(); 
+//       const randomString = Math.random().toString(36).substring(2, 10); 
+//       const googleId = `${randomString}${timestamp}`;
 
-      const saveUserData = await User.create({
-        name: user.name,
-        email: user.email,
-        mobile: user.mobile,
-        password: passwordHash,
-        googleId 
-      });
+//       const saveUserData = await User.create({
+//         name: user.name,
+//         email: user.email,
+//         mobile: user.mobile,
+//         password: passwordHash,
+//         googleId 
+//       });
 
-      //creating refferal link
-      const referalLink = `http://localhost:4000/register?refId=${saveUserData._id} `
+//       //creating refferal link
+//       const referalLink = `http://localhost:4000/register?refId=${saveUserData._id} `
 
-      saveUserData.referalLink=referalLink 
-      await saveUserData.save();
-      if(refId){
-        const findUser = await User.findById(refId);
-        if(findUser){
-          const orderId = null;
-        }
-      }
-       // Use findOne to get a single wallet document
-       const findWallet = await Wallet.create({
-        user:refId,
-        balance:200,
-        transactions:[{
-        transaction_id:`wallet_${uuid.v4()}`,
-        amount:200,
-        type:'credit',
-        description:"refferal fund",
-        orderId:orderId,
-        }],
+//       saveUserData.referalLink=referalLink 
+//       await saveUserData.save();
+//       if(refId){
+//         const findUser = await User.findById(refId);
+//         if(findUser){
+//           const orderId = null;
+//         }
+//       }
+//        // Use findOne to get a single wallet document
+//        const findWallet = await Wallet.create({
+//         user:refId,
+//         balance:200,
+//         transactions:[{
+//         transaction_id:`wallet_${uuid.v4()}`,
+//         amount:200,
+//         type:'credit',
+//         description:"refferal fund",
+//         orderId:orderId,
+//         }],
 
-       });
-       await createdWallet.save();
+//        });
+//        await createdWallet.save();
        
 
-      // Set user session
-      req.session.user = saveUserData.id;
+//       // Set user session
+//       req.session.user = saveUserData.id;
+//       res.json({ success: true, redirectUrl: '/' });
+//       return
+//     } else {
+//       res.status(400).json({ success: false, message: "Invalid OTP, please try again" });
+//     }
+//   } catch (error) {
+//     console.error("Error verifying OTP", error);
+//     res.redirect("/500");
+//   }
+// };
+
+// const verifyOtp = async (req, res) => {
+//   try {
+//     const { otp } = req.body;
+
+//     if (otp == req.session.userOtp) {
+//       const user = req.session.userData;
+//       // req.session.user_id = saveUserData.id;
+//       const passwordHash = await securePassword(user.password);
+//       const timestamp = Date.now(); 
+//       const randomString = Math.random().toString(36).substring(2, 10); 
+//       const googleId = `${randomString}${timestamp}`;
+
+//       // Save user data
+//       const saveUserData = await User.create({
+//         name: user.name,
+//         email: user.email,
+//         mobile: user.mobile,
+//         password: passwordHash,
+//         googleId,
+//       });
+
+//       // Create referral link
+//       const referalLink = `http://localhost:4000/register?refId=${saveUserData._id}`;
+//       saveUserData.referalLink = referalLink;
+//       await saveUserData.save();
+
+//       // Check for referral ID
+//       const refId = req.body.refId || req.query.refId; // Extract referral ID if provided
+//       if (refId) {
+//         const findUser = await User.findById(refId);
+//         if (findUser) {
+//           const orderId = null;
+
+//           // Create wallet
+//           const createdWallet = await Wallet.create({
+//             user: refId,
+//             balance: 200,
+//             transactions: [
+//               {
+//                 transaction_id: `wallet_${uuid.v4()}`,
+//                 amount: 200,
+//                 type: 'credit',
+//                 description: "referral fund",
+//                 orderId: orderId,
+//               },
+//             ],
+//           });
+
+//           await createdWallet.save();
+//         }
+//       }
+
+//       // Set user session
+//       req.session.user = saveUserData.id;
+//       res.json({ success: true, redirectUrl: '/' });
+//     } else {
+//       res.status(400).json({ success: false, message: "Invalid OTP, please try again" });
+//     }
+//   } catch (error) {
+//     console.error("Error verifying OTP", error);
+//     res.redirect("/500");
+//   }
+// };
+
+const verifyOtp = async (req, res) => {
+  try {
+    const { otp, refId } = req.body; 
+    const sessionOtp = req.session.userOtp;
+    const sessionUser = req.session.userData;
+
+    
+    if (!otp || !sessionOtp || !sessionUser) {
+      return res.status(400).json({ success: false, message: "Invalid session or OTP missing" });
+    }
+
+    
+    if (otp === sessionOtp) {
+     
+      const passwordHash = await securePassword(sessionUser.password);
+
+     
+      const timestamp = Date.now();
+      const randomString = Math.random().toString(36).substring(2, 10);
+      const googleId = `${randomString}${timestamp}`;
+
+     
+      const newUser = await User.create({
+        name: sessionUser.name,
+        email: sessionUser.email,
+        mobile: sessionUser.mobile,
+        password: passwordHash,
+        googleId,
+      });
+
+      
+      const referralLink = `http://localhost:4000/register?refId=${newUser._id}`;
+      newUser.referralLink = referralLink;
+      await newUser.save();
+
+      
+      if (refId) {
+        const referrer = await User.findById(refId);
+        if (referrer) {
+          const transactionId = `wallet_${uuid.v4()}`;
+          await Wallet.create({
+            user: refId,
+            balance: 200,
+            transactions: [
+              {
+                transaction_id: transactionId,
+                amount: 200,
+                type: 'credit',
+                description: "Referral fund",
+                orderId: null,
+              },
+            ],
+          });
+        }
+      }
+
+      
+      req.session.user_id = newUser._id; 
+      req.session.userOtp = null; 
+      req.session.userData = null; 
+
       res.json({ success: true, redirectUrl: '/' });
-      return
     } else {
       res.status(400).json({ success: false, message: "Invalid OTP, please try again" });
     }
   } catch (error) {
-    console.error("Error verifying OTP", error);
-    res.redirect("/500");
+    console.error("Error in verifyOtp controller:", error);
+    res.status(500).json({ success: false, message: "Something went wrong. Please try again later." });
   }
 };
+
+
 
 
 
@@ -522,6 +697,7 @@ const userLogout = async (req, res) => {
 //     res.redirect('/500');
 //   }
 // };
+
 
 
 const userProfile = async (req, res) => {
@@ -763,6 +939,7 @@ module.exports = {
   forgotOtpPage,
   FverifyOtp,
   resetPage,
+  resetPassword,
   // loadProduct,
   changePassword,
   searchResult,

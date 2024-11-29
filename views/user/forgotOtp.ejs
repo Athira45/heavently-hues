@@ -110,82 +110,94 @@
     startTimer();
 
     function validateOTPForm() {
-      
-      const otpInput = document.getElementById('otp').value;
-      
+  const otpInput = document.getElementById('otp').value;
 
-      $.ajax({
-        type: 'POST',
-        url: '/verifyForgotOtp',
-        data: { otp: otpInput },
-        success: function(response) {
-          if (response.success) {
-           
-            Swal.fire({
-              icon: 'success',
-              title: 'OTP Verified successfully',
-              showConfirmButton: false,
-              timer: 1500
-            }).then(() => {
-              window.location.href = response.redirectUrl;
-              // window.location.href = '/resetpassword';
-              
-            });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Invalid OTP',
-              text: response.message,
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'An error occurred while verifying OTP. Please try again.'
-          });
-        }
+  $.ajax({
+    type: 'POST',
+    url: '/verifyForgotOtp',
+    data: { OTP: otpInput },  // Pass the otpInput here
+    success: function(response) {
+      if (response.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'OTP Verified successfully',
+          showConfirmButton: false,
+          timer: 1500
+        }).then(() => {
+          window.location.href = response.redirectUrl;
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid OTP',
+          text: response.message,
+        });
+      }
+    },
+    error: function() {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while verifying OTP. Please try again.'
       });
-      return false; // Prevent default form submission
     }
+  });
+  return false; // Prevent default form submission
+}
+
 
 
 
    
    
-    function resendOTP() {
-      clearInterval(timerInterval);
-      startTimer(); // Restart the timer
-      $.ajax({
-        type: 'POST',
-        url: '/resend-Otp',
-        success: function(response) {
-          if (response.success) {
-            Swal.fire({
-              icon: 'success',
-              title: 'OTP Resent successfully',
-              showConfirmButton: false,
-              timer: 1500
-            });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.message
-            });
-          }
-        },
-        error: function() {
+function resendOTP() {
+  clearInterval(timerInterval);
+  startTimer(); // Restart the timer
+
+  $.ajax({
+    type: 'POST',
+    url: '/resend-Otp',
+    success: function(response) {
+      if (response.success) {
+        // Reset OTP on the server side and send a new one
+        const newOtp = generateOtp(req.session.userData.email); // Generate a new OTP
+        req.session.userOtp = newOtp;
+
+        // Send email again with the new OTP
+        const sentEmail = sendOTPverificationEmail(req.session.userData.email, newOtp);
+        if (sentEmail) {
+          Swal.fire({
+            icon: 'success',
+            title: 'OTP Resent successfully',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        } else {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'An error occurred while resending OTP. Please try again.'
+            text: 'An error occurred while resending OTP.'
           });
         }
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: response.message
+        });
+      }
+    },
+    error: function() {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while resending OTP. Please try again.'
       });
-      return false;
     }
+  });
+  return false;
+}
+
   </script>
 </body>
 </html>

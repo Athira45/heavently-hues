@@ -1,3 +1,5 @@
+
+
 <%- include('../layout/User/header') %>
 
 <style>
@@ -5,6 +7,11 @@
     padding-right: 10px;
     padding-left: 130px;
 }
+.owl-carousel .product {
+    display: block !important;
+    visibility: visible !important;
+}
+
 
 
 </style>
@@ -90,17 +97,10 @@
                                     <a>
                                         <%=viewProduct.category.name%>
                                     </a>
-                                    <!-- <span>Brand:</span>
-                                <a >ikea</a> -->
+                                  
 
                                 </div>
-                                <!-- <div class="product-cat">
-                                <span>Brand:</span>
-                                <a>IKEA</a>
-                                <span>Brand:</span>
-                                <a >ikea</a> 
-                        
-                            </div> -->
+                              
                             </div>
                             <div class="ratings-container">
                                 <div class="ratings">
@@ -109,18 +109,7 @@
                                 <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews  )</a>
                             </div>
 
-                            <!-- <%if(viewProduct.discount){%>
-                                <div class="product-price" style="text-decoration: line-through;">
-                                    ₹ <%=viewProduct.price%>
-                                </div>
-                                <div class="product-price">
-                                    ₹ <%=viewProduct.discount%>
-                                </div>
-                                <% }else{%>
-                                    <div class="product-price">
-                                        ₹ <%=viewProduct.price%>
-                                    </div>
-                                    <%} %> -->
+                           
                                     <%if(viewProduct.discount && viewProduct.category.category_discount ){%>
                                         <div class="product-price">
                                             <span class="out-price" style="text-decoration: line-through;">₹ <%=viewProduct.price%></span> 
@@ -138,50 +127,9 @@
                                             <span class="out-price" style="color: green;" >₹ <%=viewProduct.price%></span> 
                                            
                                         </div>
-                                     <% } %>
-
-
-                                       <!-- <div class="product-content">
-                                <p><%=viewProduct.description %> </p>
-                            </div> -->
-
-                                            <!-- End .product-content -->
-
-                                            <!-- <div class="details-filter-row details-row-size">
-                                <label>Color:</label>
-
-                                <div class="product-nav product-nav-thumbs">
-                                    <a href="#" class="active">
-                                        <img src="assets/images/products/single/1-thumb.jpg" alt="product desc">
-                                    </a>
-                                    <a href="#">
-                                        <img src="assets/images/products/single/2-thumb.jpg" alt="product desc">
-                                    </a>
-                                </div>
-                            </div> -->
-                                            <!-- End .details-filter-row -->
-
-                                            <!-- <div class="details-filter-row details-row-size">
-                                <label for="size">Size:</label>
-                                <div class="select-custom">
-                                    <select name="size" id="size" class="form-control">
-                                        <option value="#" selected="selected">Select a size</option>
-                                        <option value="s">Small</option>
-                                        <option value="m">Medium</option>
-                                        <option value="l">Large</option>
-                                        <option value="xl">Extra Large</option>
-                                    </select>
-                                </div>End .select-custom -->
-
-                                            <!-- <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a>
-                            </div>End .details-filter-row -->
-                        
-
-                
+                                     <% } %>              
                            
-                           <p>stock: <%= viewProduct.stock%></p>
-                 
-                            
+                           <p>stock: <%= viewProduct.stock%></p>                      
 
                             <% if (!alreadyCart) { %>
                                 <div class="product-details-action">
@@ -203,13 +151,6 @@
                                    
                                   <% } %>
 
-                                  <!-- <div class="details-action-wrapper">
-                                    <a href="#" class="btn-product btn-wishlist"
-                                        title="Wishlist"><span>add to wishlist</span></a>
-                        </div>  -->
-                                 
-
-                            
                         </div>
                     </div>
                 </div>
@@ -245,99 +186,60 @@
                             </ul>
                         </div>
                     </div>
+                </div>
+                <br><br>
 
-                    <h2 class="title text-center mb-4">You May Also Like</h2>
-        
-        
-                    <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
+                <h2 class="title text-center mb-4">You May Also Like</h2>
+                <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
                     data-toggle="owl" data-owl-options='{
-            "nav": false, 
-            "dots": true,
-            "margin": 20,
-            "loop": false,
-            "responsive": {
-                "0": {
-                    "items":1
-                },
-                "480": {
-                    "items":2
-                },
-                "768": {
-                    "items":3
-                },
-                "992": {
-                    "items":4
-                },
-                "1200": {
-                    "items":4,
-                    "nav": true,
-                    "dots": false
-                }
-            }
-            }'>
-            
-            
-            <% relatedProduct.forEach((viewProduct)=>{%>
+                        "nav": false,
+                        "dots": true,
+                        "margin": 20,
+                        "loop": false,
+                        "responsive": {
+                            "0": { "items": 1 },
+                            "480": { "items": 2 },
+                            "768": { "items": 3 },
+                            "992": { "items": 4 },
+                            "1200": { "items": 4, "nav": true, "dots": false }
+                        }
+                    }'>
                 
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <span class="product-label label-out">Out of Stock</span>
-                        <a href="/productDetails/<%=viewProduct._id%>">
-                            <img src="/uploads/<%=viewProduct.image[0]%>" alt="Product image"
-                                class="product-image">
-                        </a>
-            
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add
-                                    to wishlist</span></a>
-                            <a href="/productDetails/<%=viewProduct._id%>" class="btn-product-icon btn-quickview"
-                                title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare"
-                                title="Compare"><span>Compare</span></a>
-                        </div>
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div>
-                    </figure>
-            
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#"><%=viewProduct.category.name%></a>
-                        </div>
-                        <h3 class="product-title"><a href="#"><%=viewProduct.name%>
-                                </a></h3>
+                    <% relatedProduct.forEach((viewProduct) => { %>
+                        <div class="product product-7 text-center">
+                            <figure class="product-media">
 
-
-                        <div class="product-price">
-                            <span class="out-price"> ₹ <%=viewProduct.price%> </span>
-                        </div>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 80%;"></div>
-                                <!-- End .ratings-val -->
+                                <!-- <span class="product-label label-out">Out of Stock</span> -->
+                                <%if(viewProduct.stock <= 0){%>
+                                    <span class="badge badge-danger">Out of stock</span>
+                                    <%} else if(viewProduct.stock < 10){%>
+                                        <span class="badge badge-warning">Limited Stock</span>
+                                        <% } else {%>
+                                            <span class="badge badge-success">IN Stock</span>
+                                            <%} %>
+                                <a href="/productDetails/<%=viewProduct._id%>">
+                                    <img src="/uploads/<%=viewProduct.image[0]%>" alt="Product image"
+                                        class="product-image">
+                                </a>
+                            </figure>
+                
+                            <div class="product-body">
+                                <div class="product-cat">
+                                    <a href="#"><%=viewProduct.category.name%></a>
+                                </div>
+                                <h3 class="product-title"><a href="#"><%=viewProduct.name%></a></h3>
+                                <div class="product-price">
+                                    <span class="out-price"> ₹ <%=viewProduct.price%> </span>
+                                </div>
                             </div>
-                            <span class="ratings-text">( 6 Reviews )</span>
-                        </div> 
-                    </div>
+                        </div>
+                    <% }) %>
                 </div>
+                
             
-               <% })%>
-                         
-            
-                          
-                                         
-                       
-            
-            
-                                        </div>
-            
-                </div>
+                <!-- </div> -->
             </div>
         </div>
-
-       
-
-
     </div>
     </div>
 </main>
@@ -501,7 +403,26 @@
           });
         }
     </script>
+<script>
+  $(document).ready(function(){
+    // Reinitialize Owl Carousel for the related products section
+    $('.owl-carousel').trigger('destroy.owl.carousel'); // Destroy previous initialization
+    $('.owl-carousel').owlCarousel({ // Initialize again
+        nav: false, 
+        dots: true,
+        margin: 20,
+        loop: false,
+        responsive: {
+            "0": { "items": 1 },
+            "480": { "items": 2 },
+            "768": { "items": 3 },
+            "992": { "items": 4 },
+            "1200": { "items": 4, "nav": true, "dots": false }
+        }
+    });
+});
 
+</script>
 
     <!-- Main JS File -->
     <script src="/userAssets/js/main.js"></script>

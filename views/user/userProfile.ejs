@@ -485,7 +485,8 @@
                        <!-- End .card-title -->
 
                        <p>
-                           Wallet Balance: <%=wallet.balance  %>
+                           
+                           Wallet Balance: <%= wallet ? wallet.balance : 'No wallet available' %>
 
                        </p>
 

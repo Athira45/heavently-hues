@@ -647,11 +647,18 @@ const renderProductDetails = async(req,res)=>{
       }
 
 
-    const relatedProduct = await Products.find({category:viewProduct.category,
-        _id: { $ne: viewProduct._id }  
-     } ).limit(4);
+    // const relatedProduct = await Products.find({category:viewProduct.category,
+    //     _id: { $ne: viewProduct._id }  
+    //  } ).limit(4);
 
-      
+    const relatedProduct = await Products.find({ 
+        category: viewProduct.category,
+        _id: { $ne: viewProduct._id }  
+      })
+      .populate('category', 'name')  // Populate category field with the 'name'
+      .limit(4);
+
+      console.log("related:",relatedProduct);
    
     const checkCart = await Cart.findOne({ userid});
     let alreadyCart = false;
