@@ -8,7 +8,7 @@ const fs = require('fs');
 const LoadAdProducts = async(req,res)=>{
     try {
         const categories = await Categories.find();
-        res.render('AddProducts',{categories});
+        res.render('addProducts',{categories});
     } catch (error) {
         console.error('Error loading dashboard:', error);
        
@@ -32,7 +32,7 @@ const LoadAllProducts = async(req,res)=>{
 
         const categoryData = await Categories.find();
 
-        res.render('AllProducts', {
+        res.render('allProducts', {
             productList,
             categoryData,
             currentPage: page,
@@ -488,9 +488,8 @@ const productDelete = async (req, res) => {
 
         if (!deleteProduct) {
             return res.status(404).send('Product not found');
-        }     
-        // res.redirect("/admin/editProduct");
-        res.redirect("/admin/AllProducts");
+        }            
+        res.redirect("/admin/allProducts");
     } catch (error) {
         console.error('Error deleting product:', error);
         res.redirect("/500");
@@ -646,19 +645,14 @@ const renderProductDetails = async(req,res)=>{
       
       }
 
-
-    // const relatedProduct = await Products.find({category:viewProduct.category,
-    //     _id: { $ne: viewProduct._id }  
-    //  } ).limit(4);
-
     const relatedProduct = await Products.find({ 
         category: viewProduct.category,
         _id: { $ne: viewProduct._id }  
       })
-      .populate('category', 'name')  // Populate category field with the 'name'
+      .populate('category', 'name') 
       .limit(4);
 
-      console.log("related:",relatedProduct);
+    //   console.log("related:",relatedProduct);
    
     const checkCart = await Cart.findOne({ userid});
     let alreadyCart = false;
@@ -674,6 +668,34 @@ const renderProductDetails = async(req,res)=>{
     }
 };
 
+
+// const userProducts = async(req,res)=>{
+
+//     try {
+        
+//         const user = req.session?.userData ? req.session?.userData : null;
+       
+//         const page = parseInt(req.query.page) || 1;
+//         const limit = 9;
+//         const skip = (page - 1) * limit;
+//         const totalProducts = await Products.countDocuments();
+//         const totalPages = Math.ceil(totalProducts / limit);
+
+//         const productList = await Products.find()
+//          .populate('category')
+//          .skip(skip)
+//          .limit(limit);
+//         const categories = await Categories.find()
+//         productList.forEach(product =>{
+//             // console.log('product',product.category)
+//         })
+       
+//         res.render("products",{user,productList,categories,currentPage:page , totalPages:totalPages , totalProducts})
+//     } catch (error) {
+//         console.log("error in userProducts funtn",error);
+//         res.redirect("/500")
+//     }
+// }
 
 const userProducts = async(req,res)=>{
 
@@ -705,6 +727,10 @@ const userProducts = async(req,res)=>{
 
 
 
+
+
+
+
 module.exports = {
     LoadAdProducts,
     LoadAllProducts,
@@ -716,6 +742,7 @@ module.exports = {
     renderProductDetails,
     imageDelete,
     userProducts,
+    
 }
 
 

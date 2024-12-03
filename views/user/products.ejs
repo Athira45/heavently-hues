@@ -7,29 +7,14 @@
             <h1 class="page-title">All Products<span>Shop</span></h1>
         </div>
     </div>
-    <!-- <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
-        <div class="container">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Shop</a></li>
-                <li class="breadcrumb-item active" aria-current="/products">products</li>
-            </ol>
-        </div>
-        
-        
-    </nav> -->
-
-   <!-- Make sure to include Font Awesome CDN in the head section of your HTML -->
-
-
-<!-- Make sure to include Font Awesome CDN in the head section of your HTML -->
+  
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
     <div class="container d-flex justify-content-between align-items-center">
         <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Shop</a></li>
+            <!-- <li class="breadcrumb-item"><a href="#">Shop</a></li> -->
             <li class="breadcrumb-item active" aria-current="/products">Products</li>
         </ol>
         <div class="header-right">
@@ -68,17 +53,11 @@
 
                         <div class="toolbox-right">
                             <div class="toolbox-sort">
-                                <!-- <label for="sortby">Sort by:</label> -->
                                 <div class="select-custom">
-                                    <!-- <select name="sortby" id="sortby" class="form-control">
-                                        <option value="popularity" selected="selected">Most Popular</option>
-                                        <option value="rating">Most Rated</option>
-                                        <option value="date">Date</option>
-                                    </select> -->
                                 </div>
                             </div>
                             <div class="toolbox-layout">
-                                <a href="category-list.html" class="btn-layout">
+                                <a href="#" class="btn-layout">
                                     <svg width="16" height="10">
                                         <rect x="0" y="0" width="4" height="4" />
                                         <rect x="6" y="0" width="10" height="4" />
@@ -87,7 +66,7 @@
                                     </svg>
                                 </a>
 
-                                <a href="category-2cols.html" class="btn-layout">
+                                <a href="#" class="btn-layout">
                                     <svg width="10" height="10">
                                         <rect x="0" y="0" width="4" height="4" />
                                         <rect x="6" y="0" width="4" height="4" />
@@ -96,7 +75,7 @@
                                     </svg>
                                 </a>
 
-                                <a href="category.html" class="btn-layout active">
+                                <a href="#" class="btn-layout active">
                                     <svg width="16" height="10">
                                         <rect x="0" y="0" width="4" height="4" />
                                         <rect x="6" y="0" width="4" height="4" />
@@ -107,7 +86,7 @@
                                     </svg>
                                 </a>
 
-                                <a href="category-4cols.html" class="btn-layout">
+                                <a href="#" class="btn-layout">
                                     <svg width="22" height="10">
                                         <rect x="0" y="0" width="4" height="4" />
                                         <rect x="6" y="0" width="4" height="4" />
@@ -125,16 +104,7 @@
 
                     <div class="products mb-3">
                         <div class="row justify-content-center">
-
-
-
-  
-  
-
-
-
-
-                            
+                       
                            <% productList.forEach((product)=>{%>
                             <div class="col-6 col-md-4 col-lg-4">
                                 <div class="product product-7 text-center">
@@ -158,9 +128,15 @@
                                             <a href="#" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
                                             <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                         </div>
+
+
                                         <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                           <a href="#" class="btn-product btn-cart" onclick="addtoCart('<%= product._id%>')">    
+                                        <span>add to cart</span>
+                                        </a>
                                         </div>
+                                        
+
                                     </figure>
 
                                     <div class="product-body">
@@ -188,9 +164,7 @@
                                             </div>
                                          <% } %>
 
-                                        <!-- <div class="product-price">
-                                            <span class="out-price">₹ <%=product.price%></span>
-                                        </div> -->
+                                        
                                         <div class="ratings-container">
                                             <div class="ratings">
                                                 <div class="ratings-val" style="width: 80%;"></div>
@@ -203,37 +177,11 @@
 
                             <%})%>
 
-
-                           
-                           
-
-                          
-    
-
-
-
                    
                         </div>
                     </div>
 
-                    <!-- <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item disabled">
-                                <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
-                                    <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
-                                </a>
-                            </li>
-                            <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item-total">of 6</li>
-                            <li class="page-item">
-                                <a class="page-link page-link-next" href="#" aria-label="Next">
-                                    Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav> -->
+                  
                
                     <nav aria-label="Page navigation">
                         <ul class="pagination justify-content-center">
@@ -267,8 +215,6 @@
                     
                 </div>
                 <aside class="col-lg-3 order-lg-first">
-                   
-
                 
                     <form id="filter-form" method="GET" action="/filter">
                         <div class="sidebar sidebar-shop">
@@ -328,35 +274,10 @@
                                 </div>
                             </div>
                     
-                            <!-- Add additional filters like Brand, Size, etc. here -->
+                          
                         </div>
-                    
-                        <!-- Submit button  -->
                         <button type="submit" class="btn btn-primary">Filter</button>
                     </form>
-                    
-                                
-                        
-                        <!-- End .widget -->
-
-                        <!-- <div class="widget widget-collapsible">
-                            <h3 class="widget-title">
-                                <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true" aria-controls="widget-5">
-                                    Price
-                                </a>
-                            </h3> End .widget-title -->
-
-                            <!-- <div class="collapse show" id="widget-5">
-                                <div class="widget-body">
-                                    <div class="filter-price">
-                                        <div class="filter-price-text">
-                                            Price Range:
-                                            <span id="filter-price-range"></span>
-                                        </div>
-
-                                        <div id="price-slider"></div>
-                                    </div>
-                                </div> -->
                             </div>
                         </div> 
                         
@@ -368,6 +289,128 @@
     </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- add to cart  -->
+
+<!-- <script>
+    function addToCart(button) {
+    const productId = button.getAttribute("data-id");
+    const quantity = parseInt(document.getElementById('qty').value,10);
+    // Send an AJAX request to add the product to the cart
+    fetch(`/cart/add`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId: productId ,quantity }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+               
+                button.classList.remove('btn-cart');
+                button.classList.add('btn-go-cart');
+                button.innerHTML = '<span>go to cart</span>';
+
+               
+                button.href = '/cart';
+            } else {
+                alert('Failed to add to cart. Please try again.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+</script> -->
+
+<!-- <script>
+    function addtoCart(productId) {
+        console.log("productId", productId);
+        // const quantity = parseInt(document.querySelector(`[data-stock]`).getAttribute('data-stock'));
+        // console.log("quantity",quantity)
+
+        if (isNaN(quantity) || quantity < 1) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Out of Stock',
+                text: 'Product quantity must be at least 1.',
+            });
+            return;
+        }
+
+        fetch(`/addCartFromproductsList`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ productId, quantity }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    console.log("response", response);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Response from backend:", data);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }
+</script> -->
+
+<script>
+    function addtoCart(productId) {
+        console.log("productId:", productId);
+
+        fetch(`/addCartFromproductsList/${productId}`, { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then((response) => {
+            if (!response.ok) {
+                console.error("Failed to add product to cart. Response:", response);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to add product to cart.',
+                });
+                return;
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: data.message,
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to add product to cart.',
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong.',
+            });
+        });
+    }
+</script>
+
+
+
+
 
 
 <script>
@@ -418,12 +461,8 @@
 </script>
 <script>
     function resetToOriginalPage(event) {
-        event.preventDefault(); // Prevent the default link behavior
-        
-        // Define the original product page URL (modify as needed)
-        const originalUrl = '/products'; // Change this to your actual product page URL
-
-        // Redirect to the original product page
+        event.preventDefault();   
+        const originalUrl = '/products';
         window.location.href = '/products'; 
     }
 </script>
@@ -522,33 +561,5 @@
         });
     });
 </script>
-
-<!-- <script>
-    // Auto-submit the form when filters change
-    document.querySelectorAll('.custom-control-input').forEach(item => {
-        item.addEventListener('change', () => {
-            document.getElementById('filter-form').submit();
-        });
-    });
-
-    // Clear all filters
-    document.getElementById('clear-filters').addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.href = '/filter';
-    });
-</script> -->
-
-
-<!-- <script>
-    document.querySelector('form').addEventListener('submit', function(e) {
-      const query = document.querySelector('input[name="q"]').value;
-      if (!query.trim()) {
-        e.preventDefault();  // Prevent empty search submission
-        alert('Please enter a search term.');
-      }
-    });
-  </script> -->
-  
-
 
 <%- include('../layout/User/footer') %>

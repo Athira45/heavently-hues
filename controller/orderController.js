@@ -98,7 +98,8 @@ module.exports = {
                     price: item.productPrice,
                     quantity: item.quantity,
                     total: item.productPrice * item.quantity,
-                    orderStatus: 'pending'
+                    orderStatus: 'pending',
+                    returnReason: "noReason"
                 };
             });
     // console.log('cartproducts',orderProducts)
@@ -125,12 +126,12 @@ module.exports = {
                 user: user,
                 products: orderProducts,
                 paymentMode: paymentMethod,
-                // total: cartData.subtotal,
                 total: finalTotal,
                 totalQuantity: totalQuantity,
                 paymentStatus: paymentStatus,
-                couponDiscount:discountValue,
-                discountPercentage:discountPercentage,
+                couponDiscount: discountValue,
+                discountPercentage: discountPercentage,
+                returnReason:orderProducts.returnReason,
                 address: {
                     name: selectedValue.name,
                     mobile: selectedValue.mobile,
@@ -138,9 +139,14 @@ module.exports = {
                     address: selectedValue.address,
                     city: selectedValue.city,
                     state: selectedValue.state,
+                    returnReason:orderProducts.returnReason,
+                     // Explicitly included
                 },
+                returnReason:orderProducts.returnReason,
                 date: new Date()
-            });          
+            });
+            
+                     
             await newOrder.save();
             cartData.products = [];
             await cartData.save();
@@ -177,7 +183,7 @@ module.exports = {
                 // Save the updated wallet data
             await walletData.save();
             }
-            // ..........
+            
 
            
             res.status(201).json({success:true, message: "Order created successfully", order: newOrder });
@@ -245,6 +251,7 @@ module.exports = {
                 city: addressId.city,
                 state: addressId.state,
             },
+            
             date: new Date()
         });          
         await newOrder.save();
@@ -792,42 +799,76 @@ getKey: async(req,res)=>{
   
 //handle returnreq
 
-orderReturn: async (req, res) => {
-    try {
-        console.log("entere orderRetuern");
-      const { orderId, productId } = req.params;
-      const { returnReason } = req.body;
-      console.log("reassssssssssson:",returnReason);
-      console.log("orderId, prodectId :",orderId, productId)
+// orderReturn: async (req, res) => {
+//     try {
+//         console.log("entere orderRetuern");
+//       const { orderId, productId } = req.params;
+//       const { returnReason } = req.body;
+//       console.log("reassssssssssson:",returnReason);
+//       console.log("orderId, prodectId :",orderId, productId)
   
-    //   const orderData = await Orders.findOne({ _id: orderId, "products._id": productId });
-      const orderData = await Orders.findOne({ 
-        _id: new mongoose.Types.ObjectId(orderId), 
-        "products.productId": new mongoose.Types.ObjectId(productId) 
-      });
-      console.log("orderdata:",orderData)
-      if (!orderData) {
-        return res.status(404).json({ success: false, message: "Order not found" });
-      }
+//     //   const orderData = await Orders.findOne({ _id: orderId, "products._id": productId });
+//       const orderData = await Orders.findOne({ 
+//         _id: new mongoose.Types.ObjectId(orderId), 
+//         "products.productId": new mongoose.Types.ObjectId(productId) 
+//       });
+//       console.log("orderdata:",orderData)
+//       if (!orderData) {
+//         return res.status(404).json({ success: false, message: "Order not found" });
+//       }
   
-      // Update the specific product in the order with the return status and reason
-      const product = orderData.products.find((p) => p._id.toString() === productId);
+//       orderData.returnReason= returnReason;
+//       await orderData.save();
+//       // Update the specific product in the order with the return status and reason
+//       const product = orderData.products.find((p) => p._id.toString() === productId);
     
-      if (product) {
-            console.log("Return Reason:", product.returnReason);
+//       if (product) {
+//             console.log("Return Reason:", product.returnReason);
            
         
-        product.orderStatus = 'Return Requested';
-        product.returnReason = returnReason;  // Store the return reason
-        await orderData.save();
-      }
+//         product.orderStatus = 'Return Requested';
+//         // product.returnReason = returnReason;  // Store the return reason
+//         await orderData.save();
+//       }
   
-      res.json({ success: true });
+//       res.json({ success: true });
+//     } catch (error) {
+//       console.log("Error in orderReturn:", error);
+//       res.status(500).json({ success: false, message: "Error processing return request" });
+//     }
+//   },
+orderReturn: async (req, res) => {
+    try {
+        console.log("entered orderReturn");
+        const { orderId, productId } = req.params;
+        const { returnReason } = req.body;
+        console.log("reason:", returnReason);
+
+        const orderData = await Orders.findOneAndUpdate(
+            { 
+                _id: new mongoose.Types.ObjectId(orderId), 
+                "products.productId": new mongoose.Types.ObjectId(productId) 
+            },
+            { 
+                $set: { 
+                    returnReason: returnReason,
+                    returnStatus: 'requested' // Optionally update return status
+                }
+            },
+            { new: true } // This ensures the updated document is returned
+        );
+
+        if (!orderData) {
+            return res.status(404).json({ success: false, message: "Order not found" });
+        }
+
+        console.log("updated order:", orderData);
+        res.status(200).json({ success: true, order: orderData });
     } catch (error) {
-      console.log("Error in orderReturn:", error);
-      res.status(500).json({ success: false, message: "Error processing return request" });
+        console.log("Error in orderReturn:", error);
+        res.status(500).json({ success: false, message: "Error processing return request" });
     }
-  },
+},
 
 returnReq: async(req,res)=>{
     try {

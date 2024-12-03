@@ -6,7 +6,7 @@ const env = require("dotenv").config();
 passport.use(new GoogleStrategy({
     clientID:process.env.GOOGLE_CLIENT_ID,
     clientSecret:process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL:"http://localhost:4000/google/callback"
+    callbackURL:"http://heavently-hues.shop/google/callback"
 
 },
 async (accessToken,refershToken,profile,done)=>{

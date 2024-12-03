@@ -12,15 +12,7 @@
                 </ol>
 
                 <nav class="product-pager ml-auto" aria-label="Product">
-                    <!-- <a class="product-pager-link product-pager-prev" href="#" aria-label="Previous" tabindex="-1">
-                    <i class="icon-angle-left"></i>
-                    <span>Prev</span>
-                </a>
-
-                <a class="product-pager-link product-pager-next" href="#" aria-label="Next" tabindex="-1">
-                    <span>Next</span>
-                    <i class="icon-angle-right"></i>
-                </a> -->
+                   
                     <%if(viewProduct.stock<= 0){%>
                         <span class="badge badge-danger">Out of stock</span>
                         <%} else if(viewProduct.stock< 10){%>
@@ -93,17 +85,9 @@
                                         <a>
                                             <%=viewProduct.category.name%>
                                         </a>
-                                        <!-- <span>Brand:</span>
-                                    <a >ikea</a> -->
-
+                                       
                                     </div>
-                                    <!-- <div class="product-cat">
-                                    <span>Brand:</span>
-                                    <a>IKEA</a>
-                                    <span>Brand:</span>
-                                    <a >ikea</a> 
-                            
-                                </div> -->
+                                   
                                 </div>
 
 
@@ -163,13 +147,7 @@
 
                                             <!-- <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a>
                             </div>End .details-filter-row -->
-
-
-
-
-                            
-                                
-            
+  
                                 
                                        
                                             <div class="details-filter-row details-row-size">

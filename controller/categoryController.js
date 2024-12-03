@@ -2,26 +2,13 @@ const category = require ("../models/categoryModel");
 
 
 
-// const LoadAdminCategory = async(req,res)=>{
-//     try {
-//         const categoryData = await category.find()
-//         const messages = {
-//             nameError: req.flash('nameError'),
-//         };
-       
-//         res.render('AdCategory',{categoryData,messages});  
 
-//     } catch (error) {
-//         console.error('Error loading dashboard:', error);
-       
-//     }
-// }
 
 const LoadAdminCategory = async(req,res)=>{
     try {
         const categoryData = await category.find()
        
-        res.render('AdCategory',{categoryData});  // inserted categoryData send to AdCatagory page
+        res.render('adCategory',{categoryData});  
     } catch (error) {
         console.error('Error loading dashboard:', error);
        

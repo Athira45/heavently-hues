@@ -52,13 +52,11 @@
                         <td class="price-col">₹<%=wishlistItem.price%></td>
                         <td class="stock-col"><span class="in-stock"><%= wishlistItem.stock %></span></td>
                 
-                            <td>
-                               <button class="btn btn-block btn-outline-primary-2" onclick="addtoCart('<%= wishlistItem.productId._id %>')">  
-                                <i class="icon-cart-plus"></i> Add to Cart
-                            </button>
-                            
-                                
-                            </td>
+                        <td>
+                            <button class="btn btn-block btn-outline-primary-2" onclick="addtoCart('<%= wishlistItem.productId._id %>')">  
+                             <i class="icon-cart-plus"></i> Add to Cart
+                            </button>    
+                        </td>
                         
 
                         <td class="remove-col"><button class="btn-remove" onclick="removeFromWishlist('<%= wishlistItem.productId._id %>')" ><i class="icon-close"></i></button></td>
@@ -70,48 +68,7 @@
                         </tr>
 
                         <% } %>
-                    <!-- <tr> -->
-                        <!-- <td class="product-col">
-                            <div class="product">
-                                <figure class="product-media">
-                                    <a href="#">
-                                        <img src="assets/images/products/table/product-2.jpg" alt="Product image">
-                                    </a>
-                                </figure>
-
-                                <h3 class="product-title">
-                                    <a href="#">Blue utility pinafore denim dress</a>
-                                </h3>
-                            </div>
-                        </td> -->
-                        <!-- <td class="price-col">$76.00</td> -->
-                        <!-- <td class="stock-col"><span class="in-stock">In stock</span></td> -->
-                        <!-- <td class="action-col">
-                            <button class="btn btn-block btn-outline-primary-2"><i class="icon-cart-plus"></i>Add to Cart</button>
-                        </td> -->
-                        <!-- <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td> -->
-                    <!-- </tr> -->
-                    <!-- <tr>
-                        <td class="product-col">
-                            <div class="product">
-                                <figure class="product-media">
-                                    <a href="#">
-                                        <img src="assets/images/products/table/product-3.jpg" alt="Product image">
-                                    </a>
-                                </figure>
-
-                                <h3 class="product-title">
-                                    <a href="#">Orange saddle lock front chain cross body bag</a>
-                                </h3>
-                            </div>
-                        </td>
-                        <td class="price-col">$52.00</td>
-                        <td class="stock-col"><span class="out-of-stock">Out of stock</span></td>
-                        <td class="action-col">
-                            <button class="btn btn-block btn-outline-primary-2 disabled">Out of Stock</button>
-                        </td>
-                        <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
-                    </tr> -->
+                   
                 </tbody>
             </table>
             <div class="wishlist-share">
@@ -182,6 +139,62 @@
     }
 </script> -->
 
+<!-- <script>
+    async function addtoCart(productid) {
+        // console.log("entttttttttttttrrrrrrrrrrr")
+        console.log("proidfffff",productid)
+
+       try {
+        
+        const confirmation = await Swal.fire({
+                title: 'Add to Cart?',
+                text: 'Are you sure you want to add this product to your cart?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, add to cart',
+                cancelButtonText: 'Cancel'
+            });
+            if(confirmation.isConfirmed){
+                console.log("EEEEENttttt")
+                const response = await fetch("/addToCart/" + productid,{
+                    method:'POST',
+                    headers:{
+                        'Content-Type': 'application/json',
+                    },
+                })
+                if(response.ok){
+                    const result = await response.json();
+                    console.log( "asssssssss",result.message)
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Product added to cart!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(()=>{
+                        window.location.reload()
+                    })
+                }else{
+                    console.log("Error adding to cart:",response.statusText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error adding to cart',
+                        text: 'An error occurred while adding the product to the cart.'
+                    });
+                }
+            }
+
+       } catch (error) {
+         console.log("Exception:",error.message);
+         Swal.fire({
+                icon: 'error',
+                title: 'Error adding to cart',
+                text: 'An error occurred while adding the product to the cart.'
+            });
+       }
+        
+    }
+</script> -->
+
 <script>
     async function addtoCart(productid) {
         console.log("entttttttttttttrrrrrrrrrrr")
@@ -237,7 +250,6 @@
         
     }
 </script>
-
 
 
 

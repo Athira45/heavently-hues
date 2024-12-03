@@ -16,27 +16,49 @@ const Wallet = require('../models/walletModel');
 
 
 
+// const LoadIndex = async(req,res)=>{
+//   try {
+//     const queryProduct = req.params.id;
+//     const user = req.session?.userData ? req.session?.userData : null
+//     const products = await Product.find();
+//     const checkCart = await Cart.findOne({ user});
+//     let alreadyCart = false;
+//     if(checkCart){
+//         alreadyCart = checkCart.products.some(product => product.productId.toString() === queryProduct);
+//     }
+    
+
+//     res.render('home',{user,products,alreadyCart});
+//   } catch (error) {
+//     console.log("error in loadIndex:",error);
+//   }
+
+// }
+
+//searchig..........
+
 const LoadIndex = async(req,res)=>{
   try {
     const queryProduct = req.params.id;
     const user = req.session?.userData ? req.session?.userData : null
+    const userid = req.session.user_id;
     const products = await Product.find();
-    const checkCart = await Cart.findOne({ user});
-    let alreadyCart = false;
-    if(checkCart){
-        alreadyCart = checkCart.products.some(product => product.productId.toString() === queryProduct);
-    }
+    const checkCart = await Cart.findOne({ userid});
     
+    // Create an array of product IDs in the cart
+    const cartProductIds = checkCart ? 
+      checkCart.products.map(product => product.productId.toString()) 
+      : [];
 
-    res.render('home',{user,products,alreadyCart});
+    res.render('home', {
+      user,
+      products,
+      cartProductIds // Pass this to the template
+    });
   } catch (error) {
     console.log("error in loadIndex:",error);
   }
-
 }
-
-//searchig..........
-
 
 const searchResult = async (req, res) => {
   try {
@@ -901,10 +923,6 @@ const InternalServer = async(req,res)=>{
    res.redirect("/500")
   }
 }
-
-
-
-
 
  
 const userNotFound = async(req,res)=>{

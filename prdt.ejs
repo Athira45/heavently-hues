@@ -1,4 +1,39 @@
+<!-- add to cart  -->
+<script>
+   function addToCart(button) {
+    const productId = button.getAttribute("data-id");
 
+    
+    fetch(`/cart/add`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId: productId }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the button text to 'Go to Cart'
+                button.classList.remove('btn-cart');
+                button.classList.add('btn-go-cart');
+                button.innerHTML = '<span>go to cart</span>';
+
+                // Optionally, change the href to the cart page
+                button.href = '/cart';
+            } else {
+                alert('Failed to add to cart. Please try again.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+</script>
+
+
+
+
+<!-- admin route  -->
 const path = require('path');
 const express = require('express');
 const router=express();
@@ -58,7 +93,6 @@ router.get('/resetpassword', userController.resetPage);
 router.post('/resetpassword', userController.resetPassword);
 
 //------------------products--------------------------
-router.post('/addCartFromproductsList/:productid',cartController.addToCartFromProductList)
 router.get('/productDetails/:id',productController.renderProductDetails);
 router.get('/products',productController.userProducts);
 router.get('/filter',userController.filterResult);

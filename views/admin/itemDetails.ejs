@@ -137,12 +137,7 @@
         </div>
         
 
-        <% if (order.returnRequest) { %>
-            <div class="return-request alert alert-warning">
-                <h4>Return Request</h4>
-                <p><strong>Reason:</strong> <%= order.returnReason %></p>
-            </div>
-        <% } %>
+      
 
 
         <!-- Product Details -->
@@ -188,6 +183,8 @@
 
         <!-- Update Order Status -->
         <div class="update-status">
+            <% if (!order.returnReason) { %>
+
             <h4>Update Order Status</h4>
             <form id="statusForm">
                 <div class="input-group mb-3">
@@ -201,6 +198,14 @@
                 </div>
                 <button type="submit" class="btn btn-custom">Update Status</button>
             </form>
+            <% }else{%>
+            
+                <div class="return-request alert alert-warning">
+                    <h4>Return Request</h4>
+                    <p><strong>Reason:</strong> <%= order.returnReason %></p>
+                </div>
+            <%} %>
+
         </div>
 
     </div>

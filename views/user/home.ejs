@@ -45,7 +45,7 @@
         </div>
 
         <span class="slider-loader text-white"></span>
-    </div> -->
+    </div> 
 
     <!-- <div class="brands-border owl-carousel owl-simple" data-toggle="owl" 
         data-owl-options='{
@@ -196,12 +196,7 @@
                 
             </li>
             
-            <!-- <li class="nav-item">
-                <a class="nav-link" id="products-sale-link" data-toggle="tab" href="#products-sale-tab" role="tab" aria-controls="products-sale-tab" aria-selected="false">On Sale</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="products-top-link" data-toggle="tab" href="#products-top-tab" role="tab" aria-controls="products-top-tab" aria-selected="false">Top Rated</a>
-            </li> -->
+           
         </ul>
         
 
@@ -232,26 +227,16 @@
                                         ₹ <%= product.price %>
                                     </div>
                                 </div>
-                                <!-- <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div> -->
-                                <% if (!alreadyCart) { %>
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart" onclick="addtoCart('')">
-                                        <span>add to cart</span>
-                                    </a>
-                                    <% } else { %>
-                                        <div class="product-details-action">
-                                            <a href="/cart" class="btn-product btn-cart">
-                                              <span>Go To Cart</span>
-                                            </a>
-                                    </div>
-                                    <% } %>
-
-
-                                </div>
+                              
                                  
-                                       
+                                <div class="product-action">
+                                    <a href="#" class="btn-product btn-cart" onclick="addtoCart('<%= product._id%>')">    
+                                 <span>add to cart</span>
+                                 </a>
+                                 </div>
+                                
+                               
+                                   
 
                             </div>
                         </div>
@@ -714,9 +699,11 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
-<script>
+<!-- add to cart  -->
+ <!-- <script>
     function addtoCart(productId) {
+
+        console.log("clickedddd")
         // Assuming you have a quantity input somewhere on the page
         const quantity = parseInt(document.getElementById('quantity').value, 10) || 1;
 
@@ -763,7 +750,63 @@
             });
         });
     }
-</script>
+</script>  -->
+
+ <script>
+    function addtoCart(productId) {
+        console.log("productId:", productId);
+
+        fetch(`/addCartFromproductsList/${productId}`, { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then((response) => {
+            if (!response.ok) {
+                console.error("Failed to add product to cart. Response:", response);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to add product to cart.',
+                });
+                return;
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.success) {
+                // Dynamically update the button
+                const button = document.getElementById(`btn-cart-${productId}`);
+                if (button) {
+                    button.innerHTML = '<span>Go To Cart</span>';
+                    button.setAttribute('href', '/cart'); // Change link to cart
+                    button.setAttribute('onclick', ''); // Remove the onclick event
+                }
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: data.message || 'Product added to cart!',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to add product to cart.',
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong.',
+            });
+        });
+    }
+</script> 
 
 
 <%- include('../layout/User/footer') %>
