@@ -60,5 +60,7 @@ const loadWallet = async(req,res)=>{
 
 
 module.exports = {
-    loadWallet
+    loadWallet,
+    // login
+    
 }
