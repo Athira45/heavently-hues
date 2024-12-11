@@ -112,10 +112,13 @@ router.post('/addproducts', upload.array('image', 3), multerErrorHandler, produc
 
 //Edit product
 router.get('/editProduct',productController.LoadEditProduct);
-// router.post('/editProduct/:id', upload.array('image', 3), productController.handleEditProduct);
 router.post('/editProduct/:id', upload.array('images', 10), productController.handleEditProduct);
+// router.post('/editProduct/:id', upload.array('image', 3), productController.handleEditProduct);
 
-router.get('/deleteimage',productController.imageDelete)
+// router.get('/deleteimage',productController.imageDelete)
+router.post('/delete-image',productController.imageDelete)
+
+
 //list unlist product
 router.get('/productList',productController.listunlistProduct);
 

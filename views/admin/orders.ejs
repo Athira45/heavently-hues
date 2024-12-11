@@ -82,7 +82,7 @@
                                         <td rowspan="<%= order.products.length %>"><%= new Date(order.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) %></td>
                                         <td class="text-end" rowspan="<%= order.products.length %>">
                                             <% if (product.orderStatus === "cancelled") { %>
-                                                order cancelled
+                                                <p style="color:red;">order cancelled</p>
                                             <% } else { %>
                                                 <a href="/admin/orders/<%= order._id %>/items/<%= product.productId._id %>" class="btn btn-md rounded font-sm">Detail</a>
                                             <% } %>
@@ -101,13 +101,13 @@
 <script>
   const dropdownItems = document.querySelectorAll('#orderStatusDropdown .dropdown-item');
 
-// Add click event listener to each item
+
 dropdownItems.forEach(item => {
     item.addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default link behavior
-        const selectedValue = this.textContent.trim(); // Get the text content of the clicked item
-        console.log(selectedValue); // You can use this value in your logic
-        // Do something with the selectedValue
+        event.preventDefault(); 
+        const selectedValue = this.textContent.trim(); 
+        console.log(selectedValue); 
+       
         const inputElement = document.getElementById("orderId").textContent;
 console.log("..........", inputElement);
 
@@ -257,32 +257,12 @@ fetch('/updateStatus', {
 
 </script>
 
-
-
-
-
-
-
             </div>
             <!-- table-responsive //end -->
         </div>
         <!-- card-body end// -->
     </div>
-    <!-- card end// -->
-    <!-- <div class="pagination-area mt-15 mb-50">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-start">
-                <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                <li class="page-item"><a class="page-link" href="#">02</a></li>
-                <li class="page-item"><a class="page-link" href="#">03</a></li>
-                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                <li class="page-item"><a class="page-link" href="#">16</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
-                </li>
-            </ul>
-        </nav>
-    </div> -->
+   
 </section>
 
 

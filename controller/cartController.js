@@ -522,7 +522,7 @@ const couponSave = async (req, res) => {
 
 const addToCartFromProductList = async (req, res) => {
     try {
-        console.log("Entered addToCartFromProductList");
+        // console.log("Entered addToCartFromProductList");
 
         const productId = req.params.productid;
         const userId = req.session.user_id;
@@ -535,7 +535,7 @@ const addToCartFromProductList = async (req, res) => {
         const cart = await Cart.findOne({ userid: userId });
 
         if (cart) {
-            console.log("Cart exists");
+            // console.log("Cart exists");
 
             // Find the index of the product in the cart
             const existingProductIndex = cart.products.findIndex(
@@ -559,9 +559,9 @@ const addToCartFromProductList = async (req, res) => {
                 });
             }
             await cart.save();
-            console.log("Product added to existing cart");
+            // console.log("Product added to existing cart");
         } else {
-            console.log("Creating a new cart");
+            // console.log("Creating a new cart");
 
             // Create a new cart and add the product
             const newCart = new Cart({

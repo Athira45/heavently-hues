@@ -12,7 +12,7 @@
 
                     <div class="tab-content">
 
-                          <% orders.forEach(order =>{%>
+                         
                              
                                 <div class="row align-items-center h-100">
                             
@@ -20,32 +20,32 @@
                                       <div class="card-header p-4">
                                         <div class="d-flex justify-content-between align-items-center">
                                           <div>    
-                                            <p class="text-muted mb-2" style="font-weight: bold;"> Order ID <span class="fw-bold text-body"><%=order._id %></span></p>
-                                            <p class="text-muted mb-0" style="font-weight: bold;"> Place On <span class="fw-bold text-body"><%= order.date.toLocaleDateString( 'en-US',{
+                                            <p class="text-muted mb-2" style="font-weight: bold;"> Order ID <span class="fw-bold text-body"><%=orders._id %></span></p>
+                                            <p class="text-muted mb-0" style="font-weight: bold;"> Place On <span class="fw-bold text-body"><%= orders.date.toLocaleDateString( 'en-US',{
                                               year:'numeric',
                                               month:'short',
                                               day:'2-digit'
                                             } ).replace(/\//g, '-')%></span> </p>
                                                 
                                               
-                                                <p class="mt-1" style="font-weight: bold;">TOTAL AMOUNT: &nbsp; ₹ <span style="font-size: medium; color: black;" ><%= order.total %> </span></p> <br>
+                                                <p class="mt-1" style="font-weight: bold;">TOTAL AMOUNT: &nbsp; ₹ <span style="font-size: medium; color: black;" ><%= orders.total %> </span></p> <br>
                                                 <p style="font-weight: bold;">Address:</p><br>
-                                                <p ><% if (order.address) {%>
-                                                    <%= `Name: ${order.address.name},
-                                                    Mobile: ${order.address.mobile},
-                                                    Pincode: ${order.address.pincode},
-                                                    Address: ${order.address.adress},
-                                                    City: ${order.address.city},
-                                                    State: ${order.address.state}` %>
+                                                <p ><% if (orders.address) {%>
+                                                    <%= `Name: ${orders.address.name},
+                                                    Mobile: ${orders.address.mobile},
+                                                    Pincode: ${orders.address.pincode},
+                                                    Address: ${orders.address.adress},
+                                                    City: ${orders.address.city},
+                                                    State: ${orders.address.state}` %>
                                                  <% } else {%>
                                                      N/A 
                                                   <% } %> </p>
-                                                <p class="mt-4" style="font-weight: bold;">Payment method: <%= order.paymentMode %> </p>
+                                                <p class="mt-4" style="font-weight: bold;">Payment method: <%= orders.paymentMode %> </p>
                                           </div>
                                         </div>
                                       </div>
                                       <div class="card-body p-4 ">
-                                        <% order.products.forEach(product =>{ %>
+                                        <% orders.products.forEach(product =>{ %>
                                           <div class="d-flex flex-row mb-4 pb-2 mt-4 ">
                                             <div class="flex-fill">
                                               <h5 class="bold"> <a href="/eachproduct/<%=product._id %>"><%= product.name %></a></h5>
@@ -90,35 +90,38 @@
                                                             <!-- return reason modal end  -->
 
                                                             <% if( product.orderStatus=="pending") {%>
-                                                            <h6 class="text-primary " style="margin-left: 20px; margin-bottom: 30px;" ></h6>
-                                                            <div class="card-footer p-4">
-                                                                <div class="d-flex justify-content-between">
-                                                                  <h5 class="fw-normal mb-0">
-                                                                    <a href="#" class="mb-4" onclick="removefromorder('<%=order._id%>','<%=product.productId._id %>')">Cancel</a>
-                                                                  </h5>
-                                                                  <div class="border-start h-100"></div>
+                                                              <h6 class="text-primary " style="margin-left: 20px; margin-bottom: 30px;" ></h6>
+                                                              <div class="card-footer p-4">
+                                                                  <div class="d-flex justify-content-between">
+                                                                    <h5 class="fw-normal mb-0">
+                                                                      <a href="#" class="mb-4" onclick="removefromorder('<%=orders._id%>','<%=product.productId._id %>')">Cancel</a>
+                                                                    </h5>
+                                                                    <div class="border-start h-100"></div>
+                                                                  </div>
                                                                 </div>
-                                                              </div>
-                                                              <%}%>
+                                                                <%}%>
 
-                                                           <% if(product.orderStatus == "Delivered") {%>
+                                                           <% if(product.orderStatus === "Delivered") {%>
+                                                                
+                                                                 <% if ( orders.returnStatus === "accepted") { %>
+                                                                  <h6 style="color: chocolate;">Return request Accepted</h6>
+                                                              <% }else{%>
                                                                 <h6 class="text-primary" style="margin-left: 20px; margin-bottom: 30px;"></h6>
                                                                 <div class="card-footer p-4">
                                                                     <div class="d-flex justify-content-between">
                                                                         <h5 class="fw-normal mb-0">
-                                                                            <!-- <a href="#" class="mb-4" onclick="returnfromorder('<%= order._id %>' , '<%= product._id %>','<%= product.orderStatus %>')">Return Order</a> -->
-                                                                            <a href="#" class="mb-4" onclick="openReturnReasonModal('<%= order._id %>', '<%= product.productId._id %>')">Return Order</a>
+                                                                            
+                                                                            <a href="#" class="mb-4" onclick="openReturnReasonModal('<%= orders._id %>', '<%= product.productId._id %>')">Return Order</a>
                                                                            
                                                                         </h5>
                                                                         <div class="border-start h-100"></div>
                                                                     </div>
                                                                 </div>
+                                                                <%}%> 
                                                             <%}%>
 
 
-                                                            
-                                                            
-                                                            
+                                                                                                               
                                                             
                                                               <%if(product.orderStatus == "request cancellation"){%> 
                                                                 <h6 class="text-danger"><%=product.orderStatus%></h6>
@@ -142,8 +145,8 @@
                                 </div>  
                                  
                               <br>
-                              <a href="/dowload-invoice/<%=order._id %>" class="btn btn-primary btn-round" >Download Invoice</a>
-                              <% }); %> 
+                              <a href="/dowload-invoice/<%=orders._id %>" class="btn btn-primary btn-round" >Download Invoice</a>
+                             
                     </div>
                 </div>
             </div>
@@ -168,7 +171,9 @@
 
  </script>
 
-<script>
+ 
+ <!-- claude code  -->
+  <script>
   function removefromorder(orderId, proId){
     console.log(`Order ID: ${orderId}, Product ID: ${proId}`);
       
@@ -217,8 +222,7 @@
                }
             })
   }
-</script>
-
+</script> 
 <!-- //return order script  -->
 <!-- <script>
   function returnfromorder(orderId, proId) {

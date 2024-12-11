@@ -225,8 +225,13 @@
                                                                           <span class="text-danger">Payment Failed</span>
                                                                           <button class="btn btn-warning" onclick="retryPayment('<%= order._id %>')">Retry Payment</button>
                                                                         <% } else { %>
+                                                                            <% if (order.returnStatus === "accepted") { %>
+                                                                                <p class="text-danger">Returned</p>
+
+                                                                                <% }else{%> 
                                                                             <span style="color: black;">Order Status:</span>
                                                                           <span class="text-success"><%= product.orderStatus  %></span>
+                                                                                <%}%>
                                                                         <% } %>
                                                                       </div>
                                                                   

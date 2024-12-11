@@ -425,15 +425,19 @@ rePayment: async (req, res) => {
 //user side
     orderDetailsPage: async (req,res)=>{
         try {
+            console.log("ent orderDetailsPage")
             const user = req.session.user_id;
             const orderId = req.query.orderId;
             const userName = await User.findOne({_id:user});
-            const orders = await Orders.find({_id:orderId}) .populate ({
+
+
+            const orders = await Orders.findOne({ _id: orderId }).populate({
                 path: "products.productId",
                 model: "Product",
-            })
-               
-           
+              });
+              console.log(orders.returnStatus);
+
+
             res.render('orderDetails',{user,orders,orderId});
         } catch (error) {
             console.log("error from orderDetails :",error);
@@ -471,7 +475,7 @@ rePayment: async (req, res) => {
 
 
 //     const productPrice = await Products.findOne({_id: productId});//products
-//         // console.log("productPrice", productPrice);
+//         console.log("productPrice", productPrice);
 
        
 //         let wallet = await Wallet.findOne({userId: user});
@@ -536,102 +540,129 @@ rePayment: async (req, res) => {
 
 //admin
 
-cancelOrPlaceOrder: async (req, res) => {
-    console.log("ennbttttttttttttrrr")
+cancelOrPlaceOrder :async(req,res)=>{
     try {
-        const userId = req.session.user_id; // User from session
-        const { orderId, productId } = req.params; // Order ID and Product ID from parameters
+        const user = req.session.user_id;
+        const orderId = req.params.orderId;
+        const productId = req.params.productId
+        console.log("nnnnnnnnn,",productId);
 
-        console.log("Product ID:", productId,'order',orderId);
-
-        // Update the specific product's status in the order
-        const updateResult = await Orders.updateOne(
-            { _id: orderId, 'products._id': productId },
-            { $set: { 'products.$.orderStatus': 'canceled' } }
+        await Orders.findOneAndUpdate(
+            { 
+                _id: orderId, 
+                'products.productId': productId 
+            },
+            { 
+                $set: { 'products.$.orderStatus': 'cancelled' } 
+            },
+            { new: true }
         );
 
-        // Check if any document was modified
-        // if (updateResult.modifiedCount === 0) {
-        //     return res.status(404).json({ success: false, message: "Order or Product not found" });
-        // }
+        const order = await Orders.findOne({ _id: orderId });
+if (!order) {
+    return res.status(404).json({ success: false, message: "Order not found" });
+}
 
-        // Fetch the updated order
-        const order = await Orders.findById(orderId);
-        if (!order) {
-            return res.status(404).json({ success: false, message: "Order not found" });
-        }
 
-        console.log("Updated Order:", order);
+const canceledProduct = order.products.find(p => p.productId.toString() === productId);
 
-        // Find the canceled product in the order
-        const canceledProduct = order.products.find(p => p._id.toString() === productId);
-        if (!canceledProduct) {
-            return res.status(404).json({ success: false, message: "Product not found in the order" });
-        }
+console.log("canceledProduct",canceledProduct)
+if (!canceledProduct) {
+    return res.status(404).json({ success: false, message: "Product not found in the order" });
+}
 
-        // Get the product details for price
-        const product = await Products.findById(productId);
-        if (!product) {
-            return res.status(404).json({ success: false, message: "Product details not found" });
-        }
+    const productPrice = await Products.findOne({_id: productId});//products
+        // console.log("productPrice", productPrice);
 
-        const productPrice = product.price;
-        console.log("Product Price:", productPrice);
+       
+        let wallet = await Wallet.findOne({userId: user});
 
-        // Fetch or create a wallet for the user
-        let wallet = await Wallet.findOne({ userId });
-        const transactionId = uuidv4(); 
+        // Generate a unique transaction ID
+        const transactionId = uuidv4();  
+
         if (!wallet) {
-            // Create a new wallet for the user
-            wallet = new Wallet({
-                userId,
-                balance: productPrice,
+            
+            // Create a new wallet for the user if none exists
+            wallet = await Wallet.create({
+                userId: user,
+                balance: productPrice.price,
                 transactions: [{
-                    transaction_id: transactionId,
-                    amount: productPrice,
+                    transaction_id: uuidv4(),  
+                    amount: productPrice.price,
                     type: "credit",
-                    description: "Cancellation Refund",
-                    orderId,
+                    description: "Cancel Amount",
+                    orderId: orderId,
                     product: productId,
                 }]
             });
+            await wallet.save();
         } else {
-            // Update the wallet balance and add a transaction
-            wallet.balance += productPrice;
+            
+            wallet.balance += productPrice.price;
             wallet.transactions.push({
-                transaction_id: transactionId,
-                amount: productPrice,
+                transaction_id: uuidv4(),  
+                amount: productPrice.price,
                 type: "credit",
-                description: "Cancellation Refund",
-                orderId,
+                description: "Cancel Amount",
+                orderId: orderId,
                 product: productId,
             });
+            await wallet.save();
         }
 
-        await wallet.save();
-        console.log("Updated Wallet:", wallet);
-
-        // Prepare data for restoring product quantity
-        const productQuantityInfo = [{
+          // Prepare data for quantityIncreasing function
+          const ProductQuantityInfo = [{
             ProductId: productId,
-            Productquantity: canceledProduct.quantity,
+            Productquantity: canceledProduct.quantity
         }];
-        console.log("Product Quantity Info:", productQuantityInfo);
+  console.log("ProductQuantityInfo",ProductQuantityInfo);
+  await quantityIncreasing(ProductQuantityInfo);
 
-        // Call the quantityIncreasing function
-        await quantityIncreasing(productQuantityInfo);
 
-        // Respond with success
-        res.json({
-            success: true,
-            message: "Product canceled successfully",
-            updatedOrder: order,
-        });
+     res.json({
+        success:true,
+        message:"Product cancelled successfully",
+        updateOrder: order,
+     })
+   
+
     } catch (error) {
-        console.error("Error in cancelOrPlaceOrder:", error);
-        res.status(500).json({ success: false, message: "Internal server error" });
+        res.redirect("/500");
+        console.log("errorr in cancel",error)
+        // res.status(500).json({success: false, message: "Internal server error"});
     }
 },
+
+//  working prev 
+// cancelOrPlaceOrder :async(req,res)=>{
+//     try {
+
+//         const orderId = req.params.orderId;
+//         const productId = req.params.productId
+
+//         const updateOrder = await Orders.updateOne({
+//             _id:orderId,
+//             'products._id' :productId
+//         },
+//      {
+//         $set: {
+//             'products.$.orderStatus': ' cancelled',
+//         }
+//      } )
+
+//      res.json({
+//         success:true,
+//         message:"Product cancelled successfully",
+//         updateOrder,
+//      })
+   
+
+//     } catch (error) {
+//         res.redirect("/500");
+//         res.status(500).json({success: false, message: "Internal server error"});
+//     }
+// },
+
 
 
 
@@ -880,7 +911,7 @@ returnReq: async(req,res)=>{
         orderData.returnStatus=selectedValue
         orderData.save()
         
-        console.log("ppppp",productId)
+        // console.log("ppppp",productId)
 
         const productPrice = await Products.findOne({_id: productId});
         let wallet = await Wallet.findOne({userId: user});

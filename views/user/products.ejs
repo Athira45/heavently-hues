@@ -23,7 +23,13 @@
                 <form action="/search" method="get">
                     <div class="header-search-wrapper search-wrapper-wide">
                         <label for="q" class="sr-only">Search</label>
-                        <input type="search" class="form-control" name="q" id="q" placeholder="Search product ..." required>
+                        <input type="search" class="form-control" name="q" id="q" placeholder="Search product ..." value="<%= query || '' %>" required>
+                        <% if (selectedCategories) { %>
+                            <% (Array.isArray(selectedCategories) ? selectedCategories : [selectedCategories]).forEach(category => { %>
+                              <input type="hidden" name="categories" value="<%= category %>">
+                            <% }) %>
+                          <% } %>
+                          <input type="hidden" name="sortOption" value="<%= selectedSortOption || '' %>">
                         <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
                     </div>
                 </form>
@@ -218,18 +224,21 @@
                 
                     <form id="filter-form" method="GET" action="/filter">
                         <div class="sidebar sidebar-shop">
+                            <!-- Filter Header -->
                             <div class="widget widget-clean">
                                 <label>Filters:</label>
                                 <a href="#" id="clear-filters" class="sidebar-filter-clear" onclick="resetToOriginalPage(event)">Clean All</a>
                             </div>
+
+                           
                     
+                            <!-- Category Filter -->
                             <div class="widget widget-collapsible">
                                 <h3 class="widget-title">
                                     <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
                                         Category
                                     </a>
                                 </h3>
-                    
                                 <div class="collapse show" id="widget-1">
                                     <div class="widget-body">
                                         <div class="filter-items filter-items-count">
@@ -246,14 +255,13 @@
                                 </div>
                             </div>
                     
-                            <!-- Price filter -->
+                            <!-- Price Filter -->
                             <div class="widget widget-collapsible">
                                 <h3 class="widget-title">
                                     <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true" aria-controls="widget-5">
                                         Price
                                     </a>
                                 </h3>
-                    
                                 <div class="collapse show" id="widget-5">
                                     <div class="widget-body">
                                         <div class="filter-items">
@@ -273,9 +281,8 @@
                                     </div>
                                 </div>
                             </div>
-                    
-                          
                         </div>
+                        <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary">Filter</button>
                     </form>
                             </div>
@@ -291,74 +298,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- add to cart  -->
-
-<!-- <script>
-    function addToCart(button) {
-    const productId = button.getAttribute("data-id");
-    const quantity = parseInt(document.getElementById('qty').value,10);
-    // Send an AJAX request to add the product to the cart
-    fetch(`/cart/add`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ productId: productId ,quantity }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-               
-                button.classList.remove('btn-cart');
-                button.classList.add('btn-go-cart');
-                button.innerHTML = '<span>go to cart</span>';
-
-               
-                button.href = '/cart';
-            } else {
-                alert('Failed to add to cart. Please try again.');
-            }
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-</script> -->
-
-<!-- <script>
-    function addtoCart(productId) {
-        console.log("productId", productId);
-        // const quantity = parseInt(document.querySelector(`[data-stock]`).getAttribute('data-stock'));
-        // console.log("quantity",quantity)
-
-        if (isNaN(quantity) || quantity < 1) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Out of Stock',
-                text: 'Product quantity must be at least 1.',
-            });
-            return;
-        }
-
-        fetch(`/addCartFromproductsList`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ productId, quantity }),
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    console.log("response", response);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log("Response from backend:", data);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    }
-</script> -->
 
 <script>
     function addtoCart(productId) {
@@ -407,11 +346,6 @@
         });
     }
 </script>
-
-
-
-
-
 
 <script>
    function addtoWishlist(productId) {
@@ -525,7 +459,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
+<!-- 
 <script>
     document.getElementById('filter-form').addEventListener('submit', function(event) {
         // Check if at least one checkbox is checked
@@ -560,6 +494,6 @@
             radio.checked = false;
         });
     });
-</script>
+</script> -->
 
 <%- include('../layout/User/footer') %>

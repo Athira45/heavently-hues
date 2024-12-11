@@ -16,6 +16,7 @@ const Wallet = require('../models/walletModel');
 
 
 
+
 // const LoadIndex = async(req,res)=>{
 //   try {
 //     const queryProduct = req.params.id;
@@ -60,35 +61,30 @@ const LoadIndex = async(req,res)=>{
   }
 }
 
-const searchResult = async (req, res) => {
+const searchAndFilter = async (req, res) => {
   try {
-   
     const user = req.session.user_id;
-    const query = req.query.q;
-    console.log("Search query:", query);
-    const { categories, sortOption, page = 1 } = req.query;
-    const limit = 9;
+    const { q: query = '', categories, sortOption, page = 1 } = req.query;
+    const limit = 9; // Products per page
     const skip = (page - 1) * limit;
 
-    // Build filterOptions object
-    let filterOptions = { is_listed: "Listed" }; // Changed from isBlocked to is_listed
+    let filterOptions = { is_listed: "Listed" };
 
     if (query) {
-      filterOptions.name = { $regex: new RegExp(query, 'i') }; // Changed from ProductName to name
+      filterOptions.name = { $regex: new RegExp(query, 'i') };
     }
-   
-   
-    const categoriesList = await Category.find({});
 
-    // Define sorting logic
+    if (categories) {
+      filterOptions.category = { $in: Array.isArray(categories) ? categories : [categories] };
+    }
+
     let sort = {};
     if (sortOption === 'priceAsc') {
-      sort.price = 1; // Changed from Price to price
+      sort.price = 1;
     } else if (sortOption === 'priceDesc') {
-      sort.price = -1; // Changed from Price to price
+      sort.price = -1;
     }
 
-    // Fetch products based on filterOptions and pagination
     const productList = await Products.find(filterOptions)
       .sort(sort)
       .skip(skip)
@@ -98,82 +94,24 @@ const searchResult = async (req, res) => {
     const totalProducts = await Products.countDocuments(filterOptions);
     const totalPages = Math.ceil(totalProducts / limit);
 
-    console.log("Products found:", productList.length);
-    console.log("Total products:", totalProducts);
+    const categoriesList = await Category.find();
 
-    // Render the view or send JSON response
     res.render('products', {
-      user, 
+      user,
       productList,
       categories: categoriesList,
+      query,
+      selectedCategories: categories,
+      selectedSortOption: sortOption || '', // Pass the selected sort option
       totalPages,
-      totalProducts: totalProducts,
-      currentPage: parseInt(page)
+      totalProducts,
+      currentPage: parseInt(page),
     });
   } catch (error) {
-    console.error('Error in searchResults', error);
+    console.error('Error in searchAndFilter:', error);
     res.status(500).send('Server Error');
   }
 };
-
-
-
-
-
-
-const filterResult = async (req, res) => {
-  try {
-      console.log("enter into this filterResult");
-      const user = req.session.user_id;
-      const { categories, sortOption, page = 1 } = req.query; // Include page query
-      const limit = 9;
-      const skip = (page - 1) * limit;
-
-      // Build the query object
-      let query = {};
-      if (categories) {
-          query.category = { $in: Array.isArray(categories) ? categories : [categories] };
-      }
-
-      // Set the sort object
-      let sort = {};
-      if (sortOption === 'priceAsc') {
-          sort.price = 1; // Sort price ascending (low to high)
-      } else if (sortOption === 'priceDesc') {
-          sort.price = -1; // Sort price descending (high to low)
-      }
-
-      // Execute the query with filters and sorting, and limit pagination
-      const productList = await Products.find(query)
-          .sort(sort)
-          .skip(skip)
-          .limit(limit)
-          .populate('category');
-
-      // Get total products for pagination
-      const totalProducts = await Products.countDocuments(query); // Count with filters
-      const totalPages = Math.ceil(totalProducts / limit);
-      
-      // Fetch categories for the UI
-      const categoriesList = await Category.find();
-
-      // Render the products page with the filtered products
-      res.render('products', {
-          user,
-          productList,
-          categories: categoriesList,
-          currentPage: parseInt(page), // Ensure currentPage is an integer
-          totalPages: totalPages,
-          totalProducts: totalProducts
-      });
-  } catch (error) {
-      console.error('Error fetching products:', error);
-      res.status(500).send('Internal Server Error');
-  }
-};
-
-
-
 
 
 //forgot password
@@ -251,10 +189,6 @@ const FverifyOtp = async (req, res) => {
 }
 
 
-
-
-
-
 //reset password page render
 const resetPage = async (req, res) => {
   console.log("Entering resetPage function");
@@ -303,8 +237,8 @@ const resetPassword = async (req, res) => {
 
 const loginLoad = async (req,res)=>{
   try{
-    let message
-    res.render('login',{message});
+    // let message
+    res.render('login',{errors: {} });
   }catch(error){
      res.redirect('/500');
   }
@@ -312,47 +246,195 @@ const loginLoad = async (req,res)=>{
 
 
 //verify login
-const verifyLogin = async(req,res)=>{
-  // console.log("request is coming",req)
-  try{
-      const email = req.body.email;
-      const password = req.body.password;
-      const userData = await User.findOne({email});
-      // console.log("userData :",userData);
+// const verifyLogin = async(req,res)=>{
+//   // console.log("request is coming",req)
+//   try{
+//       const email = req.body.email;
+//       const password = req.body.password;
+//       const userData = await User.findOne({email});
+//       // console.log("userData :",userData);
 
-      if(userData){
+//       if(userData){
 
-        const passwordMatch = await bcrypt.compare(password,userData.password);
-        if(passwordMatch){
-          if(userData.status === 'Active'){
-              req.session.user_id = userData._id;
-              req.session.userData = userData;
-              // console.log("session Userr:",req.session.userData);
-              return res.redirect('/');
+//         const passwordMatch = await bcrypt.compare(password,userData.password);
+//         if(passwordMatch){
+//           if(userData.status === 'Active'){
+//               req.session.user_id = userData._id;
+//               req.session.userData = userData;
+//               // console.log("session Userr:",req.session.userData);
+//               return res.redirect('/');
 
 
-          }else{
-            req.flash('err','User have blocked');
-            return res.render('login',{message:req.flash('err')})
+//           }else{
+//             req.flash('err','User have blocked');
+//             return res.render('login',{message:req.flash('err')})
             
-          }
-        }else{
-          req.flash('err','Incorrect username and password');
-          return res.render('login',{message: req.flash('err')})
-        }
-      }else{
-        req.flash('err','please signup you are not an user');
-        return res.render('login',{message : req.flash('err')})
-      }
-  }catch(error) {
-    console.log("error in verifyLogin :",error);
-     res.redirect('/500');
+//           }
+//         }else{
+//           req.flash('err','Incorrect username and password');
+//           return res.render('login',{message: req.flash('err')})
+//         }
+//       }else{
+//         req.flash('err','please signup you are not an user');
+//         return res.render('login',{message : req.flash('err')})
+//       }
+//   }catch(error) {
+//     console.log("error in verifyLogin :",error);
+//      res.redirect('/500');
     
+//   }
+// };
+
+// const verifyLogin = async(req,res)=>{
+//   // console.log("request is coming",req)
+//   try{
+//       const email = req.body.email;
+//       const password = req.body.password;
+//       const userData = await User.findOne({email});
+//       // console.log("userData :",userData);
+
+//       if(userData){
+
+//         const passwordMatch = await bcrypt.compare(password,userData.password);
+//         if(passwordMatch){
+//           if(userData.status === 'Active'){
+//               req.session.user_id = userData._id;
+//               req.session.userData = userData;
+//               // console.log("session Userr:",req.session.userData);
+//               return res.redirect('/');
+
+
+//           }else{
+            
+            
+//           }
+//         }else{
+          
+//         }
+//       }else{
+       
+//       }
+//   }catch(error) {
+//     console.log("error in verifyLogin :",error);
+//      res.redirect('/500');
+    
+//   }
+// };
+
+
+
+const verifyLogin = async (req, res) => {
+  try {
+    const email = req.body.email?.trim();
+    const password = req.body.password?.trim();
+    let errors = {};
+
+    // Validate if fields are empty
+    if (!email) {
+      errors.email = 'Email is required.';
+    }
+
+    if (!password) {
+      errors.password = 'Password is required.';
+    }
+
+    // If there are validation errors, render login with errors
+    if (Object.keys(errors).length > 0) {
+      return res.render('login', { errors }); 
+    }
+
+    // Query database to find user by email
+    const userData = await User.findOne({ email });
+
+    if (!userData) {
+      errors.email = 'No account found with this email.';
+      return res.render('login', { errors });
+    }
+
+    // Verify password
+    const isPasswordCorrect = await bcrypt.compare(password, userData.password);
+
+    if (!isPasswordCorrect) {
+      errors.password = 'Incorrect password.';
+      return res.render('login', { errors });
+    }
+
+    // Check user status
+    if (userData.status !== 'Active') {
+      errors.general = 'Your account is inactive. Contact support.';
+      return res.render('login', { errors });
+    }
+
+    // Set session variables on successful login
+    req.session.user_id = userData._id;
+    req.session.userData = {
+      email: userData.email,
+      name: userData.name,
+    };
+
+    // Redirect to the home page
+    return res.redirect('/');
+  } catch (error) {
+    console.error('Error during login:', error);
+
+    return res.status(500).render('login', {
+      errors: { general: 'Something went wrong. Please try again later.' }
+    });
   }
 };
 
 
+
+
+
+// const verifyLogin = async (req, res) => {
+//   console.log("enteeeeerrrr verifyLogin ");
+//   try {
+//     const email = req.body.email;
+//     const password = req.body.password;
+//     const userData = await User.findOne({ email });
+//     console.log("email,password,", email, password);
+//   console.log("userData",userData);
+  
+//     if (userData) {
+//       console.log("userData is hereeeeeee");
+//       const passwordMatch = await bcrypt.compare(password, userData.password);
+//       if (passwordMatch) {
+//         if (userData.status === 'Active') {
+//           req.session.user_id = userData._id;
+//           req.session.userData = userData;
+//           return res.redirect('/');
+//         } else {
+//           req.flash('err', 'User has been blocked');
+//           const message = req.flash('err');
+//           console.log('Flash message:', message); // Debug flash message
+//           return res.render('login', { message });
+//         }
+//       } else {
+//         console.log("Incorrect username or password");
+//         req.flash('err', 'Incorrect username or password');
+//         const message = req.flash('err');
+//         console.log('Flash message:', message);
+//         return res.render('login', { message });
+//       }
+//     } else {
+     
+//       req.flash('err', 'Please sign up. You are not a user.');
+//       const message = req.flash('err');
+//       console.log('Flash message:', message);
+//       return res.render('login', { message });
+//     }
+//   } catch (error) {
+//     console.log('Error in verifyLogin:', error);
+//     return res.redirect('/500');
+//   }
+// };
+
+
+
 //load register
+
+
 const loadRegister = async (req, res) => {
   try {
     res.render('signup');
@@ -960,8 +1042,9 @@ module.exports = {
   resetPassword,
   // loadProduct,
   changePassword,
-  searchResult,
-  filterResult,
+  searchAndFilter,
+  // searchResult,
+  // filterResult,
 
   
   

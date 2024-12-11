@@ -61,9 +61,8 @@ router.post('/resetpassword', userController.resetPassword);
 router.post('/addCartFromproductsList/:productid',cartController.addToCartFromProductList)
 router.get('/productDetails/:id',productController.renderProductDetails);
 router.get('/products',productController.userProducts);
-router.get('/filter',userController.filterResult);
-router.get('/search',userController.searchResult);
-
+router.get('/search', userController.searchAndFilter);
+router.get('/filter',userController.searchAndFilter);
 
 //Logout
  router.get("/logout",userController.userLogout);
