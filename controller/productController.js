@@ -19,7 +19,7 @@ const LoadAdProducts = async(req,res)=>{
 //Load edit product
 
 const LoadAllProducts = async(req,res)=>{
-    try {
+    try {  
         const page = parseInt(req.query.page) || 1;
         const limit = 10;
         const skip = (page - 1) * limit;
@@ -40,9 +40,7 @@ const LoadAllProducts = async(req,res)=>{
             totalPages: totalPages,
             totalProducts: totalProducts,
             limit: limit
-        });
-
-        
+        });       
        
     } catch (error) {
         console.error('Error loading dashboard:', error);
@@ -90,7 +88,7 @@ const handleEditProduct = async (req, res) => {
           category,
           stock,
           spec,
-          width,
+          width, 
           depth,
           height,
           material
@@ -124,7 +122,8 @@ const handleEditProduct = async (req, res) => {
           { new: true, runValidators: true }
         );
     
-        res.redirect('/allProducts');
+        
+        res.redirect('/admin/allProducts');
       } catch (error) {
         console.error('Error updating product with new images:', error);
         res.status(500).send('An error occurred');
@@ -132,10 +131,6 @@ const handleEditProduct = async (req, res) => {
   };
   
   
-  
-
-
-
 
 const uploadProduct = async (req, res) => {
     try {
@@ -163,8 +158,6 @@ const uploadProduct = async (req, res) => {
         res.status(500).json({ message: 'Internal server error', error: error.message });
     }
 }
-
-
 
 const productDelete = async (req, res) => {
     try {
@@ -211,7 +204,6 @@ const imageDelete = async (req, res) => {
       }
 };
 
-
 const listunlistProduct = async (req, res) => {
     try {
         const id = req.query.id;
@@ -235,7 +227,6 @@ const listunlistProduct = async (req, res) => {
         // res.status(500).send("Internal Server Error");
     }
 };
-
 
 const renderProductDetails = async(req,res)=>{
     try{
@@ -306,9 +297,6 @@ const renderProductDetails = async(req,res)=>{
 };
 
 
-
-
-
 const userProducts = async (req, res) => {
     try {
       const user = req.session?.userData ? req.session?.userData : null;
@@ -345,10 +333,6 @@ const userProducts = async (req, res) => {
     }
   };
   
-  
-
-
-
 
 module.exports = {
     LoadAdProducts,

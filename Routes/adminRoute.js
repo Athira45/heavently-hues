@@ -101,14 +101,6 @@ const upload = multer({ storage: storage });
 router.post('/addproducts', upload.array('image', 3), multerErrorHandler, productController.uploadProduct);
 
 
-//delete image from editpage
-
-// router.delete('/deleteImage/:productId/:imageId', adminAuth.verify, productController.imageDelete);
-// router.delete('/deleteImage/:productId/:imageId', productController.imageDelete);
-
-
-
-
 
 //Edit product
 router.get('/editProduct',productController.LoadEditProduct);
