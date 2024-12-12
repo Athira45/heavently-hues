@@ -76,10 +76,105 @@ const LoadEditProduct = async (req, res) => {
 
 
 
-const handleEditProduct = async (req, res) => {
+// const handleEditProduct = async (req, res) => {
+//     try {
+//         const productId = req.params.id;
+//         // const { croppedImage } = req.body;
+
+      
+//         const {
+//           name,
+//           description,
+//           price,
+//           discount,
+//           category,
+//           stock,
+//           spec,
+//           width, 
+//           depth,
+//           height,
+//           material
+//         } = req.body;
+
+//       //   if (croppedImage) {
+//       //     const base64Data = croppedImage.replace(/^data:image\/\w+;base64,/, "");
+//       //     const fs = require('fs');
+//       //     fs.writeFileSync('uploads/cropped-image.png', base64Data, 'base64');
+//       //     console.log('Image successfully saved');
+//       // }
+  
+//       // res.send('Product updated!');
+    
+//         // Get existing product from database
+//         const existingProduct = await Products.findById(productId);
+//         if (!existingProduct) {
+//           return res.status(404).send('Product not found');
+//         }
+    
+//         const newImages = req.files ? req.files.map(file => file.filename) : [];
+//         const totalImages = [...existingProduct.image, ...newImages].slice(0, 3);
+    
+//         const updatedProduct = await Products.findByIdAndUpdate(
+//           productId,
+//           {
+//             name,
+//             description,
+//             price,
+//             discount,
+//             category,
+//             stock,
+//             spec,
+//             width,
+//             depth,
+//             height,
+//             material,
+//             image: totalImages // Limit total images to a maximum of 3
+//           },
+//           { new: true, runValidators: true }
+//         );
+    
+        
+//         res.redirect('/admin/allProducts');
+//       } catch (error) {
+//         console.error('Error updating product with new images:', error);
+//         res.status(500).send('An error occurred');
+//       }
+//   };
+  
+  const handleEditProduct = async (req, res) => {
     try {
         const productId = req.params.id;
-    
+        // const { croppedImage } = req.body;
+        const { croppedImage } = req.body;
+      
+        let newImageFilename = null;
+
+        // Handle cropped image
+        if (croppedImage) {
+          // Ensure the uploads directory exists
+          const uploadsDir = path.join(__dirname, '../uploads');
+          console.log(uploadsDir)
+          if (!fs.existsSync(uploadsDir)) {
+              fs.mkdirSync(uploadsDir, { recursive: true });
+          }
+      
+          // Generate unique filename
+          newImageFilename = `cropped-${Date.now()}.png`;
+          const filepath = path.join(uploadsDir, newImageFilename);
+      
+          // Remove the data URL prefix
+          const base64Data = croppedImage.replace(/^data:image\/\w+;base64,/, '');
+          
+          // Write the file
+          fs.writeFileSync(filepath, base64Data, 'base64');
+          console.log('Cropped image saved:', newImageFilename);
+      
+          // Add the cropped image filename to the images array
+          req.body.images = [newImageFilename];
+      }
+      
+
+      
         const {
           name,
           description,
@@ -93,15 +188,29 @@ const handleEditProduct = async (req, res) => {
           height,
           material
         } = req.body;
+
     
         // Get existing product from database
         const existingProduct = await Products.findById(productId);
         if (!existingProduct) {
-          return res.status(404).send('Product not found');
+            return res.status(404).send('Product not found');
         }
-    
+
+        // Handle other file uploads
         const newImages = req.files ? req.files.map(file => file.filename) : [];
-        const totalImages = [...existingProduct.image, ...newImages].slice(0, 3);
+        
+        // Combine existing images with new images
+        const allImages = [...existingProduct.image];
+        if (newImageFilename) {
+          allImages.push(newImageFilename);
+      }
+      
+      // Add new uploaded images
+      allImages.push(...newImages);
+
+      // Limit total images to 3
+      const totalImages = allImages.slice(0, 3);
+
     
         const updatedProduct = await Products.findByIdAndUpdate(
           productId,
@@ -129,8 +238,6 @@ const handleEditProduct = async (req, res) => {
         res.status(500).send('An error occurred');
       }
   };
-  
-  
 
 const uploadProduct = async (req, res) => {
     try {
