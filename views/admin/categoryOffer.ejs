@@ -14,9 +14,7 @@
                     </div>
                 </div>
                
-                <!-- <div>
-                    <input type="text" placeholder="Search by name" class="form-control bg-white" />
-                </div> -->
+                
             
                 <div class="main-panel">
                     <div class="content-wrapper">
@@ -62,7 +60,7 @@
                                                     </button>
                                                     
                                          
-                                                         <button class="btn-sm btn-danger status-btn" onclick="removeOffer('<%= category._id %>')">Delete</button>
+                                                    <button class="btn-sm btn-danger status-btn" onclick="removeOffer('<%= category._id %>')">Delete</button>
                                                      </td>
                                                  </tr>
                                             <% }) %>  
@@ -183,26 +181,84 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
         <!-- <script>
-            function showEditModal(button) {
-                // Get data from the clicked button
-                const categoryId = $(button).data('category-id');
-                const categoryName = $(button).data('category-name');
-                const categoryDiscount = $(button).data('category-discount');
-                const startingDate = $(button).data('category-starting-date');
-                const expiryDate = $(button).data('category-expiry-date');
-        
-                // Populate the modal fields with the retrieved data
-                $('#editCategoryModal #categoryId').val(categoryId);
-                $('#editCategoryModal #categoryName').val(categoryName);
-                $('#editCategoryModal #categoryDiscount').val(categoryDiscount);
-                $('#editCategoryModal #startingDate').val(startingDate);
-                $('#editCategoryModal #expiryDate').val(expiryDate);
-        
-                // Show the modal
-                $('#editCategoryModal').modal('show');
+            function removeOffer(categoryId) {
+                console.log("categoryId",categoryId)
+                console.log("enter in toooooooooo")
+            if (confirm('Are you sure you want to delete this category offer?')) {
+                fetch(`/admin/categoryoffer/delete/${categoryId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Category offer deleted successfully!');
+                        location.reload(); // Refresh the page to show updated data
+                    } else {
+                        alert('Failed to delete the category offer.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             }
+        }
+        
         </script> -->
-
+      
+      
+<!-- JavaScript -->
+ <script>
+    function removeOffer(categoryId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to delete this category offer?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/admin/categoryoffer/delete/${categoryId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'Category offer has been deleted.',
+                            timer: 1500
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Failed to delete the category offer.'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while deleting the offer.'
+                    });
+                });
+            }
+        });
+    }
+</script> 
 
 <script>
     function showEditModal(button) {
@@ -225,9 +281,6 @@
 }
 
 </script>
-
-
-
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -289,7 +342,7 @@
                 return;
             }
          
-console.log("sssssssssssssssssssss")
+// console.log("sssssssssssssssssssss")
 fetch('/admin/addCategoryOff', {
             method: 'POST',
             headers: {
@@ -328,10 +381,6 @@ fetch('/admin/addCategoryOff', {
 
             }
 
-
-
-          
-            
         })
     })
 })
@@ -430,8 +479,6 @@ fetch('/admin/addCategoryOff', {
         });
     });
 </script>
-
-
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -136,7 +136,7 @@ router.delete('/coupons/delete',couponController.deleteCoupon);
 router.get('/categoryoffer',offerController.loadOffer);
 router.post('/addCategoryOff',offerController.addCategoryOffer)
 router.post('/categoryPercentageEdit',offerController.categoryOffer);
-
+router.delete('/categoryoffer/delete/:id', offerController.deleteCategoryOffer);
 
 router.post('/updateStatus',orderController.statusUpdate);
 

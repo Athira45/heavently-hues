@@ -96,10 +96,24 @@ const categoryOffer = async (req, res) => {
     }
 }
 
+const deleteCategoryOffer = async (req, res) => {
+    try {
+        console.log("eeeeeeeeeeeeeeeeeeeeeeeeeentr")
+        const categoryId = req.params.id;
+        console.log("categoryId",categoryId)
+        await Category.findByIdAndDelete(categoryId);
+        res.json({ success: true, message: 'Category offer deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting category offer:', error);
+        res.json({ success: false, message: 'Failed to delete category offer' });
+    }
+};
+
 
 module.exports = {
     loadOffer,
     categoryOffer,
     addCategoryOffer,
+    deleteCategoryOffer,
 
 }
